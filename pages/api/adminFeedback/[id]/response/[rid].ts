@@ -26,11 +26,11 @@ export default async function handler(
   }
 
   if (req.method === "POST") {
-    const updated = await addResponse(
-      id as string,
-      req.body,
-      AdminName as string,
-    );
+    const { text } = req.body;
+    if (!text) {
+      return res.status(400).json({ message: "답글 내용을 입력해주세요." });
+    }
+    const updated = await addResponse(id as string, text, AdminName as string);
     return res.status(200).json(updated);
   }
 
