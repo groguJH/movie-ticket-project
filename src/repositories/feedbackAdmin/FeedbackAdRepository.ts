@@ -158,11 +158,18 @@ export async function getFeedbackStatusStats() {
  * - patch 객체를 받아 해당 피드백의 필드를 수정합니다.
  * - 유효한 상태 값인지 검증합니다.
  */
-export async function patchFeedback(id: string, patch: any) {
+export async function patchFeedback(id: string, rid: string, patch: any) {
   const collection = await getCollection();
-  const _id = new ObjectId(id);
-  await collection.updateOne({ _id }, { $set: patch });
-  return await collection.findOne({ _id });
+  await collection.updateOne(
+    { _id: new ObjectId(id), "responses._id": new ObjectId(rid) },
+    {
+      $set: {
+        "responses.$.text": patch.text,
+        "responses.$.updatedAt": new Date(),
+      },
+    },
+  );
+  return await collection.findOne({ _id: new ObjectId(id) });
 }
 
 /**
@@ -174,15 +181,17 @@ export async function patchFeedback(id: string, patch: any) {
  * - soft가 false일 경우 실제로 문서를 삭제합니다.
  * @return 삭제 결과
  */
-export async function deleteFeedback(id: string, soft = true) {
+export async function deleteFeedback(id: string, rid: string) {
   const collection = await getCollection();
-  const _id = new ObjectId(id);
-  if (soft) {
-    await collection.updateOne({ _id }, { $set: { isDeleted: true } });
-  } else {
-    return collection.deleteOne({ _id });
-  }
-  return { ok: true };
+  return await collection.updateOne(
+    {
+      _id: new ObjectId(id),
+      "responses._id": new ObjectId(rid),
+    },
+    {
+      $set: { "responses.$.isDeleted": true },
+    },
+  );
 }
 
 interface UpdateFeedbackStatusPayload {

@@ -46,6 +46,7 @@ export default async function addResponse(
 
 export async function patchFeedbackService(
   id: string,
+  rid: string,
   patch: any,
   adminName: string,
 ) {
@@ -54,11 +55,11 @@ export async function patchFeedbackService(
     !["new", "in_progress", "resolved", "closed"].includes(patch.status)
   )
     throw new Error("Invalid status");
-  const updated = await patchFeedback(id, patch);
+  const updated = await patchFeedback(id, rid, patch);
   await logAdminAction({
     adminName,
     action: "patchFeedback",
-    targetId: id,
+    targetId: `${id}-${rid}`,
     details: patch,
   });
   return updated;
@@ -66,14 +67,15 @@ export async function patchFeedbackService(
 
 export async function deleteFeedbackService(
   id: string,
+  rid: string,
   adminName: string,
   soft: boolean,
 ) {
-  const result = await deleteFeedback(id, soft);
+  const result = await deleteFeedback(id, rid);
   await logAdminAction({
     adminName: adminName,
     action: "deleteFeedback",
-    targetId: id,
+    targetId: `${id}-${rid}`,
     details: { soft },
   });
   return result;

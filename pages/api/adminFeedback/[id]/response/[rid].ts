@@ -7,7 +7,7 @@ import addResponse, {
 } from "../../../../../src/services/adminFeedback/FeedbackAdService";
 
 /**
- * 관리자의 답글 수정/삭제 핸들러
+ * 관리자의 답글 작성/수정/삭제 핸들러
  * @param req
  * @param res
  */
@@ -35,13 +35,14 @@ export default async function handler(
   }
 
   if (req.method === "PATCH") {
-    const patchContext = req.body;
-    const updated = await patchFeedbackService(id, patchContext, AdminName);
+    const { text } = req.body;
+    const updated = await patchFeedbackService(id, rid, { text }, AdminName);
     return res.status(200).json({ ok: true, data: updated });
   }
+
   if (req.method === "DELETE") {
-    const soft = true;
-    await deleteFeedbackService(id, AdminName, soft);
+    const isSoft = true;
+    await deleteFeedbackService(id, rid, AdminName, isSoft);
     return res.status(200).json({ ok: true });
   }
   return res.status(405).end();
