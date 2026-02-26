@@ -8,8 +8,10 @@ class SentryExampleAPIError extends Error {
   }
 }
 // A faulty API route to test Sentry's error monitoring
-export default function handler(_req, res) {
+export default function handler(_req: any, res: any) {
   Sentry.logger.info("Sentry example API called");
-throw new SentryExampleAPIError("This error is raised on the backend called by the example page.");
-res.status(200).json({ name: "John Doe" });
+  throw new SentryExampleAPIError(
+    "This error is raised on the backend called by the example page.",
+  );
+  // res.status(200).json({ name: "John Doe" });
 }

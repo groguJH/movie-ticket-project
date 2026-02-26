@@ -2,9 +2,10 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import clientPromise from "../../../lib/mongodb";
 import { authOptions } from "../auth/[...nextauth]";
+import { ObjectId } from "mongodb";
 
 /**
- * 내 예매내역을 조회하는 API 핸들러
+ * 회원 전용 예매내역을 조회하는 API 핸들러
  * @param req
  * @param res
  * @description
@@ -16,16 +17,16 @@ import { authOptions } from "../auth/[...nextauth]";
  */
 export default async function myPageListHandler(
   req: NextApiRequest,
-  res: NextApiResponse<any[] | { message: string }>
+  res: NextApiResponse<any[] | { message: string }>,
 ) {
   if (req.method !== "GET")
     return res.status(405).json({ message: "허용되지 않은 메서드입니다." });
 
   const session = await getServerSession(req, res, authOptions);
-  if (!session)
+  if (!session || !session.user || !session.user.id) {
     return res.status(401).json({ message: "로그인이 필요합니다." });
-
-  const userId = session?.user?.id!;
+  }
+  const userId = session.user.id;
   const client = await clientPromise;
   const db = client.db("mymovieticket");
   try {
@@ -33,7 +34,7 @@ export default async function myPageListHandler(
       .collection("movie_bookings")
       .aggregate([
         {
-          $match: { userId: session?.user?.id },
+          $match: { userId: new ObjectId(userId) },
         },
         {
           $lookup: {
@@ -71,5 +72,3 @@ export default async function myPageListHandler(
     res.status(500).json({ message: "예매내역을 불러오지 못했습니다." });
   }
 }
-// bookings → screenings 조인 → movies 조인
-// 마지막에 movieTitle: "$movie.title" 으로 제목만 추출

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 
 const PROTECTED_PATHS = ["/mypage", "/bookPage"];
-const ADMIN_PROTECTED_PATHS = ["/admin"];
+const ADMIN_PROTECTED_PATHS = ["/feedbackAdmin"];
 
 /**
  * 로그인, 관리자를 확인하는 미들웨어
@@ -39,5 +39,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/mypage/:path*", "/admin/:path*"],
+  matcher: ["/mypage/:path*", "/feedbackAdmin/:path*"],
 };

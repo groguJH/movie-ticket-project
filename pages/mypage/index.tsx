@@ -10,7 +10,7 @@ export async function getServerSideProps(context: any) {
   if (!session) {
     return {
       redirect: {
-        destination: "/auth/signup",
+        destination: "/authPage/signup",
         permanent: false,
       },
     };

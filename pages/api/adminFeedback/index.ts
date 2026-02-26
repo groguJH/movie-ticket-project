@@ -1,5 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { findFeedbackQueryService } from "../../../src/services/adminFeedback/FeedbackAdService";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "../auth/[...nextauth]";
 
 /**
  *관리자의 피드백 목록을 가져오는 API 핸들러
@@ -19,8 +21,15 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
+  const session = await getServerSession(req, res, authOptions);
+  const AdminName = (session?.user?.name as string) ?? "admin-unknown";
+
+  if (session?.user?.role !== "admin") {
+    return res.status(403).json({ message: "접근 권한이 없습니다." });
+  }
+
   if (req.method !== "GET")
-    return res.status(405).end({ message: "허용되지 않은 메서드입니다." });
+    return res.status(405).json({ message: "허용되지 않은 메서드입니다." });
 
   try {
     const { page, limit, search } = req.query;
@@ -37,5 +46,6 @@ export default async function handler(
     return res.status(200).json(data);
   } catch (err: any) {
     console.error("/api/adminFeedback라우트에서 발생한 오류", err);
+    return res.status(500).json({ message: "서버 에러가 발생하였습니다." });
   }
 }

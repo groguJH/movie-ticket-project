@@ -67,7 +67,7 @@ export async function patchFeedbackService(
 export async function deleteFeedbackService(
   id: string,
   adminName: string,
-  soft: true,
+  soft: boolean,
 ) {
   const result = await deleteFeedback(id, soft);
   await logAdminAction({

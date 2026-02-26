@@ -8,6 +8,7 @@ import { authOptions } from "../../auth/[...nextauth]";
 
 /**
  * 피드백 작성, 조회 API 핸들러
+ * 다른 사람들의 작성글도 모두 볼 수 있습니다.
  * @param req
  * @param res
  */
@@ -19,6 +20,10 @@ export default async function writeHandler(
   const session = await getServerSession(req, res, authOptions);
   try {
     if (req.method == "POST") {
+      if (!session || !session.user) {
+        return res.status(401).json({ error: "로그인이 필요한 서비스입니다." });
+      }
+
       const userId = session?.user?.id as string;
       const userName = (session?.user?.name as string) || "익명";
       const { title, content, satisfaction } = req.body;
@@ -57,6 +62,7 @@ export default async function writeHandler(
         },
       );
     }
+    return res.status(405).json({ error: "허용되지 않는 메서드입니다." });
   } catch (error: any) {
     console.error(error);
     return res.status(500).json({ error: "서버 에러가 발생했습니다." });

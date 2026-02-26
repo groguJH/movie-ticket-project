@@ -39,7 +39,7 @@ export default function FeedbackDetailContainer({
       setData(payload);
       setStatus(payload.status);
     } catch (err: any) {
-      ("상세 조회할 수 없습니다.", err);
+      console.error("상세 조회할 수 없습니다.", err);
     } finally {
       setLoading(false);
     }
@@ -64,7 +64,7 @@ export default function FeedbackDetailContainer({
         onRefreshAction();
       }
     } catch (err) {
-      ("답글 추가할 수 없습니다", err);
+      console.error("답글 추가할 수 없습니다", err);
       alert("답글 추가할 수 없습니다");
     } finally {
       setComment(false);
@@ -79,7 +79,7 @@ export default function FeedbackDetailContainer({
       onRefreshAction();
       onClose();
     } catch (err) {
-      ("상태를 저장할 수 없습니다.", err);
+      console.error("상태를 저장할 수 없습니다.", err);
     } finally {
       setSaving(false);
     }
@@ -104,7 +104,7 @@ export default function FeedbackDetailContainer({
       }
       onClose();
     } catch (err) {
-      ("삭제할 수 없습니다", err);
+      console.error("삭제할 수 없습니다", err);
       alert("삭제할 수 없습니다");
     } finally {
       setComment(false);

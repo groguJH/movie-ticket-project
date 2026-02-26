@@ -23,7 +23,12 @@ export default async function handler(
   }
 
   const session = await getServerSession(req, res, authOptions);
-  const userId = session?.user?.id as string;
+
+  if (!session || !session.user) {
+    return res.status(401).json({ error: "로그인이 필요한 서비스입니다." });
+  }
+
+  const userId = session.user.id as string;
 
   const { id } = req.query;
   const { title, content, satisfaction } = req.body;

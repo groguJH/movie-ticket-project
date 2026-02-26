@@ -29,7 +29,7 @@ export async function findNonMemberService(payload: {
     throw new Error("비회원 정보가 없습니다.");
   }
 
-  return user._id;
+  return user?._id;
 }
 
 // 비회원의 예매 내역을 조회하여 다가오는 예매와 지난 예매로 구분하여 반환하는 함수

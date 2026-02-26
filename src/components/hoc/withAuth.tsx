@@ -18,7 +18,7 @@ export default function withAuth<T>(WrappedComponent: any) {
 
     useEffect(() => {
       if (status === "unauthenticated") {
-        router.replace("/auth/signin");
+        router.replace("/authPage/signup");
       }
     }, [status, router]);
 

@@ -220,7 +220,7 @@ export const authOptions: NextAuthOptions = {
     },
   },
   pages: {
-    signIn: "/auth/signup",
+    signIn: "/authPage/signup",
     signOut: "/",
   },
   // debug: process.env.NODE_ENV === "development", // 개발 모드에서만 디버그 활성화

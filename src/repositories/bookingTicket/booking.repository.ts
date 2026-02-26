@@ -17,13 +17,19 @@ export async function insertBooking(
     .db("mymovieticket")
     .collection("movie_screenings")
     .updateOne(
-      { _id: new ObjectId(showtimeId), "seats.status": "available" },
+      {
+        _id: new ObjectId(showtimeId),
+        seats: {
+          $all: seats.map((s) => ({
+            $elemMatch: { row: s.row, number: s.number, status: "available" },
+          })),
+        },
+      },
       { $set: { "seats.$[s].status": "sold" } },
       {
         arrayFilters: [
           {
-            "s.row": { $in: seats.map((s) => s.row) },
-            "s.number": { $in: seats.map((s) => s.number) },
+            $or: seats.map((s) => ({ "s.row": s.row, "s.number": s.number })),
           },
         ],
         session,
@@ -31,7 +37,9 @@ export async function insertBooking(
     );
 
   if (result.modifiedCount !== seats.length) {
-    throw new Error("일부 좌석이 이미 예약되었거나 변경 실패");
+    throw new Error(
+      "일부 좌석이 이미 예약되었거나 선택한 좌석을 찾을 수 없습니다.",
+    );
   }
 
   const bookedAt = new Date();

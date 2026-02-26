@@ -9,7 +9,7 @@ import { authOptions } from "../auth/[...nextauth]";
  * @param req
  * @param res
  * @description
- *  모달로 받는 상세API라우트
+ *  모달로 받는 관리자 전용 상세API라우트
  *  GET으로 특정 게시글 전체 조회
  *  PATCH로 게시글의 처리 상태를 변경합니다.
  */
@@ -20,9 +20,9 @@ export default async function handler(
   const { id } = req.query;
   const session = await getServerSession(req, res, authOptions);
   const AdminName = session?.user?.name as string;
-  const AdminId = (req as any).session?.user?.id ?? "unknown";
 
-  if (session?.user?.role === "admin") {
+  if (session?.user?.role !== "admin") {
+    return res.status(403).json({ message: "접근 권한이 없습니다." });
   }
 
   if (req.method == "GET") {
@@ -39,7 +39,7 @@ export default async function handler(
     const updated = await updateFeedbackStatusService(
       id as string,
       status,
-      AdminId,
+      AdminName,
     );
     return res.status(200).json(updated);
   }

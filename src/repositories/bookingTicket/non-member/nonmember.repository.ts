@@ -1,6 +1,7 @@
 import { ObjectId } from "mongodb";
 import clientPromise from "../../../../lib/mongodb";
 import { NonMemberSearchResponse } from "../../../../types/nonmember";
+import bcrypt from "bcryptjs";
 
 /**
  *
@@ -19,12 +20,16 @@ export async function findNonMemberByInfo(payload: {
   const client = await clientPromise;
   const db = client.db("mymovieticket");
 
-  return db.collection("non-member-user").findOne({
+  const user = await db.collection("non-member-user").findOne({
     name: payload.name,
     birth: payload.birth,
     phone: payload.phone,
-    password: payload.password,
   });
+
+  if (!user) return null;
+  const isMatchPassword = await bcrypt.compare(payload.password, user.password);
+  if (!isMatchPassword) return null;
+  return user;
 }
 
 export async function createNonMember(payload: {
@@ -34,6 +39,7 @@ export async function createNonMember(payload: {
   password: string;
   movieId?: string;
 }) {
+  const hashedPassword = await bcrypt.hash(payload.password, 10);
   const client = await clientPromise;
   const db = client.db("mymovieticket");
   const result = await db
@@ -42,7 +48,7 @@ export async function createNonMember(payload: {
       name: payload.name,
       birth: payload.birth,
       phone: payload.phone,
-      password: payload.password,
+      password: hashedPassword,
       movieId: payload.movieId ? payload.movieId : null,
       createdAt: new Date(),
     });
@@ -77,7 +83,7 @@ export async function findUpcomingByGuestId(guestId: string) {
 
       {
         $lookup: {
-          from: "movie_movies", // 🔥 영화 컬렉션
+          from: "movie_movies",
           localField: "showtime.movieId",
           foreignField: "_id",
           as: "movie",

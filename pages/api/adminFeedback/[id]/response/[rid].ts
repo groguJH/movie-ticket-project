@@ -14,34 +14,34 @@ import addResponse, {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   const { id, rid } = req.query as { id: string; rid: string };
 
   const session = await getServerSession(req, res, authOptions);
   const AdminName = (session?.user?.name as string) ?? "admin-unknown";
 
+  if (session?.user?.role !== "admin") {
+    return res.status(403).json({ message: "접근 권한이 없습니다." });
+  }
+
   if (req.method === "POST") {
     const updated = await addResponse(
       id as string,
       req.body,
-      AdminName as string
+      AdminName as string,
     );
     return res.status(200).json(updated);
   }
 
   if (req.method === "PATCH") {
     const patchContext = req.body;
-    const updated = await patchFeedbackService(
-      id,
-      { patchContext, AdminName },
-      rid
-    );
+    const updated = await patchFeedbackService(id, patchContext, AdminName);
     return res.status(200).json({ ok: true, data: updated });
   }
   if (req.method === "DELETE") {
     const soft = true;
-    await deleteFeedbackService(id, rid, soft);
+    await deleteFeedbackService(id, AdminName, soft);
     return res.status(200).json({ ok: true });
   }
   return res.status(405).end();

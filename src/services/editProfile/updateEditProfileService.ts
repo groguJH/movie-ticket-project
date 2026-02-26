@@ -22,13 +22,7 @@ export interface updateEditProfileParams {
 export default async function updateEditProfileService({
   userId,
   oldEmail,
-  newEmail,
-  name,
-  password,
-  phone,
-  profileImage,
-  agreeSms,
-  agreeEmail,
+  ...rest
 }: updateEditProfileParams) {
   const filter: any = {};
   if (oldEmail) {
@@ -42,25 +36,20 @@ export default async function updateEditProfileService({
   }
 
   const updateData: any = {
-    email: newEmail,
-    name,
-    ...(password && { password }),
-    ...(phone && { phone }),
-    ...(profileImage && { profileImage }),
-    ...(agreeSms !== undefined && { agreeSms }),
-    ...(agreeEmail !== undefined && { agreeEmail }),
+    name: rest.name,
+    email: rest.newEmail,
+    ...(rest.password && { password: rest.password }),
+    ...(rest.phone && { phone: rest.phone }),
+    ...(rest.profileImage && { profileImage: rest.profileImage }),
+    ...(rest.agreeSms !== undefined && { agreeSms: rest.agreeSms }),
+    ...(rest.agreeEmail !== undefined && { agreeEmail: rest.agreeEmail }),
   };
 
-  if (newEmail) updateData.email = newEmail;
-  const finalData = { ...updateData, filter };
-
   try {
-    const result = await editProfile(finalData);
-
+    const result = await editProfile(filter, updateData);
     return result;
   } catch (error) {
-    console.error("=== editProfile 호출 실패 ===");
-    console.error("에러:", error);
+    console.error("=== 서비스 에러 ===", error);
     throw error;
   }
 }

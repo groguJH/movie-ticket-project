@@ -35,7 +35,7 @@ export async function UpdateFeedbackService(
   satisfaction: string,
   updateData: UpdateFeedbackRequest,
 ) {
-  const feedback = await getFeedback(userId);
+  const feedback = await getFeedback(feedbackId);
 
   if (!feedback) {
     throw new Error("피드백을 찾을 수 없습니다.");
@@ -61,7 +61,11 @@ export async function UpdateFeedbackService(
   if (!Updated) {
     throw new Error("변경된 내용이 없습니다.");
   }
-  await updateFeedbackById(feedbackId, updateData);
+
+  const success = await updateFeedbackById(feedbackId, updateData);
+  if (!success) {
+    throw new Error("피드백 수정에 실패했습니다.");
+  }
   return { message: "피드백이 수정되었습니다." };
 }
 
