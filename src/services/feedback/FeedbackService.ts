@@ -71,9 +71,11 @@ export async function UpdateFeedbackService(
 
 // 페이지네이션
 export async function getFeedbackService({
+  userId,
   page,
   limit,
 }: {
+  userId: string;
   page: number;
   limit: number;
 }) {
@@ -82,7 +84,7 @@ export async function getFeedbackService({
   const perPage = limit > 0 ? limit : 10;
 
   // Repository 호출 (DB 전체 데이터 조회)
-  const allFeedbacks = await getFeedbackLists({});
+  const allFeedbacks = await getFeedbackLists({ userId });
 
   // 최신순 정렬
   const sorted = allFeedbacks.sort(

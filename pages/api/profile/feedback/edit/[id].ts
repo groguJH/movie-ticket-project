@@ -47,6 +47,7 @@ export default async function handler(
     const updated = await UpdateFeedbackService(id, userId, satisfaction, {
       title,
       content,
+      satisfaction,
     });
     return res
       .status(200)

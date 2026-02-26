@@ -46,10 +46,17 @@ export default async function writeHandler(
     }
 
     if (req.method === "GET") {
+      if (!session || !session.user) {
+        return res.status(401).json({ error: "로그인이 필요한 서비스입니다." });
+      }
+
+      const userId = session?.user?.id as string;
+
       const { page, limit } = req.query;
       const pageNumber = parseInt(page as string) || 1;
       const limitNumber = parseInt(limit as string) || 10;
       const data = await getFeedbackService({
+        userId,
         page: pageNumber,
         limit: limitNumber,
       });

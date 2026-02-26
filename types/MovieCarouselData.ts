@@ -16,5 +16,5 @@ export interface CarouselProps {
 export interface MovieItemProps {
   movie: Movie;
   onClickReserve: (id: string) => void;
-  onClickDetail: (tmdbId: number) => void;
+  onClickDetail: (id: string) => void;
 }

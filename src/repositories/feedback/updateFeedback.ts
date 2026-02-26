@@ -47,7 +47,7 @@ export async function getFeedbackLists(filter: Partial<FeedbackEntity> = {}) {
  */
 export async function getFeedback(id: string) {
   const collection = await getCollection();
-  const res = await collection.findOne({ userId: id });
+  const res = await collection.findOne({ _id: new ObjectId(id) });
   return res ? { ...res, _id: res._id?.toString() } : null;
 }
 

@@ -33,7 +33,7 @@ export interface Booking {
 }
 
 export interface MyPagePresenterProps {
-  name: string;
+  name: string | null;
   children: {
     favorites: ReactNode;
     bookings: ReactNode;

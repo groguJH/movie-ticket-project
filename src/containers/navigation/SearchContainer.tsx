@@ -70,10 +70,7 @@ export default function SearchContainer({
       handleResultClick={handleResultClick}
       results={data ?? []}
       loading={isLoading}
-      onSearch={() => {
-        // 엔터 눌렀을 때나 검색 버튼 눌렀을 때 동작을 추가하려면 여기에
-        ("검색 실행:", query);
-      }}
+      onSearch={() => {}}
     />
   );
 }

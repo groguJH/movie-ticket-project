@@ -227,7 +227,7 @@ export default function ListPresenter({
                           작성일 : {new Date(r.createdAt).toLocaleString()}
                         </span>
                         <br />
-                        <span>내용 : {r.text.text}</span>
+                        <span>내용 : {String(r.text)}</span>
                       </div>
                     ))}
                   </DetailItem>
