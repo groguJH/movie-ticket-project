@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  addAdminResponse,
+  adminResponse,
   deleteFeedback,
   getFeedbackById,
   getFeedbackLists,
@@ -29,7 +29,7 @@ export default async function addResponse(
   text: string,
   adminName: string,
 ) {
-  const updated = await addAdminResponse(feedbackId, {
+  const updated = await adminResponse(feedbackId, {
     text,
     adminName: adminName,
   });
@@ -93,7 +93,7 @@ export async function getFeedbackStatsService() {
  * 피드백 상태 업데이트 서비스
  * @param id 피드백 ID
  * @param status 새로운 상태 값
- * @param AdminId 관리자 ID (선택적)
+ * @param AdminId 관리자 ID
  * @returns 업데이트된 피드백 문서
  */
 export async function updateFeedbackStatusService(

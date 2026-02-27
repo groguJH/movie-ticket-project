@@ -36,8 +36,12 @@ export default async function handler(
 
   if (req.method === "PATCH") {
     const { text } = req.body;
-    const updated = await patchFeedbackService(id, rid, { text }, AdminName);
-    return res.status(200).json({ ok: true, data: updated });
+    try {
+      await patchFeedbackService(id, rid, { text }, AdminName);
+      return res.status(200).json({ ok: true });
+    } catch (error) {
+      return res.status(404).json({ message: "답변을 수정하지 못했습니다." });
+    }
   }
 
   if (req.method === "DELETE") {
