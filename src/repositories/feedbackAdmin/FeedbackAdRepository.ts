@@ -55,9 +55,9 @@ export async function getFeedbackLists(filters: Filter) {
   }
   if (status) match.status = status;
   if (satisfaction) match.satisfaction = satisfaction;
-  // 🚨 답변여부, 아래는 adminRes 배열의 길이로 판단
-  if (replied === true) match["adminRes.0"] = { $exists: true };
-  if (replied === false) match["adminRes"] = { $exists: true, $size: 0 };
+  // 🚨 답변여부, 아래는 response 배열의 길이로 판단
+  if (replied === true) match["response.0"] = { $exists: true };
+  if (replied === false) match["response"] = { $exists: true, $size: 0 };
   if (from || to) {
     match.createdAt = {};
     if (from) match.createdAt.$gte = new Date(from);
@@ -84,7 +84,7 @@ export async function getFeedbackLists(filters: Filter) {
  * @param response
  * @returns
  */
-export async function adminResponse(
+export async function response(
   feedbackId: string,
   response: {
     text: string;
@@ -98,7 +98,9 @@ export async function adminResponse(
     { _id },
     {
       $push: {
-        adminRes: {
+        response: {
+          // rid 기반 수정/삭제 API에서 사용할 답글 식별자입니다.
+          _id: new ObjectId(),
           text: response.text,
           adminName: response.adminName,
           createdAt: new Date(),
@@ -161,17 +163,19 @@ export async function getFeedbackStatusStats() {
 export async function patchFeedback(id: string, rid: string, patch: any) {
   const collection = await getCollection();
   const res = await collection.updateOne(
-    { _id: new ObjectId(id), "adminRes._id": new ObjectId(rid) },
+    { _id: new ObjectId(id), "response._id": new ObjectId(rid) },
     {
       $set: {
-        "adminRes.$.text": patch.text,
-        "adminRes.$.updatedAt": new Date(),
+        "response.$.text": patch.text,
+        "response.$.updatedAt": new Date(),
       },
     },
   );
+
   if (res.matchedCount === 0) {
-    throw new Error("업데이트 완료했습니다.");
+    throw new Error("수정할 답변을 찾을 수 없습니다.");
   }
+
   return await collection.findOne({ _id: new ObjectId(id) });
 }
 
@@ -189,17 +193,16 @@ export async function deleteFeedback(id: string, rid: string) {
   const res = await collection.updateOne(
     {
       _id: new ObjectId(id),
-      "adminRes._id": new ObjectId(rid),
+      "response._id": new ObjectId(rid),
     },
     {
-      $set: { "adminRes.$.isDeleted": true },
+      $set: { "response.$.isDeleted": true },
     },
   );
 
   if (res.matchedCount === 0) {
     throw new Error("삭제할 피드백을 찾을 수 없습니다.");
   }
-
   return;
 }
 

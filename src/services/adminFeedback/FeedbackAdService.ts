@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  adminResponse,
+  response,
   deleteFeedback,
   getFeedbackById,
   getFeedbackLists,
@@ -29,14 +29,14 @@ export default async function addResponse(
   text: string,
   adminName: string,
 ) {
-  const updated = await adminResponse(feedbackId, {
+  const updated = await response(feedbackId, {
     text,
     adminName: adminName,
   });
 
   await logAdminAction({
     adminName: adminName,
-    action: "addAdminResponse",
+    action: "addresponse",
     targetId: feedbackId,
     details: { textLength: text.length },
   });

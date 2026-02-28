@@ -1,12 +1,10 @@
 import "dotenv/config";
-
 import { ObjectId } from "mongodb";
 import fetch from "node-fetch";
 import clientPromise from "../lib/mongodb";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const API_SECRET_KEY = process.env.API_SECRET_KEY;
-const theaterArr: any = [];
 
 /**
  * 영화 및 상영관 데이터를 MongoDB에 삽입하는 스크립트입니다.
@@ -14,33 +12,36 @@ const theaterArr: any = [];
  * 일주일치 상영관 데이터와 일부 예매된 데이터도 함께 생성합니다.
  */
 
+const seatBooking = () => {
+  const seats = [];
+  const rows = ["A", "B", "C", "D", "E", "F", "G"];
+  for (let row of rows) {
+    for (let num = 1; num <= 7; num++) {
+      seats.push({ row, number: num, status: "available" });
+    }
+  }
+  return seats;
+};
+
+const getRandomDate = (start: Date, end: Date) => {
+  return new Date(
+    start.getTime() + Math.random() * (end.getTime() - start.getTime()),
+  );
+};
+
 async function insertMovieData() {
   const client = await clientPromise;
   const db = client.db("mymovieticket");
-
-  function seatBooking() {
-    const seats = [];
-    const rows = ["A", "B", "C", "D", "E", "F", "G"];
-    for (let row of rows) {
-      // 각 행에 대해
-      for (let num = 1; num <= 7; num++) {
-        // 각 열마다
-        seats.push({ row, number: num, status: "available" }); // 'rows'가 아닌 'row'로 저장
-      }
-    }
-    return seats;
-  }
 
   const res = await fetch(
     `${API_URL}movie/popular?api_key=${API_SECRET_KEY}&language=ko-KR&page=1`,
   );
   if (!res.ok) {
-    throw new Error(`1.API 요청 실패: ${res.status}`);
+    throw new Error(`API 요청 실패: ${res.status}`);
   }
   const data = await res.json();
   const movieData = data.results.slice(0, 12);
 
-  // TMDB 인기 영화 조회
   const movies = movieData.map((m: any) => ({
     _id: new ObjectId(),
     tmdbId: m.id,
@@ -49,14 +50,6 @@ async function insertMovieData() {
     backdropPath: m.backdrop_path,
     releaseDate: new Date(m.release_date),
   }));
-  await db.collection("movie_movies").deleteMany({});
-  await db.collection("movie_movies").insertMany(movies);
-
-  function getRandomDate(start: Date, end: Date) {
-    return new Date(
-      start.getTime() + Math.random() * (end.getTime() - start.getTime()),
-    );
-  }
 
   const screenings: any[] = [];
   const stationArr = [
@@ -66,6 +59,7 @@ async function insertMovieData() {
     "신촌역 영화관",
     "건대입구역 영화관",
   ];
+
   movies.forEach((m: any) => {
     for (let dayOffset = 0; dayOffset < 7; dayOffset++) {
       const base = new Date();
@@ -91,7 +85,6 @@ async function insertMovieData() {
       });
     }
   });
-  await db.collection("movie_screenings").insertMany(screenings);
 
   const bookings = screenings.slice(0, 1).map((s: { _id: any }) => ({
     _id: new ObjectId(),
@@ -100,12 +93,32 @@ async function insertMovieData() {
     seats: [{ row: "A", number: 1, status: "sold" }],
     bookedAt: new Date().toISOString(),
   }));
-  await db.collection("movie_bookings").insertMany(bookings);
 
-  process.exit(0);
+  const session = client.startSession();
+  try {
+    await session.withTransaction(async () => {
+      await db.collection("movie_movies").deleteMany({}, { session });
+      await db.collection("movie_screenings").deleteMany({}, { session });
+      await db.collection("movie_bookings").deleteMany({}, { session });
+
+      // 2. 새로운 데이터 삽입 (트랜잭션 안에서만 수행)
+      await db.collection("movie_movies").insertMany(movies, { session });
+      await db
+        .collection("movie_screenings")
+        .insertMany(screenings, { session });
+      await db.collection("movie_bookings").insertMany(bookings, { session });
+    });
+    console.log("데이터 트랜잭션 완료: 정상적으로 데이터 교체 성공");
+  } catch (err) {
+    console.error("트랜잭션 실패: DB 상태는 이전과 동일하게 유지됩니다.", err);
+    throw err;
+  } finally {
+    await session.endSession();
+    await client.close();
+  }
 }
 
 insertMovieData().catch((err) => {
-  console.error(err);
+  console.error("스크립트 실행 중 오류 발생:", err);
   process.exit(1);
 });

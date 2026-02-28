@@ -79,6 +79,12 @@ export default function ListPresenter({
   const limit = data?.limit ?? 10;
   const totalPages = Math.ceil(total / limit);
   const isOpenModal = selectedList !== null;
+  // 저장 키(response) 변경 이후에도 기존 responses 문서를 함께 처리하기 위한 호환 배열입니다.
+  const selectedresponses = (
+    selectedList?.response ??
+    selectedList?.responses ??
+    []
+  ).filter((res: any) => !res?.isDeleted);
 
   return (
     <Wrapper>
@@ -94,10 +100,8 @@ export default function ListPresenter({
             <List>
               {items.map((item: any, index: number) => (
                 <Item
-                  key={item.userId ?? index}
-                  className={
-                    selectedList?.userId === item.userId ? "selected" : ""
-                  }
+                  key={item._id ?? index}
+                  className={selectedList?._id === item._id ? "selected" : ""}
                 >
                   <HeaderButton
                     onClick={() => {
@@ -110,7 +114,11 @@ export default function ListPresenter({
                       <MetaInfo>
                         <span>작성자: {item.userName}</span>
                         <span>|</span>
-                        <span>{new Date().toLocaleDateString()}</span>
+                        <span>
+                          {item.createdAt
+                            ? new Date(item.createdAt).toLocaleDateString()
+                            : "-"}
+                        </span>
                       </MetaInfo>
                     </HeaderMain>
                   </HeaderButton>
@@ -165,7 +173,11 @@ export default function ListPresenter({
 
                 <DetailItem>
                   <strong>작성일</strong>
-                  <span>{new Date().toLocaleDateString()}</span>
+                  <span>
+                    {selectedList.createdAt
+                      ? new Date(selectedList.createdAt).toLocaleDateString()
+                      : "-"}
+                  </span>
                 </DetailItem>
 
                 <DetailItem>
@@ -173,7 +185,7 @@ export default function ListPresenter({
                   {isEditMode ? (
                     <div>
                       <CustomRadio
-                        value="매우 만족"
+                        value="매우만족"
                         selected={editSatisfaction}
                         onChange={SetEditSatisfaction}
                       />
@@ -216,10 +228,10 @@ export default function ListPresenter({
                     <ContentText>{selectedList.content}</ContentText>
                   )}
                 </DetailItem>
-                {selectedList.responses?.length > 0 && (
+                {selectedresponses.length > 0 && (
                   <DetailItem>
-                    {selectedList.responses.map((r: any, i: number) => (
-                      <div key={i}>
+                    {selectedresponses.map((r: any, i: number) => (
+                      <div key={String(r._id ?? i)}>
                         <strong>관리자 답변</strong>
                         <span>이름 : {r.adminName}</span>
                         <br />

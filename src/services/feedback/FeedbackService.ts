@@ -1,4 +1,3 @@
-import { message } from "antd";
 import {
   FeedbackEntity,
   UpdateFeedbackRequest,
@@ -9,6 +8,20 @@ import {
   getFeedbackLists,
   updateFeedbackById,
 } from "../../repositories/feedback/updateFeedback";
+
+const ALLOWED_SATISFACTION = [
+  "매우만족",
+  "매우 만족",
+  "만족",
+  "보통",
+  "불만족",
+  "매우 불만족",
+] as const;
+
+function normalizeSatisfaction(value: string) {
+  // 통계 집계 키와 맞추기 위해 공백 변형(매우 만족)을 저장 표준값(매우만족)으로 정규화합니다.
+  return value === "매우 만족" ? "매우만족" : value;
+}
 
 export async function CreateFeedbackService(feedback: any) {
   const { title, content, satisfaction } = feedback;
@@ -25,14 +38,14 @@ export async function CreateFeedbackService(feedback: any) {
  * 피드백 수정 서비스 함수
  * @description
  * - feedbackId와 userId로 피드백을 식별
- * - 만족도는 1~5 사이의 정수여야 합니다
+ * - 만족도는 허용된 문자열(매우만족/만족/보통/불만족/매우 불만족)만 허용합니다.
  * - 변경된 내용이 없으면 오류 발생
  * - 최신순 정렬로 페이지네이션 합니다.
  */
 export async function UpdateFeedbackService(
   feedbackId: string,
   userId: string,
-  satisfaction: string,
+  _satisfaction: string,
   updateData: UpdateFeedbackRequest,
 ) {
   const feedback = await getFeedback(feedbackId);
@@ -45,11 +58,17 @@ export async function UpdateFeedbackService(
     throw new Error("수정 권한이 없습니다.");
   }
 
-  if (updateData.satisfaction !== null) {
-    const s = Number(satisfaction);
-    if (!Number.isInteger(s) || s < 1 || s > 5) {
-      throw new Error("satisfaction 만족도는 1~5 사이의 정수여야 합니다.");
+  if (typeof updateData.satisfaction === "string") {
+    const normalized = normalizeSatisfaction(updateData.satisfaction.trim());
+    if (
+      !ALLOWED_SATISFACTION.includes(
+        normalized as (typeof ALLOWED_SATISFACTION)[number],
+      )
+    ) {
+      throw new Error("허용되지 않은 만족도 값입니다.");
     }
+    // 업데이트 전 normalize 값을 반영해 저장/통계 키를 일관되게 유지합니다.
+    updateData.satisfaction = normalized;
   }
 
   const Updated =

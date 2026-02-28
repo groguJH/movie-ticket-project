@@ -43,5 +43,5 @@ export default async function handler(
     );
     return res.status(200).json(updated);
   }
-  return res.status(405).end({ message: "허용되지 않은 메서드입니다." });
+  return res.status(405).end();
 }

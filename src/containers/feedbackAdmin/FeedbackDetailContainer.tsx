@@ -30,6 +30,12 @@ export default function FeedbackDetailContainer({
   const [status, setStatus] = useState<FeedbackStatus>("before reply");
   const [saving, setSaving] = useState(false);
 
+  const activeresponses = (
+    (data as any)?.response ??
+    (data as any)?.responses ??
+    []
+  ).filter((res: any) => !res?.isDeleted);
+
   const fetchDetail = useCallback(async () => {
     setLoading(true);
     try {
@@ -53,7 +59,7 @@ export default function FeedbackDetailContainer({
     setComment(true);
     try {
       const res = await axios.post(
-        `/api/adminFeedback/${selectedId}/response/index`,
+        `/api/adminFeedback/${selectedId}/response`,
         {
           text,
         },
@@ -91,14 +97,16 @@ export default function FeedbackDetailContainer({
     setComment(true);
 
     try {
-      const res = await axios.delete(
-        `/api/adminFeedback/${selectedId}/response/index`,
-        {
-          data: { hard },
-        },
+      const targetResponse = [...activeresponses].pop();
+      const responseId = targetResponse?._id;
+      if (!responseId) {
+        alert("삭제할 관리자 답글이 없습니다.");
+        return;
+      }
+
+      await axios.delete(
+        `/api/adminFeedback/${selectedId}/response/${responseId}`,
       );
-      const payload = res?.data ?? res.data;
-      setData(payload);
       if (onRefreshAction) {
         onRefreshAction();
       }

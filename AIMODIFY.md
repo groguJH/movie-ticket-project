@@ -1,837 +1,446 @@
 # AIMODIFY
 
-## Codex Diff 변경 설명
+## Diff Format Unified
 
-최근 커밋(28da050) 기준으로, 핵심 변경은 "피드백 문서 전체" 단위 수정/삭제에서 "답글(rid)" 단위 수정/삭제로 동작 축을 옮긴 것입니다.
+- All code blocks are unified to `diff --git` format.
+- Date: 2026-02-27
 
-1. API 라우트 변경 (`pages/api/adminFeedback/[id]/response/[rid].ts`)
-- PATCH 처리에서 body 전체 전달이 아니라 `text`를 분리하여 전달하도록 수정.
-- PATCH/DELETE 모두 `id + rid` 조합을 서비스로 넘기도록 수정.
+## Base Commit Diff (28da050)
 
-2. 서비스 레이어 변경 (`src/services/adminFeedback/FeedbackAdService.ts`)
-- `patchFeedbackService`, `deleteFeedbackService`에 `rid` 인자를 추가.
-- Repository 호출을 `id + rid` 기준으로 변경.
-- 관리자 액션 로그 `targetId`를 `id`에서 `${id}-${rid}`로 변경하여 답글 단위 추적 가능.
+```diff
+diff --git a/pages/api/adminFeedback/[id]/response/[rid].ts b/pages/api/adminFeedback/[id]/response/[rid].ts
+index c3a3806..a78c451 100644
+--- a/pages/api/adminFeedback/[id]/response/[rid].ts
++++ b/pages/api/adminFeedback/[id]/response/[rid].ts
+@@ -7,7 +7,7 @@ import addResponse, {
+ } from "../../../../../src/services/adminFeedback/FeedbackAdService";
 
-3. 리포지토리(DB 쿼리) 변경 (`src/repositories/feedbackAdmin/FeedbackAdRepository.ts`)
-- `patchFeedback`이 피드백 전체 `$set`에서, `adminRes.$`(포지셔널)로 특정 답글 텍스트/수정시각만 업데이트하도록 변경.
-- `deleteFeedback`도 피드백 문서 삭제가 아니라 `adminRes.$.isDeleted = true`로 답글 소프트 삭제 처리하도록 변경.
+ /**
+- * 관리자의 답글 수정/삭제 핸들러
++ * 관리자의 답글 작성/수정/삭제 핸들러
+  * @param req
+  * @param res
+  */
+@@ -35,13 +35,14 @@ export default async function handler(
+   }
 
-4. 동작 요약
-- 변경 전: 피드백 문서 중심 처리.
-- 변경 후: `id + rid` 기반 답글 1건 중심 처리.
-- 효과: 수정/삭제 범위가 명확해지고, 관리자 로그 추적성이 개선됨.
+   if (req.method === "PATCH") {
+-    const patchContext = req.body;
+-    const updated = await patchFeedbackService(id, patchContext, AdminName);
++    const { text } = req.body;
++    const updated = await patchFeedbackService(id, rid, { text }, AdminName);
+     return res.status(200).json({ ok: true, data: updated });
+   }
++
+   if (req.method === "DELETE") {
+-    const soft = true;
+-    await deleteFeedbackService(id, AdminName, soft);
++    const isSoft = true;
++    await deleteFeedbackService(id, rid, AdminName, isSoft);
+     return res.status(200).json({ ok: true });
+   }
+   return res.status(405).end();
+diff --git a/src/repositories/feedbackAdmin/FeedbackAdRepository.ts b/src/repositories/feedbackAdmin/FeedbackAdRepository.ts
+index 40542cc..215b1f6 100644
+--- a/src/repositories/feedbackAdmin/FeedbackAdRepository.ts
++++ b/src/repositories/feedbackAdmin/FeedbackAdRepository.ts
+@@ -158,11 +158,18 @@ export async function getFeedbackStatusStats() {
+  * - patch 객체를 받아 해당 피드백의 필드를 수정합니다.
+  * - 유효한 상태 값인지 검증합니다.
+  */
+-export async function patchFeedback(id: string, patch: any) {
++export async function patchFeedback(id: string, rid: string, patch: any) {
+   const collection = await getCollection();
+-  const _id = new ObjectId(id);
+-  await collection.updateOne({ _id }, { $set: patch });
+-  return await collection.findOne({ _id });
++  await collection.updateOne(
++    { _id: new ObjectId(id), "responses._id": new ObjectId(rid) },
++    {
++      $set: {
++        "responses.$.text": patch.text,
++        "responses.$.updatedAt": new Date(),
++      },
++    },
++  );
++  return await collection.findOne({ _id: new ObjectId(id) });
+ }
 
----
+ /**
+@@ -174,15 +181,17 @@ export async function patchFeedback(id: string, patch: any) {
+  * - soft가 false일 경우 실제로 문서를 삭제합니다.
+  * @return 삭제 결과
+  */
+-export async function deleteFeedback(id: string, soft = true) {
++export async function deleteFeedback(id: string, rid: string) {
+   const collection = await getCollection();
+-  const _id = new ObjectId(id);
+-  if (soft) {
+-    await collection.updateOne({ _id }, { $set: { isDeleted: true } });
+-  } else {
+-    return collection.deleteOne({ _id });
+-  }
+-  return { ok: true };
++  return await collection.updateOne(
++    {
++      _id: new ObjectId(id),
++      "responses._id": new ObjectId(rid),
++    },
++    {
++      $set: { "responses.$.isDeleted": true },
++    },
++  );
+ }
 
-Source Commit: 28da050 (관리자 피드백 수정)
+ interface UpdateFeedbackStatusPayload {
+diff --git a/src/services/adminFeedback/FeedbackAdService.ts b/src/services/adminFeedback/FeedbackAdService.ts
+index c269c86..a7c31a8 100644
+--- a/src/services/adminFeedback/FeedbackAdService.ts
++++ b/src/services/adminFeedback/FeedbackAdService.ts
+@@ -46,6 +46,7 @@ export default async function addResponse(
 
-워킹 트리 diff가 비어 있어, 최신 커밋의 변경 전/후 코드를 저장합니다.
+ export async function patchFeedbackService(
+   id: string,
++  rid: string,
+   patch: any,
+   adminName: string,
+ ) {
+@@ -54,11 +55,11 @@ export async function patchFeedbackService(
+     !["new", "in_progress", "resolved", "closed"].includes(patch.status)
+   )
+     throw new Error("Invalid status");
+-  const updated = await patchFeedback(id, patch);
++  const updated = await patchFeedback(id, rid, patch);
+   await logAdminAction({
+     adminName,
+     action: "patchFeedback",
+-    targetId: id,
++    targetId: `${id}-${rid}`,
+     details: patch,
+   });
+   return updated;
+@@ -66,14 +67,15 @@ export async function patchFeedbackService(
 
-## pages/api/adminFeedback/[id]/response/[rid].ts
-
-### Before (HEAD~1)
-
-```
-import { NextApiRequest, NextApiResponse } from "next";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../../../auth/[...nextauth]";
-import addResponse, {
-  deleteFeedbackService,
-  patchFeedbackService,
-} from "../../../../../src/services/adminFeedback/FeedbackAdService";
-
-/**
- * 관리자의 답글 수정/삭제 핸들러
- * @param req
- * @param res
- */
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
-  const { id, rid } = req.query as { id: string; rid: string };
-
-  const session = await getServerSession(req, res, authOptions);
-  const AdminName = (session?.user?.name as string) ?? "admin-unknown";
-
-  if (session?.user?.role !== "admin") {
-    return res.status(403).json({ message: "접근 권한이 없습니다." });
-  }
-
-  if (req.method === "POST") {
-    const { text } = req.body;
-    if (!text) {
-      return res.status(400).json({ message: "답글 내용을 입력해주세요." });
-    }
-    const updated = await addResponse(id as string, text, AdminName as string);
-    return res.status(200).json(updated);
-  }
-
-  if (req.method === "PATCH") {
-    const patchContext = req.body;
-    const updated = await patchFeedbackService(id, patchContext, AdminName);
-    return res.status(200).json({ ok: true, data: updated });
-  }
-  if (req.method === "DELETE") {
-    const soft = true;
-    await deleteFeedbackService(id, AdminName, soft);
-    return res.status(200).json({ ok: true });
-  }
-  return res.status(405).end();
-}
-```
-
-### After (HEAD)
-
-```
-import { NextApiRequest, NextApiResponse } from "next";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../../../auth/[...nextauth]";
-import addResponse, {
-  deleteFeedbackService,
-  patchFeedbackService,
-} from "../../../../../src/services/adminFeedback/FeedbackAdService";
-
-/**
- * 관리자의 답글 작성/수정/삭제 핸들러
- * @param req
- * @param res
- */
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
-  const { id, rid } = req.query as { id: string; rid: string };
-
-  const session = await getServerSession(req, res, authOptions);
-  const AdminName = (session?.user?.name as string) ?? "admin-unknown";
-
-  if (session?.user?.role !== "admin") {
-    return res.status(403).json({ message: "접근 권한이 없습니다." });
-  }
-
-  if (req.method === "POST") {
-    const { text } = req.body;
-    if (!text) {
-      return res.status(400).json({ message: "답글 내용을 입력해주세요." });
-    }
-    const updated = await addResponse(id as string, text, AdminName as string);
-    return res.status(200).json(updated);
-  }
-
-  if (req.method === "PATCH") {
-    const { text } = req.body;
-    const updated = await patchFeedbackService(id, rid, { text }, AdminName);
-    return res.status(200).json({ ok: true, data: updated });
-  }
-
-  if (req.method === "DELETE") {
-    const isSoft = true;
-    await deleteFeedbackService(id, rid, AdminName, isSoft);
-    return res.status(200).json({ ok: true });
-  }
-  return res.status(405).end();
-}
-```
-
-## src/repositories/feedbackAdmin/FeedbackAdRepository.ts
-
-### Before (HEAD~1)
-
-```
-import { ObjectId } from "mongodb";
-import clientPromise from "../../../lib/mongodb";
-import { FeedbackEntity } from "../../../types/feedbackModal";
-
-type Filter = {
-  q?: string;
-  status?: string;
-  from?: string;
-  to?: string;
-  satisfaction?: string;
-  page?: number;
-  limit?: number;
-  replied?: boolean;
-  sort?: "-createdAt";
-};
-
-/**
- *
- * 피드백 컬렉션을 가져오는 헬퍼 함수
- */
-async function getCollection() {
-  const client = await clientPromise;
-  const db = client.db("mymovieticket");
-
-  return db.collection<FeedbackEntity>("feedback");
-}
-
-/**
- *
- * 관리자용 피드백 리스트 조회 기능
- * @param filters
- * @description
- * - 다양한 필터링 옵션을 지원합니다.
- * - 페이징 및 정렬 기능을 포함합니다.
- * - promise.all 병렬처리로 기능을 높임
- */
-export async function getFeedbackLists(filters: Filter) {
-  const collection = await getCollection();
-
-  const {
-    q,
-    status,
-    from,
-    to,
-    sort = "-createdAt",
-    satisfaction,
-    replied,
-    page = 1,
-    limit = 20,
-  } = filters;
-  const match: any = { isDeleted: { $ne: true } };
-
-  if (q) {
-    match.$text = { $search: q };
-  }
-  if (status) match.status = status;
-  if (satisfaction) match.satisfaction = satisfaction;
-  // 🚨 답변여부, 아래는 responses 배열의 길이로 판단, 삭제할수도 있는 코드
-  if (replied === true) match["responses.0"] = { $exists: true };
-  if (replied === false) match["responses"] = { $exists: true, $size: 0 };
-  if (from || to) {
-    match.createdAt = {};
-    if (from) match.createdAt.$gte = new Date(from);
-    if (to) match.createdAt.$lte = new Date(to);
-  }
-
-  const skip = (page - 1) * limit;
-  const sortObj: any = {};
-
-  if (sort.startsWith("-")) sortObj[sort.slice(1)] = -1;
-  else sortObj[sort] = 1;
-
-  const [items, total] = await Promise.all([
-    collection.find(match).sort(sortObj).skip(skip).limit(limit).toArray(),
-    collection.countDocuments(match),
-  ]);
-
-  return { items, total, page, limit };
-}
-
-/**
- * 관리자 답변 추가 기능
- * @param feedbackId
- * @param response
- * @returns
- */
-export async function addAdminResponse(
-  feedbackId: string,
-  response: {
-    text: string;
-    adminName: string;
-  },
-) {
-  const collection = await getCollection();
-  const _id = new ObjectId(feedbackId);
-
-  await collection.updateOne(
-    { _id },
-    {
-      $push: {
-        responses: {
-          text: response.text,
-          adminName: response.adminName,
-          createdAt: new Date(),
-        },
-      },
-      $set: {
-        status: "in_progress",
-        handledBy: response.adminName,
-        handledAt: new Date(),
-      },
-    },
-  );
-  return await collection.findOne({ _id });
-}
-
-/**
- * 단일 피드백 조회기능
- * @param id
- * @returns id에 해당하는 피드백 문서, isDeleted가 아닌 것을 반환
- */
-export async function getFeedbackById(id: string) {
-  const collection = await getCollection();
-  const _id = new ObjectId(id);
-  return collection.findOne({ _id, isDeleted: { $ne: true } });
-}
-
-/**
- * 피드백 상태별 통계 조회 기능
- */
-export async function getFeedbackStatusStats() {
-  const collection = await getCollection();
-  const [res] = await collection
-    .aggregate([
-      {
-        $facet: {
-          Total: [{ $count: "count" }],
-          Status: [{ $group: { _id: "$status", count: { $sum: 1 } } }],
-          Satisfaction: [
-            { $group: { _id: "$satisfaction", count: { $sum: 1 } } },
-          ],
-        },
-      },
-    ])
-    .toArray();
-  return {
-    total: res.Total[0]?.count ?? 0,
-    status: res.Status,
-    satisfaction: res.Satisfaction,
-  };
-}
-
-/**
- * 피드백 수정 기능
- * @param id
- * @param patch
- * @description
- * - patch 객체를 받아 해당 피드백의 필드를 수정합니다.
- * - 유효한 상태 값인지 검증합니다.
- */
-export async function patchFeedback(id: string, patch: any) {
-  const collection = await getCollection();
-  const _id = new ObjectId(id);
-  await collection.updateOne({ _id }, { $set: patch });
-  return await collection.findOne({ _id });
-}
-
-/**
- * 피드백 삭제 기능
- * @param id
- * @param soft
- * @description
- * - soft가 true일 경우 isDeleted 플래그를 설정하여 소프트 삭제를 수행합니다.
- * - soft가 false일 경우 실제로 문서를 삭제합니다.
- * @return 삭제 결과
- */
-export async function deleteFeedback(id: string, soft = true) {
-  const collection = await getCollection();
-  const _id = new ObjectId(id);
-  if (soft) {
-    await collection.updateOne({ _id }, { $set: { isDeleted: true } });
-  } else {
-    return collection.deleteOne({ _id });
-  }
-  return { ok: true };
-}
-
-interface UpdateFeedbackStatusPayload {
-  status: "before reply" | "resolved" | "in_progress";
-  AdminId?: string;
-}
-
-/**
- * 피드백 상태 업데이트 기능
- * @param id
- * @param payload
- * @description
- * - 피드백의 상태를 업데이트합니다.
- * - 상태 변경 시 관리자 ID와 업데이트 시간을 기록합니다.
- * - 관리자가 직접 선택하여 답변상태를 변경합니다.
- */
-export async function updateFeedbackStatus(
-  id: string,
-  payload: UpdateFeedbackStatusPayload,
-) {
-  const collection = await getCollection();
-  const res = await collection.updateOne(
-    {
-      _id: new ObjectId(id),
-    },
-    {
-      $set: {
-        status: payload.status,
-        AdminId: payload.AdminId,
-        updatedAt: new Date(),
-      },
-    },
-  );
-  if (res.matchedCount === 0) {
-    throw new Error("피드백을 찾을 수 없습니다.");
-  }
-  return res;
-}
+ export async function deleteFeedbackService(
+   id: string,
++  rid: string,
+   adminName: string,
+   soft: boolean,
+ ) {
+-  const result = await deleteFeedback(id, soft);
++  const result = await deleteFeedback(id, rid);
+   await logAdminAction({
+     adminName: adminName,
+     action: "deleteFeedback",
+-    targetId: id,
++    targetId: `${id}-${rid}`,
+     details: { soft },
+   });
+   return result;
 ```
 
-### After (HEAD)
+## Current Working Tree Diff
 
+```diff
+diff --git a/pages/api/adminFeedback/[id]/response/index.ts b/pages/api/adminFeedback/[id]/response/index.ts
+index 480671c..55089ad 100644
+--- a/pages/api/adminFeedback/[id]/response/index.ts
++++ b/pages/api/adminFeedback/[id]/response/index.ts
+@@ -13,7 +13,11 @@ import { authOptions } from "../../../auth/[...nextauth]";
+
+ export default async function index(req: NextApiRequest, res: NextApiResponse) {
+   const { id } = req.query;
+-  const { text } = req.body;
++  const { text, rid } = req.body ?? {};
++
++  if (!id || Array.isArray(id)) {
++    return res.status(400).json({ message: "유효한 피드백 ID가 필요합니다." });
++  }
+
+   // 2. 세션 및 권한 체크
+   const session = await getServerSession(req, res, authOptions);
+@@ -25,14 +29,19 @@ export default async function index(req: NextApiRequest, res: NextApiResponse) {
+   // 3. 메서드별 로직 분기
+   try {
+     if (req.method === "POST") {
++      if (!text || typeof text !== "string") {
++        return res.status(400).json({ message: "답글 내용을 입력해주세요." });
++      }
+       const result = await addResponse(id as string, text, adminName);
+       return res.status(200).json(result);
+     }
+
+     if (req.method === "DELETE") {
+-      const { hard } = req.body;
+-      // deleteResponse 서비스 함수가 있다고 가정
+-      const result = await deleteFeedbackService(id as string, adminName, true);
++      if (!rid || typeof rid !== "string") {
++        return res.status(400).json({ message: "삭제할 답글 ID(rid)가 필요합니다." });
++      }
++      // 하위 호환을 위해 index 라우트에서도 rid 삭제를 지원합니다.
++      const result = await deleteFeedbackService(id as string, rid, adminName, true);
+       return res.status(200).json(result);
+     }
+
+diff --git a/src/components/presenters/FeedbackAdmin/FeedbackDetailPresenter.tsx b/src/components/presenters/FeedbackAdmin/FeedbackDetailPresenter.tsx
+index 5aceecc..098fd1a 100644
+--- a/src/components/presenters/FeedbackAdmin/FeedbackDetailPresenter.tsx
++++ b/src/components/presenters/FeedbackAdmin/FeedbackDetailPresenter.tsx
+@@ -44,6 +44,9 @@ export default function FeedbackDetailPresenter({
+   if (!selectedId) null;
+
+   const [responseText, SetResponseText] = useState("");
++  const responses = (Array.isArray(data?.response) ? data.response : []).filter(
++    (res: any) => !res?.isDeleted,
++  );
+
+   // 모달엔 아이디, 데이터, 로딩에러,뿐만 아니라 답글추가, 수정, 삭제도 필요하다.
+   return (
+@@ -108,11 +111,10 @@ export default function FeedbackDetailPresenter({
+                 <DetailItem>
+                   <strong>관리자 응답</strong>
+
+-                  {Array.isArray(data.responses) &&
+-                  data.responses.length > 0 ? (
+-                    data.responses.map((r: any) => (
++                  {responses.length > 0 ? (
++                    responses.map((r: any) => (
+                       <div
+-                        key={r.createdAt}
++                        key={String(r._id ?? r.createdAt)}
+                         style={{
+                           padding: "8px 0",
+                           borderBottom: "1px dashed #444",
+diff --git a/src/components/presenters/feedback/ListPresenter.tsx b/src/components/presenters/feedback/ListPresenter.tsx
+index d9ba15d..98df1f9 100644
+--- a/src/components/presenters/feedback/ListPresenter.tsx
++++ b/src/components/presenters/feedback/ListPresenter.tsx
+@@ -79,6 +79,12 @@ export default function ListPresenter({
+   const limit = data?.limit ?? 10;
+   const totalPages = Math.ceil(total / limit);
+   const isOpenModal = selectedList !== null;
++  // 저장 키(response) 변경 이후에도 기존 responses 문서를 함께 처리하기 위한 호환 배열입니다.
++  const selectedresponses = (
++    selectedList?.response ??
++    selectedList?.responses ??
++    []
++  ).filter((res: any) => !res?.isDeleted);
+
+   return (
+     <Wrapper>
+@@ -110,7 +116,11 @@ export default function ListPresenter({
+                       <MetaInfo>
+                         <span>작성자: {item.userName}</span>
+                         <span>|</span>
+-                        <span>{new Date().toLocaleDateString()}</span>
++                        <span>
++                          {item.createdAt
++                            ? new Date(item.createdAt).toLocaleDateString()
++                            : "-"}
++                        </span>
+                       </MetaInfo>
+                     </HeaderMain>
+                   </HeaderButton>
+@@ -165,7 +175,11 @@ export default function ListPresenter({
+
+                 <DetailItem>
+                   <strong>작성일</strong>
+-                  <span>{new Date().toLocaleDateString()}</span>
++                  <span>
++                    {selectedList.createdAt
++                      ? new Date(selectedList.createdAt).toLocaleDateString()
++                      : "-"}
++                  </span>
+                 </DetailItem>
+
+                 <DetailItem>
+@@ -173,7 +187,7 @@ export default function ListPresenter({
+                   {isEditMode ? (
+                     <div>
+                       <CustomRadio
+-                        value="매우 만족"
++                        value="매우만족"
+                         selected={editSatisfaction}
+                         onChange={SetEditSatisfaction}
+                       />
+@@ -216,10 +230,10 @@ export default function ListPresenter({
+                     <ContentText>{selectedList.content}</ContentText>
+                   )}
+                 </DetailItem>
+-                {selectedList.responses?.length > 0 && (
++                {selectedresponses.length > 0 && (
+                   <DetailItem>
+-                    {selectedList.responses.map((r: any, i: number) => (
+-                      <div key={i}>
++                    {selectedresponses.map((r: any, i: number) => (
++                      <div key={String(r._id ?? i)}>
+                         <strong>관리자 답변</strong>
+                         <span>이름 : {r.adminName}</span>
+                         <br />
+diff --git a/src/containers/feedbackAdmin/FeedbackDetailContainer.tsx b/src/containers/feedbackAdmin/FeedbackDetailContainer.tsx
+index d2234e2..849672c 100644
+--- a/src/containers/feedbackAdmin/FeedbackDetailContainer.tsx
++++ b/src/containers/feedbackAdmin/FeedbackDetailContainer.tsx
+@@ -29,6 +29,12 @@ export default function FeedbackDetailContainer({
+
+   const [status, setStatus] = useState<FeedbackStatus>("before reply");
+   const [saving, setSaving] = useState(false);
++  // 저장 키(response) 변경 이후 기존 responses 데이터도 읽기 위한 호환 배열입니다.
++  const activeresponses = (
++    (data as any)?.response ??
++    (data as any)?.responses ??
++    []
++  ).filter((res: any) => !res?.isDeleted);
+
+   const fetchDetail = useCallback(async () => {
+     setLoading(true);
+@@ -91,14 +97,15 @@ export default function FeedbackDetailContainer({
+     setComment(true);
+
+     try {
+-      const res = await axios.delete(
+-        `/api/adminFeedback/${selectedId}/response/index`,
+-        {
+-          data: { hard },
+-        },
+-      );
+-      const payload = res?.data ?? res.data;
+-      setData(payload);
++      // 현재 UI는 특정 답글 선택 기능이 없어, 마지막(최신) 답글을 삭제 대상으로 사용합니다.
++      const targetResponse = [...activeresponses].pop();
++      const responseId = targetResponse?._id;
++      if (!responseId) {
++        alert("삭제할 관리자 답글이 없습니다.");
++        return;
++      }
++
++      await axios.delete(`/api/adminFeedback/${selectedId}/response/${responseId}`);
+       if (onRefreshAction) {
+         onRefreshAction();
+       }
+diff --git a/src/repositories/feedbackAdmin/FeedbackAdRepository.ts b/src/repositories/feedbackAdmin/FeedbackAdRepository.ts
+index 498273f..98d7b83 100644
+--- a/src/repositories/feedbackAdmin/FeedbackAdRepository.ts
++++ b/src/repositories/feedbackAdmin/FeedbackAdRepository.ts
+@@ -99,6 +99,8 @@ export async function response(
+     {
+       $push: {
+         response: {
++          // rid 기반 수정/삭제 API에서 사용할 답글 식별자입니다.
++          _id: new ObjectId(),
+           text: response.text,
+           adminName: response.adminName,
+           createdAt: new Date(),
+@@ -169,9 +171,11 @@ export async function patchFeedback(id: string, rid: string, patch: any) {
+       },
+     },
+   );
++
+   if (res.matchedCount === 0) {
+-    throw new Error("업데이트 완료했습니다.");
++    throw new Error("수정할 답변을 찾을 수 없습니다.");
+   }
++
+   return await collection.findOne({ _id: new ObjectId(id) });
+ }
+
+@@ -199,7 +203,6 @@ export async function deleteFeedback(id: string, rid: string) {
+   if (res.matchedCount === 0) {
+     throw new Error("삭제할 피드백을 찾을 수 없습니다.");
+   }
+-
+   return;
+ }
+
+diff --git a/src/services/feedback/FeedbackService.ts b/src/services/feedback/FeedbackService.ts
+index 22af9a7..5ef3fa9 100644
+--- a/src/services/feedback/FeedbackService.ts
++++ b/src/services/feedback/FeedbackService.ts
+@@ -10,6 +10,20 @@ import {
+   updateFeedbackById,
+ } from "../../repositories/feedback/updateFeedback";
+
++const ALLOWED_SATISFACTION = [
++  "매우만족",
++  "매우 만족",
++  "만족",
++  "보통",
++  "불만족",
++  "매우 불만족",
++] as const;
++
++function normalizeSatisfaction(value: string) {
++  // 통계 집계 키와 맞추기 위해 공백 변형(매우 만족)을 저장 표준값(매우만족)으로 정규화합니다.
++  return value === "매우 만족" ? "매우만족" : value;
++}
++
+ export async function CreateFeedbackService(feedback: any) {
+   const { title, content, satisfaction } = feedback;
+
+@@ -25,14 +39,14 @@ export async function CreateFeedbackService(feedback: any) {
+  * 피드백 수정 서비스 함수
+  * @description
+  * - feedbackId와 userId로 피드백을 식별
+- * - 만족도는 1~5 사이의 정수여야 합니다
++ * - 만족도는 허용된 문자열(매우만족/만족/보통/불만족/매우 불만족)만 허용합니다.
+  * - 변경된 내용이 없으면 오류 발생
+  * - 최신순 정렬로 페이지네이션 합니다.
+  */
+ export async function UpdateFeedbackService(
+   feedbackId: string,
+   userId: string,
+-  satisfaction: string,
++  _satisfaction: string,
+   updateData: UpdateFeedbackRequest,
+ ) {
+   const feedback = await getFeedback(feedbackId);
+@@ -45,11 +59,13 @@ export async function UpdateFeedbackService(
+     throw new Error("수정 권한이 없습니다.");
+   }
+
+-  if (updateData.satisfaction !== null) {
+-    const s = Number(satisfaction);
+-    if (!Number.isInteger(s) || s < 1 || s > 5) {
+-      throw new Error("satisfaction 만족도는 1~5 사이의 정수여야 합니다.");
++  if (typeof updateData.satisfaction === "string") {
++    const normalized = normalizeSatisfaction(updateData.satisfaction.trim());
++    if (!ALLOWED_SATISFACTION.includes(normalized as (typeof ALLOWED_SATISFACTION)[number])) {
++      throw new Error("허용되지 않은 만족도 값입니다.");
+     }
++    // 업데이트 전 normalize 값을 반영해 저장/통계 키를 일관되게 유지합니다.
++    updateData.satisfaction = normalized;
+   }
+
+   const Updated =
+diff --git a/types/feedbackModal.ts b/types/feedbackModal.ts
+index 6d53afc..239d89c 100644
+--- a/types/feedbackModal.ts
++++ b/types/feedbackModal.ts
+@@ -27,7 +27,7 @@ export interface FeedbackEntity {
+   isPublic?: boolean; // 공개해도 되는 내용인지 여부
+   isFlagged?: boolean; // 내용의 중요도 여부
+   replied?: boolean; // 답변여부
+-  response?: FeedbackAdResponse[];
++  response?: FeedbackAdResponse[];
+ }
+
+ export interface FeedbackResponse {
+@@ -36,13 +36,16 @@ export interface FeedbackResponse {
+   userName: string;
+   satisfaction?: string;
+   createdAt: string;
+-  responses?: FeedbackAdResponse[];
++  response?: FeedbackAdResponse[];
+ }
+
+ export interface FeedbackAdResponse {
++  _id?: string | ObjectId;
+   text: string;
+   adminName: string;
+   createdAt: Date | string;
++  updatedAt?: Date | string;
++  isDeleted?: boolean;
+ }
+
+ export interface FeedbackListResponse {
 ```
-import { ObjectId } from "mongodb";
-import clientPromise from "../../../lib/mongodb";
-import { FeedbackEntity } from "../../../types/feedbackModal";
-
-type Filter = {
-  q?: string;
-  status?: string;
-  from?: string;
-  to?: string;
-  satisfaction?: string;
-  page?: number;
-  limit?: number;
-  replied?: boolean;
-  sort?: "-createdAt";
-};
-
-/**
- *
- * 피드백 컬렉션을 가져오는 헬퍼 함수
- */
-async function getCollection() {
-  const client = await clientPromise;
-  const db = client.db("mymovieticket");
-
-  return db.collection<FeedbackEntity>("feedback");
-}
-
-/**
- *
- * 관리자용 피드백 리스트 조회 기능
- * @param filters
- * @description
- * - 다양한 필터링 옵션을 지원합니다.
- * - 페이징 및 정렬 기능을 포함합니다.
- * - promise.all 병렬처리로 기능을 높임
- */
-export async function getFeedbackLists(filters: Filter) {
-  const collection = await getCollection();
-
-  const {
-    q,
-    status,
-    from,
-    to,
-    sort = "-createdAt",
-    satisfaction,
-    replied,
-    page = 1,
-    limit = 20,
-  } = filters;
-  const match: any = { isDeleted: { $ne: true } };
-
-  if (q) {
-    match.$text = { $search: q };
-  }
-  if (status) match.status = status;
-  if (satisfaction) match.satisfaction = satisfaction;
-  // 🚨 답변여부, 아래는 adminRes 배열의 길이로 판단, 삭제할수도 있는 코드
-  if (replied === true) match["adminRes.0"] = { $exists: true };
-  if (replied === false) match["adminRes"] = { $exists: true, $size: 0 };
-  if (from || to) {
-    match.createdAt = {};
-    if (from) match.createdAt.$gte = new Date(from);
-    if (to) match.createdAt.$lte = new Date(to);
-  }
-
-  const skip = (page - 1) * limit;
-  const sortObj: any = {};
-
-  if (sort.startsWith("-")) sortObj[sort.slice(1)] = -1;
-  else sortObj[sort] = 1;
-
-  const [items, total] = await Promise.all([
-    collection.find(match).sort(sortObj).skip(skip).limit(limit).toArray(),
-    collection.countDocuments(match),
-  ]);
-
-  return { items, total, page, limit };
-}
-
-/**
- * 관리자 답변 추가 기능
- * @param feedbackId
- * @param response
- * @returns
- */
-export async function adminResponse(
-  feedbackId: string,
-  response: {
-    text: string;
-    adminName: string;
-  },
-) {
-  const collection = await getCollection();
-  const _id = new ObjectId(feedbackId);
-
-  await collection.updateOne(
-    { _id },
-    {
-      $push: {
-        adminRes: {
-          text: response.text,
-          adminName: response.adminName,
-          createdAt: new Date(),
-        },
-      },
-      $set: {
-        status: "in_progress",
-        handledBy: response.adminName,
-        handledAt: new Date(),
-      },
-    },
-  );
-  return await collection.findOne({ _id });
-}
-
-/**
- * 단일 피드백 조회기능
- * @param id
- * @returns id에 해당하는 피드백 문서, isDeleted가 아닌 것을 반환
- */
-export async function getFeedbackById(id: string) {
-  const collection = await getCollection();
-  const _id = new ObjectId(id);
-  return collection.findOne({ _id, isDeleted: { $ne: true } });
-}
-
-/**
- * 피드백 상태별 통계 조회 기능
- */
-export async function getFeedbackStatusStats() {
-  const collection = await getCollection();
-  const [res] = await collection
-    .aggregate([
-      {
-        $facet: {
-          Total: [{ $count: "count" }],
-          Status: [{ $group: { _id: "$status", count: { $sum: 1 } } }],
-          Satisfaction: [
-            { $group: { _id: "$satisfaction", count: { $sum: 1 } } },
-          ],
-        },
-      },
-    ])
-    .toArray();
-  return {
-    total: res.Total[0]?.count ?? 0,
-    status: res.Status,
-    satisfaction: res.Satisfaction,
-  };
-}
-
-/**
- * 피드백 수정 기능
- * @param id
- * @param patch
- * @description
- * - patch 객체를 받아 해당 피드백의 필드를 수정합니다.
- * - 유효한 상태 값인지 검증합니다.
- */
-export async function patchFeedback(id: string, rid: string, patch: any) {
-  const collection = await getCollection();
-  await collection.updateOne(
-    { _id: new ObjectId(id), "adminRes._id": new ObjectId(rid) },
-    {
-      $set: {
-        "adminRes.$.text": patch.text,
-        "adminRes.$.updatedAt": new Date(),
-      },
-    },
-  );
-  return await collection.findOne({ _id: new ObjectId(id) });
-}
-
-/**
- * 피드백 삭제 기능
- * @param id
- * @param soft
- * @description
- * - soft가 true일 경우 isDeleted 플래그를 설정하여 소프트 삭제를 수행합니다.
- * - soft가 false일 경우 실제로 문서를 삭제합니다.
- * @return 삭제 결과
- */
-export async function deleteFeedback(id: string, rid: string) {
-  const collection = await getCollection();
-  return await collection.updateOne(
-    {
-      _id: new ObjectId(id),
-      "adminRes._id": new ObjectId(rid),
-    },
-    {
-      $set: { "adminRes.$.isDeleted": true },
-    },
-  );
-}
-
-interface UpdateFeedbackStatusPayload {
-  status: "before reply" | "resolved" | "in_progress";
-  AdminId?: string;
-}
-
-/**
- * 피드백 상태 업데이트 기능
- * @param id
- * @param payload
- * @description
- * - 피드백의 상태를 업데이트합니다.
- * - 상태 변경 시 관리자 ID와 업데이트 시간을 기록합니다.
- * - 관리자가 직접 선택하여 답변상태를 변경합니다.
- */
-export async function updateFeedbackStatus(
-  id: string,
-  payload: UpdateFeedbackStatusPayload,
-) {
-  const collection = await getCollection();
-  const res = await collection.updateOne(
-    {
-      _id: new ObjectId(id),
-    },
-    {
-      $set: {
-        status: payload.status,
-        AdminId: payload.AdminId,
-        updatedAt: new Date(),
-      },
-    },
-  );
-  if (res.matchedCount === 0) {
-    throw new Error("피드백을 찾을 수 없습니다.");
-  }
-  return res;
-}
-```
-
-## src/services/adminFeedback/FeedbackAdService.ts
-
-### Before (HEAD~1)
-
-```
-import React from "react";
-import {
-  addAdminResponse,
-  deleteFeedback,
-  getFeedbackById,
-  getFeedbackLists,
-  getFeedbackStatusStats,
-  patchFeedback,
-  updateFeedbackStatus,
-} from "../../repositories/feedbackAdmin/FeedbackAdRepository";
-import { logAdminAction } from "../../../lib/logAdminAction";
-
-export function findFeedbackQueryService(q: any) {
-  return getFeedbackLists(q);
-}
-
-export async function getAdminFeedbackStatsService() {
-  const stats = await getFeedbackStatusStats();
-  return stats;
-}
-
-export async function getFeedbackByIdService(id: string) {
-  const feedback = await getFeedbackById(id);
-  return feedback;
-}
-
-export default async function addResponse(
-  feedbackId: string,
-  text: string,
-  adminName: string,
-) {
-  const updated = await addAdminResponse(feedbackId, {
-    text,
-    adminName: adminName,
-  });
-
-  await logAdminAction({
-    adminName: adminName,
-    action: "addAdminResponse",
-    targetId: feedbackId,
-    details: { textLength: text.length },
-  });
-
-  return updated;
-}
-
-export async function patchFeedbackService(
-  id: string,
-  patch: any,
-  adminName: string,
-) {
-  if (
-    patch.status &&
-    !["new", "in_progress", "resolved", "closed"].includes(patch.status)
-  )
-    throw new Error("Invalid status");
-  const updated = await patchFeedback(id, patch);
-  await logAdminAction({
-    adminName,
-    action: "patchFeedback",
-    targetId: id,
-    details: patch,
-  });
-  return updated;
-}
-
-export async function deleteFeedbackService(
-  id: string,
-  adminName: string,
-  soft: boolean,
-) {
-  const result = await deleteFeedback(id, soft);
-  await logAdminAction({
-    adminName: adminName,
-    action: "deleteFeedback",
-    targetId: id,
-    details: { soft },
-  });
-  return result;
-}
-
-/**
- * 피드백 상태별 통계 조회 서비스
- * @return 상태별 피드백 통계
- */
-export async function getFeedbackStatsService() {
-  return await getFeedbackStatusStats();
-}
-
-/**
- * 피드백 상태 업데이트 서비스
- * @param id 피드백 ID
- * @param status 새로운 상태 값
- * @param AdminId 관리자 ID (선택적)
- * @returns 업데이트된 피드백 문서
- */
-export async function updateFeedbackStatusService(
-  id: string,
-  status: "before reply" | "resolved" | "in_progress",
-  AdminId?: string,
-) {
-  const allowed = ["before reply", "resolved", "in_progress"];
-
-  if (!allowed.includes(status)) {
-    throw new Error("허용되지 않은 status 값입니다.");
-  }
-  return await updateFeedbackStatus(id, { status, AdminId });
-}
-```
-
-### After (HEAD)
-
-```
-import React from "react";
-import {
-  adminResponse,
-  deleteFeedback,
-  getFeedbackById,
-  getFeedbackLists,
-  getFeedbackStatusStats,
-  patchFeedback,
-  updateFeedbackStatus,
-} from "../../repositories/feedbackAdmin/FeedbackAdRepository";
-import { logAdminAction } from "../../../lib/logAdminAction";
-
-export function findFeedbackQueryService(q: any) {
-  return getFeedbackLists(q);
-}
-
-export async function getAdminFeedbackStatsService() {
-  const stats = await getFeedbackStatusStats();
-  return stats;
-}
-
-export async function getFeedbackByIdService(id: string) {
-  const feedback = await getFeedbackById(id);
-  return feedback;
-}
-
-export default async function addResponse(
-  feedbackId: string,
-  text: string,
-  adminName: string,
-) {
-  const updated = await adminResponse(feedbackId, {
-    text,
-    adminName: adminName,
-  });
-
-  await logAdminAction({
-    adminName: adminName,
-    action: "addAdminResponse",
-    targetId: feedbackId,
-    details: { textLength: text.length },
-  });
-
-  return updated;
-}
-
-export async function patchFeedbackService(
-  id: string,
-  rid: string,
-  patch: any,
-  adminName: string,
-) {
-  if (
-    patch.status &&
-    !["new", "in_progress", "resolved", "closed"].includes(patch.status)
-  )
-    throw new Error("Invalid status");
-  const updated = await patchFeedback(id, rid, patch);
-  await logAdminAction({
-    adminName,
-    action: "patchFeedback",
-    targetId: `${id}-${rid}`,
-    details: patch,
-  });
-  return updated;
-}
-
-export async function deleteFeedbackService(
-  id: string,
-  rid: string,
-  adminName: string,
-  soft: boolean,
-) {
-  const result = await deleteFeedback(id, rid);
-  await logAdminAction({
-    adminName: adminName,
-    action: "deleteFeedback",
-    targetId: `${id}-${rid}`,
-    details: { soft },
-  });
-  return result;
-}
-
-/**
- * 피드백 상태별 통계 조회 서비스
- * @return 상태별 피드백 통계
- */
-export async function getFeedbackStatsService() {
-  return await getFeedbackStatusStats();
-}
-
-/**
- * 피드백 상태 업데이트 서비스
- * @param id 피드백 ID
- * @param status 새로운 상태 값
- * @param AdminId 관리자 ID (선택적)
- * @returns 업데이트된 피드백 문서
- */
-export async function updateFeedbackStatusService(
-  id: string,
-  status: "before reply" | "resolved" | "in_progress",
-  AdminId?: string,
-) {
-  const allowed = ["before reply", "resolved", "in_progress"];
-
-  if (!allowed.includes(status)) {
-    throw new Error("허용되지 않은 status 값입니다.");
-  }
-  return await updateFeedbackStatus(id, { status, AdminId });
-}
-```
-
-

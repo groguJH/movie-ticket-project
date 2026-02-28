@@ -54,13 +54,17 @@ export default async function handler(
 
       const { email, password, name, phone } = req.body;
 
-      // 필수 값 검증
       if (!email || !password || !name) {
         return res
           .status(400)
           .json({ error: "필수 필드를 모두 입력해주세요." });
       }
 
+      const preEmail = await collection.findOne({ email });
+
+      if (preEmail) {
+        return res.status(409).json({ error: "이미 가입된 이메일입니다." });
+      }
       const saltRounds = 10;
       const hashedPassword = await bcrypt.hash(password, saltRounds);
 
@@ -84,6 +88,6 @@ export default async function handler(
     }
   } else {
     res.setHeader("Allow", ["POST"]);
-    res.status(405).end(`Method ${req.method} Not Allowed`);
+    res.status(405).json(`Method ${req.method} Not Allowed`);
   }
 }

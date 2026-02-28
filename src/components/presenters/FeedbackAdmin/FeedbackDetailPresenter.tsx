@@ -44,6 +44,9 @@ export default function FeedbackDetailPresenter({
   if (!selectedId) null;
 
   const [responseText, SetResponseText] = useState("");
+  const responses = (Array.isArray(data?.response) ? data.response : []).filter(
+    (res: any) => !res?.isDeleted,
+  );
 
   // 모달엔 아이디, 데이터, 로딩에러,뿐만 아니라 답글추가, 수정, 삭제도 필요하다.
   return (
@@ -108,11 +111,10 @@ export default function FeedbackDetailPresenter({
                 <DetailItem>
                   <strong>관리자 응답</strong>
 
-                  {Array.isArray(data.responses) &&
-                  data.responses.length > 0 ? (
-                    data.responses.map((r: any) => (
+                  {responses.length > 0 ? (
+                    responses.map((r: any) => (
                       <div
-                        key={r.createdAt}
+                        key={String(r._id ?? r.createdAt)}
                         style={{
                           padding: "8px 0",
                           borderBottom: "1px dashed #444",

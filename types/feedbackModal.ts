@@ -36,13 +36,16 @@ export interface FeedbackResponse {
   userName: string;
   satisfaction?: string;
   createdAt: string;
-  responses?: FeedbackAdResponse[];
+  response?: FeedbackAdResponse[];
 }
 
 export interface FeedbackAdResponse {
+  _id?: string | ObjectId;
   text: string;
   adminName: string;
   createdAt: Date | string;
+  updatedAt?: Date | string;
+  isDeleted?: boolean;
 }
 
 export interface FeedbackListResponse {

@@ -25,19 +25,14 @@ export default async function updateEditProfileService({
   ...rest
 }: updateEditProfileParams) {
   const filter: any = {};
-  if (oldEmail) {
-    filter.email = oldEmail;
-  } else if (userId) {
-    filter._id = new ObjectId(userId);
-  } else {
-    throw new Error(
-      "사용자를 식별할 수 없습니다. userId 또는 oldEmail이 필요합니다.",
-    );
-  }
+
+  if (userId) filter._id = new ObjectId(userId);
+  else if (oldEmail) filter.email = oldEmail;
+  else throw new Error("사용자를 식별할 수 없습니다.");
 
   const updateData: any = {
-    name: rest.name,
-    email: rest.newEmail,
+    ...(rest.name && { name: rest.name }),
+    ...(rest.newEmail && { email: rest.newEmail }),
     ...(rest.password && { password: rest.password }),
     ...(rest.phone && { phone: rest.phone }),
     ...(rest.profileImage && { profileImage: rest.profileImage }),
