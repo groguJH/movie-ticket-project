@@ -56,7 +56,15 @@ export default async function handler(
     try {
       await deleteFeedbackService(id, rid, AdminName, isSoft);
       return res.status(200).json({ ok: true });
-    } catch (error) {
+    } catch (error: any) {
+      if (error.name === "BSONError" || error.name === "CastError") {
+        return res
+          .status(400)
+          .json({ message: "유효하지 않은 ID 형식입니다." });
+      }
+      if (error instanceof Error && error.message.includes("찾을 수 없습니다")) {
+        return res.status(404).json({ message: error.message });
+      }
       return res
         .status(500)
         .json({ message: "삭제 처리 중 오류가 발생했습니다." });

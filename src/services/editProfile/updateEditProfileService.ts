@@ -6,7 +6,7 @@ export interface updateEditProfileParams {
   oldEmail?: string | null; // 일반 유저 식별용
   newEmail?: string | null;
   name?: string;
-  password: string;
+  password?: string;
   phone?: string;
   profileImage?: string;
   agreeSms?: boolean;
@@ -31,11 +31,11 @@ export default async function updateEditProfileService({
   else throw new Error("사용자를 식별할 수 없습니다.");
 
   const updateData: any = {
-    ...(rest.name && { name: rest.name }),
-    ...(rest.newEmail && { email: rest.newEmail }),
-    ...(rest.password && { password: rest.password }),
-    ...(rest.phone && { phone: rest.phone }),
-    ...(rest.profileImage && { profileImage: rest.profileImage }),
+    ...(rest.name !== undefined && { name: rest.name }),
+    ...(rest.newEmail !== undefined && { email: rest.newEmail }),
+    ...(rest.password !== undefined && { password: rest.password }),
+    ...(rest.phone !== undefined && { phone: rest.phone }),
+    ...(rest.profileImage !== undefined && { profileImage: rest.profileImage }),
     ...(rest.agreeSms !== undefined && { agreeSms: rest.agreeSms }),
     ...(rest.agreeEmail !== undefined && { agreeEmail: rest.agreeEmail }),
   };

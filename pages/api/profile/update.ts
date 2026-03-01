@@ -22,7 +22,7 @@ export default async function updateHandler(
 
   const session = await getServerSession(req, res, authOptions);
   if (!session || !session.user) {
-    return res.status(405).json({ message: "로그인이 필요한 서비스입니다." });
+    return res.status(401).json({ message: "로그인이 필요한 서비스입니다." });
   }
 
   const {
@@ -72,9 +72,6 @@ export default async function updateHandler(
       return res.status(200).json({ message: "개인정보 수정 성공" });
     }
 
-    if (!newEmail && !password && !name && !phone && !profileImage) {
-      return res.status(400).json({ message: "수정할 정보가 없습니다." });
-    }
     await updateEditProfileService(updateData);
     return res.status(200).json({ message: "개인정보 수정 성공" });
   } catch (err) {

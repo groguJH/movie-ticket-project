@@ -18,9 +18,11 @@ export default async function booking(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  // if (req.method !== "POST") return res.status(400).end();
+  if (req.method !== "POST") return res.status(400).end();
+
   const session = await getServerSession(req, res, authOptions);
   const { movieId, showtimeId, seats, bookingId } = req.body;
+
   if (!session?.user?.id && !bookingId) {
     return res.status(401).json({ message: "로그인이 필요합니다." });
   }
@@ -44,7 +46,7 @@ export default async function booking(
     return res.status(201).json({ success: true, bookInfo });
   } catch (err: any) {
     res
-      .status(400)
+      .status(500)
       .json({ success: false, message: err.message ?? "예매 실패" });
   }
 }

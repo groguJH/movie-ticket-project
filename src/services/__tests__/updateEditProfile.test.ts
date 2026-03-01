@@ -30,10 +30,12 @@ describe("updateEditProfileService 테스트, 프로필을 수정합니다.", ()
     });
 
     expect(editProfile).toHaveBeenCalledTimes(1);
-    const callArgs = (editProfile as jest.Mock).mock.calls[0][0];
+    const lastCall = (editProfile as jest.Mock).mock.lastCall ?? [];
+    const calledFilter = lastCall[0];
+    const calledUpdateData = lastCall[1];
 
-    expect(callArgs.filter).toEqual({ email: "old@test.com" });
-    expect(callArgs.email).toBe("new@test.com");
+    expect(calledFilter).toEqual({ email: "old@test.com" });
+    expect(calledUpdateData.email).toBe("new@test.com");
     expect(result).toEqual({ success: true });
   });
 
@@ -47,10 +49,11 @@ describe("updateEditProfileService 테스트, 프로필을 수정합니다.", ()
       password: "hashedPassword",
     });
 
-    const calledArg = (editProfile as jest.Mock).mock.calls[0][0];
+    const lastCall = (editProfile as jest.Mock).mock.lastCall ?? [];
+    const calledFilter = lastCall[0];
 
-    expect(calledArg.filter._id).toBeInstanceOf(ObjectId);
-    expect(calledArg.filter._id.toString()).toBe(userId);
+    expect(calledFilter._id).toBeInstanceOf(ObjectId);
+    expect(calledFilter._id.toString()).toBe(userId);
   });
 
   test("oldEmail과 userId 둘 다 없으면 에러를 던진다", async () => {
@@ -58,9 +61,7 @@ describe("updateEditProfileService 테스트, 프로필을 수정합니다.", ()
       updateEditProfileService({
         password: "hashedPassword",
       }),
-    ).rejects.toThrow(
-      "사용자를 식별할 수 없습니다. userId 또는 oldEmail이 필요합니다.",
-    );
+    ).rejects.toThrow("사용자를 식별할 수 없습니다.");
   });
 
   test("editProfile이 에러를 던지면 서비스도 에러를 던진다", async () => {

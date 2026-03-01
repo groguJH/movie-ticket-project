@@ -38,6 +38,7 @@ export default async function nonMemberHanlder(
     const nonMemberId = await createNonMemberService(payload);
     return res.status(201).json({ nonMemberId });
   } catch (err) {
-    return res.status(500).json({ message: "서버 에러", err });
+    console.error("비회원 생성 처리 중 오류:", err);
+    return res.status(500).json({ message: "서버 에러가 발생했습니다." });
   }
 }

@@ -57,6 +57,7 @@ export default async function handler(
 
     res.status(200).json(validVideos);
   } catch (error) {
-    res.status(500).json({ message: "서버 에러", error });
+    console.error("TOP-RATED API 에러:", error);
+    res.status(500).json({ message: "서버 에러가 발생했습니다." });
   }
 }

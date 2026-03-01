@@ -41,7 +41,7 @@ export default function FeedbackDetailPresenter({
   handleDeleteComment,
   onClose,
 }: DetailPresenterProps) {
-  if (!selectedId) null;
+  if (!selectedId) return null;
 
   const [responseText, SetResponseText] = useState("");
   const responses = (Array.isArray(data?.response) ? data.response : []).filter(

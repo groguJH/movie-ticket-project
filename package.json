@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "module": "CommonJS",
+  "resolutions": {
+    "string-length/strip-ansi": "6.0.1"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -11,7 +14,7 @@
     "seed": "ts-node -r tsconfig-paths/register --project scripts/tsconfig.seed.json scripts/insertMovieData.ts",
     "migrate": "ts-node scripts/insertFeedbacks.ts",
     "jsdoc": "jsdoc -c jsdoc.json",
-    "test": "cross-env NODE_ENV=test NEXTAUTH_SECRET=test-secret jest --runInBand --detectOpenHandles",
+    "test": "cross-env NODE_ENV=test NEXTAUTH_SECRET=test-secret node scripts/run-jest.cjs --runInBand --detectOpenHandles",
     "test:watch": "yarn test --watch"
   },
   "dependencies": {

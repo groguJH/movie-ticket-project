@@ -25,6 +25,7 @@ export default async function bookingReceipt(
     const list = await BookingReceiptService(id as string);
     res.status(200).json(list);
   } catch (err: any) {
-    res.status(500).json({ message: err.message });
+    console.error("예매 영수증 조회 실패:", err);
+    res.status(500).json({ message: "서버 에러가 발생했습니다." });
   }
 }
