@@ -90,7 +90,7 @@ footer {
 }
 
 .custom-help-modal .ant-modal-content {
-  background: transparent;
+  background: whitesmoke !important;
   /* background-color: #fff !important; */
   color: #000 !important;
   border-radius: 8px;

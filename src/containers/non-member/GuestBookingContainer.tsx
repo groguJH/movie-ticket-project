@@ -12,8 +12,6 @@ export default function GuestBookingContainer(): JSX.Element {
   const [past, setPast] = useState<any[]>([]);
   const [searchError, setSearchError] = useState<string | null>(null);
 
-  const { movieId } = router.query;
-
   const handleFinish = async (values: NonMemberBookingFormValues) => {
     setLoading(true);
     try {
@@ -39,15 +37,18 @@ export default function GuestBookingContainer(): JSX.Element {
         }
       }
 
-      const rawReturnTo = (router.query.returnTo as string) || "/bookPage";
+      const rawReturnTo =
+        typeof router.query.returnTo === "string"
+          ? router.query.returnTo
+          : "/bookPage";
 
-      console.log("rawReturnTo:", rawReturnTo);
-      const [queryString] = rawReturnTo.split("?");
-
-      const params = new URLSearchParams(queryString || "");
+      const [rawPathname, rawQuery] = rawReturnTo.split("?");
+      const pathname = rawPathname.startsWith("/")
+        ? rawPathname
+        : `/${rawPathname}`;
+      const params = new URLSearchParams(rawQuery || "");
       params.set("bookingId", nonBookingId);
-      const bookPage = "bookPage";
-      const finalUrl = `${bookPage}?${params.toString()}`;
+      const finalUrl = `${pathname}?${params.toString()}`;
 
       await router.push(finalUrl);
     } catch (err) {

@@ -67,30 +67,39 @@ export default function NavigationPresenter({
   userProfileImage,
 }: NavigationPresenterProps): JSX.Element {
   const myName = "관리자";
+  const isAdmin = userName === myName;
+
   const menuProps = {
-    items: [
-      {
-        key: "mypage",
-        label: "마이 페이지",
-        onClick: onMyPageClick,
-      },
-      {
-        key: "editProfile",
-        label: "프로필 수정",
-        onClick: onEditProfile,
-      },
-      userName === "관리자"
-        ? {
+    items: isAdmin
+      ? [
+          {
             key: "admin",
             label: "관리자 페이지",
             onClick: onClickAdminFeedback,
-          }
-        : {
+          },
+          {
+            key: "editProfile",
+            label: "프로필 수정",
+            onClick: onEditProfile,
+          },
+        ]
+      : [
+          {
+            key: "mypage",
+            label: "마이 페이지",
+            onClick: onMyPageClick,
+          },
+          {
+            key: "editProfile",
+            label: "프로필 수정",
+            onClick: onEditProfile,
+          },
+          {
             key: "history",
             label: "예매 내역",
             onClick: onBookingHistoryClick,
           },
-    ],
+        ],
   };
 
   return (

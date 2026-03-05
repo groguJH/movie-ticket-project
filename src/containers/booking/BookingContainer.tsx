@@ -63,6 +63,12 @@ export default function BookingContainer({
   const [bookInfo, setBookInfo] = useState<BookingRecord | null>(null);
   const [activeTab, setActiveTab] = useState<StepKey>("date");
 
+  useEffect(() => {
+    if (status === "unauthenticated" && !isGuest) {
+      router.replace("/non-member");
+    }
+  }, [status, isGuest, router]);
+
   const {
     data: canBookData,
     isLoading: isCheckingCanBook,
@@ -194,9 +200,6 @@ export default function BookingContainer({
     activeKey = "confirm";
   }
 
-  if (status !== "authenticated") {
-    router.push("/non-member");
-  }
   if (status === "loading") return <FullPageSkeleton />;
 
   if (isCheckingCanBook) {
