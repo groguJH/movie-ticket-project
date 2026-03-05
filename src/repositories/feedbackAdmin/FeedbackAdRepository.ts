@@ -55,7 +55,6 @@ export async function getFeedbackLists(filters: Filter) {
   }
   if (status) match.status = status;
   if (satisfaction) match.satisfaction = satisfaction;
-  // 🚨 답변여부, 아래는 response 배열의 길이로 판단
   if (replied === true) match["response.0"] = { $exists: true };
   if (replied === false) match["response"] = { $exists: true, $size: 0 };
   if (from || to) {
@@ -99,7 +98,6 @@ export async function response(
     {
       $push: {
         response: {
-          // rid 기반 수정/삭제 API에서 사용할 답글 식별자입니다.
           _id: new ObjectId(),
           text: response.text,
           adminName: response.adminName,

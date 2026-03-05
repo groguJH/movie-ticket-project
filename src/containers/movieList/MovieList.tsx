@@ -35,9 +35,8 @@ export default function MovieListContainer() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  const IMAGE_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_BASE_URL; // 이미지 URL
+  const IMAGE_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_BASE_URL;
 
-  // API에서 영화 데이터 가져오는 함수
   const fetchMovies = async (pageNumber: number) => {
     if (loading) return;
     setLoading(true);
@@ -51,7 +50,7 @@ export default function MovieListContainer() {
         const newMovies =
           data?.results?.filter((movie) => !existingIds.has(movie.id)) || [];
         return [...prevMovies, ...newMovies];
-      }); // 기존 데이터 유지하면서, 데이터 중복제거하는 로직 ⚠️
+      });
 
       setMainMovieImage((prev) => prev || data?.results?.[0] || null);
       setPage(pageNumber);
@@ -62,7 +61,6 @@ export default function MovieListContainer() {
     }
   };
 
-  // 최초 로딩 시 실행
   useEffect(() => {
     fetchMovies(1);
   }, []);
@@ -79,7 +77,7 @@ export default function MovieListContainer() {
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [page, loading]); // page, loading 변경 시 다시 바인딩
+  }, [page, loading]);
 
   if (loading && movies.length === 0) {
     return <FullPageSkeleton />;

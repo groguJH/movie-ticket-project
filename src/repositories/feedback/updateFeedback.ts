@@ -33,7 +33,6 @@ export async function createFeedback(feedback: CreateFeedbackInput) {
   };
 }
 
-// 전체 피드백 조회
 export async function getFeedbackLists(filter: Partial<FeedbackDetail> = {}) {
   const collection = await getCollection();
   const res = await collection.find(filter).toArray();

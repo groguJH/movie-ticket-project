@@ -34,8 +34,7 @@ export default function LoginModalContainer({ onClose }: Props) {
     if (res?.error) {
       setError("아이디 또는 비밀번호가 맞지 않습니다. 다시 확인해주세요.");
     } else {
-      // 로그인 성공
-      onClose(); // 모달 닫고
+      onClose();
       router.push("/mypage");
     }
   };
@@ -50,7 +49,7 @@ export default function LoginModalContainer({ onClose }: Props) {
   return (
     <>
       <LoginModal
-        open={true} // 항상 열려 있다 보고
+        open={true}
         onClose={onClose}
         onLogin={handleLogin}
         error={error}

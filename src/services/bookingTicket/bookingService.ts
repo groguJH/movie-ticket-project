@@ -26,8 +26,8 @@ export async function bookService(
       }
 
       bookingResult = {
-        ...result, // ✅ 전체 BookingResult 객체 그대로 사용
-        bookedAt: result.bookedAt.toISOString(), // 문자열 변환
+        ...result,
+        bookedAt: result.bookedAt.toISOString(),
         status: "confirmed" as const,
       };
     });

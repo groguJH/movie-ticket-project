@@ -5,13 +5,12 @@ export interface TMDBMovieEntity {
   backdrop_path: string;
   original_title: string;
   description: string;
-  // media_type 없음 (원본 API 응답)
 }
 
 export type TMDBMovieResponse = TMDBMovieEntity;
 
 export interface MovieRequest extends TMDBMovieEntity {
-  media_type: "movie"; // 우리가 추가하는 필드
+  media_type: "movie";
 }
 
 export interface MovieResponse {

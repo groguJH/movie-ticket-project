@@ -1,4 +1,3 @@
-// 만족도 조사 라디오버튼
 
 import styled from "@emotion/styled";
 

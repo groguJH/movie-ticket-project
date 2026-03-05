@@ -7,7 +7,6 @@ import { MoviePresenterProps } from "../../../../types/fetchMovieBooking";
 
 const IMAGE_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_BASE_URL!;
 
-// ----- styled-emotion을 사용하여 스타일링
 const ListWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -47,7 +46,7 @@ function FavoriteControl({
   movieId: string;
   mediaType: "movie" | "tv";
 }) {
-  const userFrom = "로그인된_유저_ID"; // 나중에 로그인 구현 시 교체
+  const userFrom = "로그인된_유저_ID";
   const [favorited, setFavorited] = useState(false);
   const [favoriteNumber, setFavoriteNumber] = useState(0);
 

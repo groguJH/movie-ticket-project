@@ -13,7 +13,7 @@ interface MyPageBookingPresenterProps {
   selectedDate: string;
   seats: Seat[];
   children?: React.ReactNode;
-  hideGreeting?: boolean; // 새로 추가
+  hideGreeting?: boolean;
 }
 
 export default function MyPageBookingPresenter({

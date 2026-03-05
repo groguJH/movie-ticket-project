@@ -15,11 +15,11 @@ export interface Seat {
   status: "available" | "sold";
 }
 export interface Booking {
-  _id: string; // 예매 번호
-  showtimeId: string; // 영화 제목
-  bookedAt: string; // 예매 날짜
+  _id: string;
+  showtimeId: string;
+  bookedAt: string;
   seats: Seat[];
-  movieTitle: string; // 추가!
+  movieTitle: string;
 }
 /**
  *  마이페이지 예매내역 컨테이너 컴포넌트
@@ -34,9 +34,7 @@ export default function BookingTicketContainer() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // 훅은 최상단에
   useEffect(() => {
-    // 인증 완료된 경우에만 호출
     if (status !== "authenticated") return;
 
     const fetchBookings = async () => {
@@ -55,11 +53,9 @@ export default function BookingTicketContainer() {
     fetchBookings();
   }, [status]);
 
-  // 로딩, 인증 확인
   if (status === "loading") return <FullPageSkeleton />;
   if (!session) return <p>로그인이 필요합니다</p>;
 
-  // 실제 렌더
   if (loading) {
     return <p>예매내역 로딩 중...</p>;
   }

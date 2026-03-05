@@ -38,7 +38,7 @@ export interface MyPagePresenterProps {
     favorites: ReactNode;
     bookings: ReactNode;
   };
-  hideGreeting?: boolean; // 새로 추가
+  hideGreeting?: boolean;
 }
 
 export interface Movie {

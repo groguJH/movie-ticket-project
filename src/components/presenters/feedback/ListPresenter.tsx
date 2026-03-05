@@ -35,7 +35,6 @@ export interface ListPresenterProps {
   selectedList: any;
   setSelectedList: (list: any) => void;
   handleClose: () => void;
-  // ✅ 추가 Props
   isEditMode: boolean;
   editTitle: string;
   editContent: string;
@@ -45,7 +44,6 @@ export interface ListPresenterProps {
   onCancelEdit: () => void;
   onTitleChange: (title: string) => void;
   onContentChange: (content: string) => void;
-  // ✅ 기존 Props
   data: any;
   isLoading: boolean;
   isError: boolean;
@@ -62,7 +60,6 @@ export default function ListPresenter({
   data,
   isLoading,
   isError,
-  // ✅ 새로운 Props 구조분해
   isEditMode,
   editTitle,
   editContent,
@@ -79,7 +76,6 @@ export default function ListPresenter({
   const limit = data?.limit ?? 10;
   const totalPages = Math.ceil(total / limit);
   const isOpenModal = selectedList !== null;
-  // 저장 키(response) 변경 이후에도 기존 responses 문서를 함께 처리하기 위한 호환 배열입니다.
   const selectedresponses = (
     selectedList?.response ??
     selectedList?.responses ??

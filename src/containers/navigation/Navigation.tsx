@@ -27,14 +27,13 @@ const NavigationContainer: React.FC<{ children: React.ReactNode }> = ({
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { data: session, status, update } = useSession();
 
-  // 🔄 부수 효과: 라우팅 시작 시 검색창 자동 닫기
   useEffect(() => {
     const handleRouteChange = () => {
-      setIsSearchOpen(false); // 😊 라우트 변경 시 검색창 숨기기
+      setIsSearchOpen(false);
     };
     router.events.on("routeChangeStart", handleRouteChange);
     return () => {
-      router.events.off("routeChangeStart", handleRouteChange); // ✔️ 클린업
+      router.events.off("routeChangeStart", handleRouteChange);
     };
   }, [router.events]);
 
@@ -43,7 +42,6 @@ const NavigationContainer: React.FC<{ children: React.ReactNode }> = ({
       try {
         await update({
           name: event.detail.name,
-          // 기타 업데이트할 필드들
         });
       } catch (error) {
         console.error("Session update failed:", error);
@@ -76,7 +74,7 @@ const NavigationContainer: React.FC<{ children: React.ReactNode }> = ({
       router.push("/mypage/edit");
     } else {
       setIsSideMenuVisible(true);
-      setIsRequireModalOpen(true); // <-- 로그인 필요 안내 모달 열기
+      setIsRequireModalOpen(true);
     }
   };
 
@@ -84,8 +82,8 @@ const NavigationContainer: React.FC<{ children: React.ReactNode }> = ({
   const closeRequireModal = () => setIsRequireModalOpen(false);
 
   const onLoginFromRequiredModal = () => {
-    setIsRequireModalOpen(false); // 모달 닫고
-    setIsLoginModalOpen(true); // 로그인 모달 열기
+    setIsRequireModalOpen(false);
+    setIsLoginModalOpen(true);
   };
 
   const onSearchClick = () => {
@@ -109,11 +107,11 @@ const NavigationContainer: React.FC<{ children: React.ReactNode }> = ({
         onEditProfile={onEditProfile}
         onBookingHistoryClick={() => router.push("/mypage/tickets")}
         userName={session?.user?.name ?? null}
-        userProfileImage={session?.user?.image ?? null} // 기본 이미지
+        userProfileImage={session?.user?.image ?? null}
         status={status}
         userId={session?.user?.id ?? null}
         onSearchClick={onSearchClick}
-        onFavoritesClick={() => router.push("/mypage/favoriteList")} // 즐겨찾기 목록으로 이동
+        onFavoritesClick={() => router.push("/mypage/favoriteList")}
         isSearchVisible={isSearchOpen}
         onClickAdminFeedback={() => router.push("/feedbackAdmin")}
         onGuestClick={() => {

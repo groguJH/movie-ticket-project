@@ -27,7 +27,6 @@ export default async function fetchMovieDetailHandler(
       return res.status(400).json({ error: "영화 ID가 필요합니다." });
     }
 
-    // ✅ 1. TMDB API 호출 (DB 조회 제거!)
     const movieRes = await fetch(
       `${API_URL}movie/${encodeURIComponent(
         String(id)
@@ -45,7 +44,6 @@ export default async function fetchMovieDetailHandler(
       mediaType: "movie" as const,
     };
 
-    // ✅ 2. 출연진 정보 필요하면 추가 요청
     if (includeCredits === "true") {
       const creditsRes = await fetch(
         `${API_URL}movie/${id}/credits?api_key=${API_SECRET_KEY}&language=ko-KR`

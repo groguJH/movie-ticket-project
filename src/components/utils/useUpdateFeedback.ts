@@ -10,7 +10,6 @@ export default function useUpdateFeedback() {
       return res.data;
     },
     onSuccess: () => {
-      // 수정 성공 후, 피드백 리스트를 다시 불러옵니다.
       queryClient.invalidateQueries({ queryKey: ["feedback"] });
     },
   });

@@ -27,7 +27,6 @@ export default async function handler(
     const client = await clientPromise;
     const db = client.db("mymovieticket");
 
-    // 1. 24자리 유효한 ObjectId 형식인지 체크
     const isObjectId =
       movieId.length === 24 && /^[0-9a-fA-F]{24}$/.test(movieId);
 

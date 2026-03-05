@@ -1,4 +1,3 @@
-// components/auth/SignupPresenter.tsx
 import React from "react";
 import { Form, Input, Button, Typography, Divider } from "antd";
 import { BasicSignupValues } from "../../../containers/auth/SignupContainer";
@@ -16,7 +15,6 @@ const SignupPresenter: React.FC<SignupPresenterProps> = ({
   onNaverSignup,
   onBasicSignup,
 }) => {
-  // 폼 아이템의 글씨를 하얗게 만듭니다.
   const whiteLabel = (text: string) => (
     <span style={{ color: "white" }}>{text}</span>
   );

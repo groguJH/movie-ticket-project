@@ -36,7 +36,6 @@ export interface MovieDetail {
   release_date: string;
   status: string;
   popularity: number;
-  // 기타 필요한 필드 추가
 }
 
 export interface MovieInfoTbProps {

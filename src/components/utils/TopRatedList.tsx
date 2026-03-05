@@ -1,4 +1,3 @@
-// TopRatedPresenter.styles.ts
 import styled from "@emotion/styled";
 
 export const Wrapper = styled.section`
@@ -57,7 +56,7 @@ export const Overview = styled.p`
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 2; // 3줄 제한
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 `;
 

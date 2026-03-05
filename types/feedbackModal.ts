@@ -15,12 +15,11 @@ export interface FeedbackEntity {
   satisfaction: string;
   createdAt: Date | string;
 
-  // 관리자 필드
   status?: "before reply" | "resolved" | "in_progress";
-  handledBy?: string; // 담당한 관리자 Name
-  isPublic?: boolean; // 공개해도 되는 내용인지 여부
-  isFlagged?: boolean; // 내용의 중요도 여부
-  replied?: boolean; // 답변여부
+  handledBy?: string;
+  isPublic?: boolean;
+  isFlagged?: boolean;
+  replied?: boolean;
   response?: FeedbackAdResponse[];
 }
 

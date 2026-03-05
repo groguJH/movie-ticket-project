@@ -50,5 +50,5 @@ export const UserText = styled.span`
 `;
 
 export const SideMenuSpacer = styled.div`
-  height: 100px; // 기존 SideMenuBanner 높이와 비슷하게
+  height: 100px;
 `;

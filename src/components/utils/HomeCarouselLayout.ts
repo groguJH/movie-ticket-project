@@ -324,7 +324,6 @@ export const TitleOverlay = styled.span`
   }
 `;
 
-// 사용하지 않는 컴포넌트들 (기존 코드 호환성을 위해 유지)
 export const ContentAtom = styled.div`
   width: 100%;
   height: 100%;

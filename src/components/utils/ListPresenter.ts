@@ -222,13 +222,11 @@ export const MetaInfo = styled.div`
   color: #a9a9a9;
 `;
 
-// 화살표
 export const Direction = styled.span`
   font-size: 12px;
   margin-left: 12px;
 `;
 
-// 우측에 표시될 상세 영역
 export const DetailSection = styled.div`
   height: 100%;
   background: #282828;
@@ -406,7 +404,6 @@ export const PageButton = styled.button`
   }
 `;
 
-// 피드백 관리자페이지에서 사용될 컴포넌트입니다.
 export const WriterInfo = styled.div`
   display: flex;
   flex-direction: row;
@@ -435,13 +432,13 @@ export const StatusBadge = styled.span<{ status: string }>`
 const getStatusColor = (status: string) => {
   switch (status) {
     case "대기":
-      return "#ffc107"; // 노란색
+      return "#ffc107";
     case "처리 중":
-      return "#0070f3"; // 파란색
+      return "#0070f3";
     case "완료":
-      return "#28a745"; // 초록색
+      return "#28a745";
     default:
-      return "#6c757d"; // 회색
+      return "#6c757d";
   }
 };
 
@@ -463,7 +460,6 @@ export const ModalBox = styled.div`
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
 `;
 
-// 통계
 export const StatLabel = styled.span`
   font-size: 16px;
   font-weight: 700;

@@ -5,10 +5,10 @@ import { InlineSmallSpinner } from "../../src/components/utils/loadingUI";
 
 export default function BookingPage() {
   const router = useRouter();
-  const movieId = router.query.movieId as string; // URL에서 movieId 가져오기
-  const noSchedule = router.query.noSchedule === "true"; // 쿼리 파라미터에서 noSchedule 확인
+  const movieId = router.query.movieId as string;
+  const noSchedule = router.query.noSchedule === "true";
 
-  if (!router.isReady || !movieId) return <InlineSmallSpinner />; // 로딩 상태 표시
+  if (!router.isReady || !movieId) return <InlineSmallSpinner />;
 
   return (
     <section>

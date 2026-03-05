@@ -34,7 +34,7 @@ export default function EditProfileContainer() {
         password: "",
         agreeSms: false,
         agreeEmail: false,
-        image: session.user.image || "profile_dog", // 기본 이미지
+        image: session.user.image || "profile_dog",
         logging,
       });
     }
@@ -76,7 +76,6 @@ export default function EditProfileContainer() {
               image: values.image,
             }
           : {
-              // 일반 유저: 모든 정보 업데이트
               name: values.name,
               image: values.image,
               email: values.newEmail,

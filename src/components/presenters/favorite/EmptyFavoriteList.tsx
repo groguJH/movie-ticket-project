@@ -1,4 +1,3 @@
-// EmptyFavorites.tsx
 import styled from "@emotion/styled";
 
 import { Empty } from "antd";

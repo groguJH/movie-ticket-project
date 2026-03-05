@@ -22,7 +22,7 @@ export default function HelpInfoModal({ isOpen, onClose }: HelpModalProps) {
       onCancel={handleCancel}
       width={600}
       okText="확인"
-      cancelButtonProps={{ style: { display: "none" } }} // 👈 취소 버튼 숨기기
+      cancelButtonProps={{ style: { display: "none" } }}
     >
       <div className="custom-help-body">
         <h3>🎬 영화 예매 사이트 안내</h3>

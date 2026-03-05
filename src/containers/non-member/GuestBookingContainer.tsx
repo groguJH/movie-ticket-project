@@ -7,7 +7,6 @@ export default function GuestBookingContainer(): JSX.Element {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  // 검색 관련 상태
   const [searching, setSearching] = useState(false);
   const [upcoming, setUpcoming] = useState<any[]>([]);
   const [past, setPast] = useState<any[]>([]);
@@ -15,7 +14,6 @@ export default function GuestBookingContainer(): JSX.Element {
 
   const { movieId } = router.query;
 
-  // 기존: 비회원 생성 후 bookPage로 이동 (guestId 포함)
   const handleFinish = async (values: NonMemberBookingFormValues) => {
     setLoading(true);
     try {
@@ -33,7 +31,6 @@ export default function GuestBookingContainer(): JSX.Element {
       if (!nonBookingId) {
         throw new Error("서버 응답에 nonBookingId가 없습니다.");
       }
-      // 세션 스토리지에 nonBookingId 저장 (탭 닫으면 삭제)
       if (typeof window !== "undefined") {
         try {
           sessionStorage.setItem("nonBookingId", nonBookingId);
@@ -42,7 +39,6 @@ export default function GuestBookingContainer(): JSX.Element {
         }
       }
 
-      // 원래 flow 유지: /bookPage로 이동하되 쿼리스트링에 bookingId 추가
       const rawReturnTo = (router.query.returnTo as string) || "/bookPage";
 
       console.log("rawReturnTo:", rawReturnTo);
@@ -61,13 +57,12 @@ export default function GuestBookingContainer(): JSX.Element {
     }
   };
 
-  // 새로 추가: 검색(onSearch) 핸들러
   const handleSearch = async (values: NonMemberBookingFormValues) => {
     setSearching(true);
     setSearchError(null);
     try {
       const res = await fetch("/api/non-member/search", {
-        method: "POST", // 반드시 POST (민감 정보이므로)
+        method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
       });

@@ -30,7 +30,7 @@ export default function SearchPresenter({
         onChange={handleResultClick}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
-            onSearch(); // 엔터 눌렀을 때만 검색
+            onSearch();
           }
         }}
       />

@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import axios from "axios";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL; // https://api.themoviedb.org/3/
-const API_SECRET_KEY = process.env.API_SECRET_KEY; // TMDB key
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_SECRET_KEY = process.env.API_SECRET_KEY;
 
 export default async function TVListHandler(
   req: NextApiRequest,
@@ -12,7 +12,7 @@ export default async function TVListHandler(
     return res.status(400).json({ error: "허용되지 않은 메서드입니다." });
   }
 
-  const { page = "1" } = req.query; // 기본값은 1페이지
+  const { page = "1" } = req.query;
 
   try {
     const response = await axios.get(`${API_URL}tv/on_the_air`, {
@@ -23,16 +23,13 @@ export default async function TVListHandler(
       },
     });
 
-    // 원본 응답 객체 복사
     const prevData = response.data;
 
-    // results만 가공해서 덮어씌움
     const afterData = prevData.results.map((item: any) => ({
       ...item,
       mediaType: "on_air_show" as const,
     }));
 
-    // 결과에 덮어씌우기
     const resultData = {
       ...prevData,
       results: afterData,

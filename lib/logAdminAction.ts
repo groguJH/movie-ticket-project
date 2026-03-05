@@ -26,7 +26,6 @@ export async function logAdminAction({
   targetId,
   details,
 }: LogAdminActionParams) {
-  // 여기에 실제 로그 저장 로직을 구현합니다.
   const client = await clientPromise;
   const db = client.db("mymovieticket");
   const col = db.collection("adminActions");

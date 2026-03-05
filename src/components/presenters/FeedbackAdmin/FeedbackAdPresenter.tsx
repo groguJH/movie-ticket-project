@@ -66,7 +66,6 @@ export default function FeedbackAdPresenter({
   selectedId,
   processedStats,
 }: FeedbackAdPresenterProps) {
-  // 작성중
   const hasSelection = !!selectedId;
   const totalPages = Math.ceil(data?.total / data?.limit);
 

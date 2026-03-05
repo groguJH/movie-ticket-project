@@ -35,10 +35,8 @@ export default async function listFavoriteMovies(
 
     const favorites = await collection.find({ userId }).toArray();
 
-    // TMDB 이미지 기본 URL
     const IMAGE_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_BASE_URL;
 
-    // 각 영화 데이터에 fullImageUrl 추가, key 지정합니다.
     const modifiedFavorites = favorites.map((movie) => {
       return {
         key: movie.movieId,

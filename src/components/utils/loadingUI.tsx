@@ -76,7 +76,6 @@ export function InlineSmallSpinner() {
   );
 }
 
-// 에러 메시지 표시 함수
 export function ErrorToast(text: string) {
   const { message } = App.useApp();
   message.error(text);

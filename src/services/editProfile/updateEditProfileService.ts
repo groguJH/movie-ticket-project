@@ -2,8 +2,8 @@ import { ObjectId } from "mongodb";
 import editProfile from "../../repositories/editProfile/editProfile";
 
 export interface updateEditProfileParams {
-  userId?: string; // 소셜 유저 식별용
-  oldEmail?: string | null; // 일반 유저 식별용
+  userId?: string;
+  oldEmail?: string | null;
   newEmail?: string | null;
   name?: string;
   password?: string;

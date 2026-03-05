@@ -19,24 +19,21 @@ export async function findBookingsByShowtime(id: string): Promise<any> {
     $or: [{ tmdbId: id }, { tmdbId: Number(id) }],
   };
 
-  // ✅ MODIFIED: showtime 먼저 찾기 (movie_screenings)
   const showtime = isObjectId
     ? await db.collection("movie_screenings").findOne({ _id: new ObjectId(id) })
     : null;
 
-  // showtime에서 movieId 또는 tmdbId 추출
   const movieIdFromShowtime = showtime?.movieId;
   const tmdbIdFromShowtime = showtime?.tmdbId;
 
-  // ✅ MODIFIED: showtimeId 타입이 string/ObjectId 둘 다 있을 수 있으므로 둘 다 조회
   const bookingQuery: any = {
     $or: [
-      { showtimeId: id }, // string으로 저장된 경우
+      { showtimeId: id },
     ],
   };
 
   if (isObjectId) {
-    bookingQuery.$or.push({ showtimeId: new ObjectId(id) }); // ObjectId로 저장된 경우
+    bookingQuery.$or.push({ showtimeId: new ObjectId(id) });
   }
 
   const bookings = await db
@@ -44,7 +41,6 @@ export async function findBookingsByShowtime(id: string): Promise<any> {
     .find(bookingQuery)
     .toArray();
 
-  // ✅ MODIFIED: movie 찾는 기준은 showtime에서 얻은 movieId/tmdbId로 찾는다
   let movie = null;
 
   if (movieIdFromShowtime) {
@@ -56,7 +52,6 @@ export async function findBookingsByShowtime(id: string): Promise<any> {
             : movieIdFromShowtime,
       });
     } catch (e) {
-      // movieIdFromShowtime가 ObjectId 변환 불가한 값이면 무시
     }
   }
 

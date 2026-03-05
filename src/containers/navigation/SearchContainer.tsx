@@ -22,7 +22,6 @@ export default function SearchContainer({
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const router = useRouter();
 
-  // 💡 debounce + useCallback으로 메모이제이션
   const handleDebounce = useCallback(
     _.debounce((val: string) => {
       setDebouncedQuery(val);
@@ -30,12 +29,11 @@ export default function SearchContainer({
     [],
   );
 
-  // 🔄 라우팅 시작 시 검색어 & 결과 초기화
   useEffect(() => {
     const handleRouteChange = () => {
-      setQuery(""); // 😊 검색어 클리어
+      setQuery("");
       setDebouncedQuery("");
-      onSearchClick(); // ✨ 검색창 닫기
+      onSearchClick();
     };
     router.events.on("routeChangeStart", handleRouteChange);
     return () => {
@@ -43,15 +41,12 @@ export default function SearchContainer({
     };
   }, [router.events, onSearchClick]);
 
-  // input 입력 핸들러
   const handleResultClick = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputData = e.target.value;
     setQuery(inputData);
-    handleDebounce(inputData); // lodash debounce 사용
-    // onSearchClick();
+    handleDebounce(inputData);
   };
 
-  // 🎯 queryKey는 반드시 debounce된 값만 사용
   const { data, isLoading } = useQuery({
     queryKey: ["search", debouncedQuery],
     queryFn: async () => {
@@ -60,7 +55,7 @@ export default function SearchContainer({
       );
       return res.data.resultData;
     },
-    enabled: !!debouncedQuery, // 빈 문자열이면 호출 금지
+    enabled: !!debouncedQuery,
     staleTime: 1000 * 60,
   });
 

@@ -18,7 +18,7 @@ export default function MovieListDetailContainer() {
   const router = useRouter();
   const [movie, setMovie] = useState<MovieDetail | null>(null);
   const [casts, setCasts] = useState<CastMember[]>([]);
-  const [showCasts, setShowCasts] = useState(false); // 출연진 토글 상태
+  const [showCasts, setShowCasts] = useState(false);
   const { data: session } = useSession();
   const IMAGE_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_BASE_URL;
   const includeCredits = true;
@@ -28,7 +28,6 @@ export default function MovieListDetailContainer() {
       if (!router.isReady || !router.query.id) return;
 
       try {
-        // includeCredits 없이 호출하여 영화 상세 정보만 받아옴
         const res = await fetch(`/api/movies/${router.query.id}`);
         if (!res.ok) {
           throw new Error(`API 요청 실패: ${res.status}`);
@@ -46,7 +45,6 @@ export default function MovieListDetailContainer() {
   const fetchCredits = async () => {
     if (!router.isReady || !router.query.id) return;
 
-    // includeCredits가 true일 때에만 추가 API 호출
     try {
       const creditsRes = await fetch(
         `/api/movies/${router.query.id}?includeCredits=${includeCredits}`,
@@ -89,7 +87,7 @@ export default function MovieListDetailContainer() {
             <FavoriteContainer
               movieId={
                 typeof router.query.id === "string" ? router.query.id : ""
-              } // 엥?
+              }
               userId={session?.user?.id || "guest"}
               movieTitle={movie.title}
               moviePost={movie.backdrop_path}

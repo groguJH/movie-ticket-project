@@ -33,17 +33,16 @@ import { useRouter } from "next/router";
 
 interface BookingContainerProps {
   movieId: string;
-  hasNoScheduleFromPage?: boolean; // ✅ 이름 변경
+  hasNoScheduleFromPage?: boolean;
 }
 
 export default function BookingContainer({
   movieId,
   hasNoScheduleFromPage = false,
 }: BookingContainerProps) {
-  // 비회원예매를 위해 추가
-  const router = useRouter(); // ✅ ADDED: bookingId 읽기 위해 추가
-  const bookingId = router.query.bookingId as string | undefined; // ✅ ADDED
-  const isGuest = !!bookingId; // ✅ ADDED: bookingId 있으면 비회원
+  const router = useRouter();
+  const bookingId = router.query.bookingId as string | undefined;
+  const isGuest = !!bookingId;
 
   const { data: session, status } = useSession();
   const qc = useQueryClient();
@@ -195,7 +194,6 @@ export default function BookingContainer({
     activeKey = "confirm";
   }
 
-  // 작성중
   if (status !== "authenticated") {
     router.push("/non-member");
   }

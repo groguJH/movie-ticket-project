@@ -17,7 +17,6 @@ export const CardWrapper = styled.div`
   padding: 1rem;
 `;
 
-// 버튼들을 감싸는 컨테이너: 버튼 사이에 gap을 주어 간격을 확보
 export const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -26,7 +25,6 @@ export const ButtonContainer = styled.div`
   margin: 1rem auto;
 `;
 
-// 좋아요 버튼만 감싸는 래퍼: 인라인으로만 차지하며 오른쪽 정렬
 export const LikeButtonWrapper = styled.div`
   display: inline-flex;
   margin-left: auto;

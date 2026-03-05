@@ -1,5 +1,3 @@
-// antd의 message 컴포넌트를 사용합니다.
-// rest props를 받아 Button 컴포넌트에 전달합니다.
 
 import React from "react";
 import { SubmitButton } from "../../utils/WriteForm";

@@ -1,4 +1,3 @@
-// components/presenters/profile/EditProfilePresenter.tsx
 import { useState, useEffect } from "react";
 import { Button, Checkbox, Divider, Form, Input, Typography } from "antd";
 import { MyInfoEditPresenterProps } from "../../../../types/user";

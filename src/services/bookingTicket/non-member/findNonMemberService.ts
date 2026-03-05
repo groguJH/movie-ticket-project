@@ -4,7 +4,6 @@ import {
   findUpcomingByGuestId,
 } from "../../../repositories/bookingTicket/non-member/nonmember.repository";
 
-// 비회원 정보를 생성하여 저장하는 함수
 export async function createNonMemberService(payload: {
   name: string;
   birth: string;
@@ -16,7 +15,6 @@ export async function createNonMemberService(payload: {
   return nonMemberUserId;
 }
 
-// ✅ 비회원 조회 (이게 search에서 사용해야 함)
 export async function findNonMemberService(payload: {
   name: string;
   birth: string;
@@ -32,7 +30,6 @@ export async function findNonMemberService(payload: {
   return user?._id;
 }
 
-// 비회원의 예매 내역을 조회하여 다가오는 예매와 지난 예매로 구분하여 반환하는 함수
 export async function findUpcomingService(guestId: string) {
   const bookings = await findUpcomingByGuestId(guestId);
 

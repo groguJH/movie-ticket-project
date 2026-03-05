@@ -14,7 +14,7 @@ import { Showtime } from "../../../types/movieBooking";
  * 하루 범위(>=start, <end) 내의 showtime 리스트 조회
  */
 export async function findShowtimesByDate(
-  movieId: string, // string으로 통일해서 받음
+  movieId: string,
   dateStart: Date,
   dateEnd: Date,
 ): Promise<Showtime[]> {

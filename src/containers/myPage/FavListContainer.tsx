@@ -18,14 +18,12 @@ import { EmptyMessage } from "../../components/utils/loadingUI";
  * 5. 즐겨찾기 목록이 없을 경우 적절한 메시지와 함께 빈 상태 UI를 표시하며 재시도합니다
  */
 
-// 해당컨테이너는 나의 즐겨찾기 중 - 영화 & 티비 방송목록만 보여주는 컨테이너
 export default function FavListContainer() {
   const { data: session } = useSession();
   const queryClient = useQueryClient();
   const userId = session?.user?.id;
   const router = useRouter();
 
-  // 즐겨찾기 데이터 가져오기
   const {
     data: favorites,
     isLoading,
@@ -40,11 +38,9 @@ export default function FavListContainer() {
       }
       return res.json();
     },
-    enabled: !!userId, // 로그인된 경우에만 쿼리 실행
+    enabled: !!userId,
   });
 
-  // handleBooking
-  // 예매 가능 여부 확인 후 이동
   const handleBooking = async (bookingId: string) => {
     try {
       const res = await fetch(`/api/showtimes/exists?movieId=${bookingId}`);
@@ -61,9 +57,7 @@ export default function FavListContainer() {
     }
   };
 
-  // my-movie-ticket\pages\api\favorite\remove.ts
 
-  // 즐겨찾기 삭제 뮤테이션
   const mutation = useMutation({
     mutationFn: async (movieId: string) => {
       const res = await fetch("/api/favorite/remove", {
@@ -78,7 +72,6 @@ export default function FavListContainer() {
     },
   });
 
-  // 즐겨찾기 삭제 핸들러
   const handleDeleteFavorite = (movieId: string) => {
     mutation.mutate(movieId);
   };

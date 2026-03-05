@@ -57,7 +57,6 @@ export default function CarouselPresenter({
   useEffect(() => {
     hideClonedSlides();
 
-    // 추가적인 정리 작업
     const interval = setInterval(() => {
       hideClonedSlides();
     }, 100);

@@ -48,7 +48,6 @@ export default function FeedbackDetailPresenter({
     (res: any) => !res?.isDeleted,
   );
 
-  // 모달엔 아이디, 데이터, 로딩에러,뿐만 아니라 답글추가, 수정, 삭제도 필요하다.
   return (
     <ModalOverlay role="dialog" aria-modal="true" onClick={onClose}>
       <ModalBox onClick={(e) => e.stopPropagation()}>

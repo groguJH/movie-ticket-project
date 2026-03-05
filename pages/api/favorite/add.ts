@@ -33,7 +33,6 @@ export default async function addFavoriteMovie(
     }
 
     const userId = session.user?.id;
-    // mediaType 타입추가
     const { movieId, movieTitle, moviePost, movieRunTime, mediaType } =
       req.body;
 
@@ -50,7 +49,6 @@ export default async function addFavoriteMovie(
       mediaType,
     });
 
-    // 추가된 후 즐겨찾기 총 개수 다시 조회
     const favoriteNumber = await collection.countDocuments({ movieId });
 
     return res.status(201).json({

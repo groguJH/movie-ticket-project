@@ -16,8 +16,8 @@ import { useQuery } from "@tanstack/react-query";
 
 export default function FeedbackAdContainer() {
   const [search, setSearch] = useState("");
-  const [debouncedSearch] = useDebounce(search, 500); // 0.5초 디바운스
-  const [data, setData] = useState({ items: [], total: 0, page: 1, limit: 20 }); // input 데이터를 담는 상태
+  const [debouncedSearch] = useDebounce(search, 500);
+  const [data, setData] = useState({ items: [], total: 0, page: 1, limit: 20 });
   const [loading, setLoading] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [page, setPage] = useState(1);
@@ -38,7 +38,6 @@ export default function FeedbackAdContainer() {
     const { status, satisfaction, total } = statsData;
 
     const StatPercent = (list: any[], id: string) => {
-      // list가 배열인지 한 번 더 확인하는 안전장치
       if (!Array.isArray(list)) return 0;
       const item = list.find((d: any) => d._id === id);
       return item ? Math.round((item.count / total) * 100) : 0;
@@ -48,14 +47,13 @@ export default function FeedbackAdContainer() {
     const neutral = StatPercent(satisfaction, "보통");
     const veryUnsatisfied = StatPercent(satisfaction, "매우 불만족");
 
-    // 2. 위에서 계산된 변수를 더합니다. (processedStats가 아니라 변수명을 직접 참조)
     const totalSatis = verySatisfied + satisfied;
 
     return {
       total,
       status: {
-        inProgress: StatPercent(status, "in_progress"), //처리중
-        beforeReply: StatPercent(status, "before reply"), // 처리전
+        inProgress: StatPercent(status, "in_progress"),
+        beforeReply: StatPercent(status, "before reply"),
       },
       satisfaction: {
         verySatisfied,
@@ -89,7 +87,6 @@ export default function FeedbackAdContainer() {
     fetchData(debouncedSearch, page);
   }, [debouncedSearch, page, fetchData]);
 
-  // 부모가 자식(모달)의 변경 후 리스트를 갱신하게 하려면 이 refresh 함수를 넘김
   const refreshList = useCallback(() => {
     fetchData(debouncedSearch);
   }, [debouncedSearch, fetchData]);

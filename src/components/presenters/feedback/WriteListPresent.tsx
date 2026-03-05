@@ -59,7 +59,7 @@ export default function WriteListPresent({
           <span>내용</span>
           <Textarea
             value={content}
-            onChange={(e) => setContent(e.target.value)} // 중요
+            onChange={(e) => setContent(e.target.value)}
           ></Textarea>
         </Label>
         <Label>

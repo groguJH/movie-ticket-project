@@ -30,7 +30,6 @@ export default function BookingFetchContainer(): JSX.Element {
 
   const { bookingId } = router.query;
 
-  // 전체영화에서 영화목록을 가져오는 쿼리
   const {
     data: movieServerData,
     isLoading,
@@ -41,14 +40,12 @@ export default function BookingFetchContainer(): JSX.Element {
     queryFn: fetchBookingMovies,
   });
 
-  // 예매하기 버튼 클릭
   const handleBookClick = (movieId: string) => {
     if (session?.user) {
       router.push(`/bookPage/${movieId}`);
       return;
     }
 
-    // ✅ 비회원 bookingId가 이미 있으면 로그인 모달 띄우지 않음
     if (bookingId) {
       router.push(`/bookPage/${movieId}?bookingId=${bookingId}`);
       return;

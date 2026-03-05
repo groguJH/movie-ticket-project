@@ -6,7 +6,6 @@ export default function MovieInfoTb({ movie }: MovieInfoTbProps) {
     return <div>영화 정보를 불러오는 중입니다...</div>;
   }
 
-  // 출력할 필드 목록
   const allowedFields = [
     "title",
     "runtime",
@@ -18,7 +17,6 @@ export default function MovieInfoTb({ movie }: MovieInfoTbProps) {
     "popularity",
   ] as const;
 
-  // 각 필드에 대한 한글 라벨 매핑
   const fieldMapping: { [key: string]: string } = {
     title: "제목",
     release_date: "개봉일",

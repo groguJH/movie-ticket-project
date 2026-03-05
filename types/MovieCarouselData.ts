@@ -1,4 +1,3 @@
-//  영화데이터를 홈 캐러셀에 페칭하기 위한 타입 정의
 
 export interface Movie {
   _id: string;

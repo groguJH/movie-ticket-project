@@ -26,7 +26,7 @@ export default function ListContainer() {
   const [messageApi, contextHolder] = message.useMessage();
 
   const [editSatisfaction, SetEditSatisfaction] = useState<string>("");
-  const [isEditMode, setIsEditMode] = useState(false); // 수정모드 상태
+  const [isEditMode, setIsEditMode] = useState(false);
   const [editTitle, setEditTitle] = useState("");
   const [editContent, setEditContent] = useState("");
   const [backupData, setBackupData] = useState<FeedbackDetail | null>(null);
@@ -35,12 +35,9 @@ export default function ListContainer() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["feedback", page],
     queryFn: () => fetchPost(page, 10),
-    // keepPreviousData: true, // 이전 데이터 유지(깜빡임 방지)
-    refetchInterval: 1000 * 60, // 1분마다 데이터 새로고침
+    refetchInterval: 1000 * 60,
   });
 
-  // 수정작업을 보여주는 버튼을 실행하기 함수
-  // ✅ 수정 모드 진입 함수 (기존의 데이터를 담아서 진입함)
   const handleStartEdit = () => {
     if (!selectedList) return;
     setIsEditMode(true);
@@ -68,7 +65,6 @@ export default function ListContainer() {
       satisfaction: editSatisfaction,
     });
 
-    // 통신
     updateMutation.mutate(
       {
         id: selectedList?._id as string,
@@ -102,23 +98,19 @@ export default function ListContainer() {
     );
   };
 
-  // 페이지네이션 관리 함수
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
   };
 
-  // 모달을 열고 닫는 함수
   const handleModal = () => {
     setModal(!modal);
   };
 
-  // 닫기 기능
   const handleClose = () => {
     setSelectedList(null);
     setModal(false);
   };
 
-  //
   return (
     <ListPresenter
       page={page}
@@ -127,18 +119,16 @@ export default function ListContainer() {
       setModal={handleModal}
       selectedList={selectedList}
       setSelectedList={setSelectedList}
-      // ✅ 추가 Props
       isEditMode={isEditMode}
       editTitle={editTitle}
       editContent={editContent}
       editSatisfaction={editSatisfaction}
       SetEditSatisfaction={SetEditSatisfaction}
-      setUpdate={handleUpdate} // 요청하기
-      onStartEdit={handleStartEdit} // 수정모드
-      onCancelEdit={handleCancelEdit} // 수정취소
+      setUpdate={handleUpdate}
+      onStartEdit={handleStartEdit}
+      onCancelEdit={handleCancelEdit}
       onTitleChange={setEditTitle}
       onContentChange={setEditContent}
-      // ✅ 기존 Props
       handleClose={handleClose}
       data={data}
       isLoading={isLoading}

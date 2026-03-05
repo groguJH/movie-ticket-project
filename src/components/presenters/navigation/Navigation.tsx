@@ -66,7 +66,6 @@ export default function NavigationPresenter({
   isSearchVisible,
   userProfileImage,
 }: NavigationPresenterProps): JSX.Element {
-  //  드롭다운 메뉴 아이템 정의
   const myName = "관리자";
   const menuProps = {
     items: [

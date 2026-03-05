@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 
-// Presenter 컴포넌트 반환문 전에 추가
 export const SearchWrapper = styled.div`
   position: absolute;
   display: flex;

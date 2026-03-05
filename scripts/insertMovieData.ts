@@ -101,7 +101,6 @@ async function insertMovieData() {
       await db.collection("movie_screenings").deleteMany({}, { session });
       await db.collection("movie_bookings").deleteMany({}, { session });
 
-      // 2. 새로운 데이터 삽입 (트랜잭션 안에서만 수행)
       await db.collection("movie_movies").insertMany(movies, { session });
       await db
         .collection("movie_screenings")

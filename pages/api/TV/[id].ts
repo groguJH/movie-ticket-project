@@ -1,4 +1,3 @@
-// pages/api/tv/[id].ts
 
 import type { NextApiRequest, NextApiResponse } from "next";
 
@@ -19,7 +18,6 @@ export default async function fetchTvDetail(
       return res.status(400).json({ error: "TV 프로그램 ID가 필요합니다." });
     }
 
-    // TV 프로그램 상세 정보 API 호출
     const tvRes = await fetch(
       `${API_URL}tv/${id}?api_key=${API_SECRET_KEY}&language=ko-KR`
     );
@@ -36,7 +34,6 @@ export default async function fetchTvDetail(
       mediaType: "on_air_show" as const,
     };
 
-    // includeCredits가 true일 때에만 추가 API 호출
     if (includeCredits === "true") {
       const creditsRes = await fetch(
         `${API_URL}tv/${id}/credits?api_key=${API_SECRET_KEY}&language=ko-KR`
@@ -50,7 +47,6 @@ export default async function fetchTvDetail(
       return res.status(200).json({ ...tvWithTypeData, credits: creditsData });
     }
 
-    // includeCredits가 없으면 TV 프로그램 정보만 반환
     res.status(200).json(tvWithTypeData);
   } catch (error) {
     console.error("서버 에러:", error);

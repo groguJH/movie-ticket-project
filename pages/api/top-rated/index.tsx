@@ -13,13 +13,11 @@ export default async function handler(
   }
 
   try {
-    // 3단계: 더 많은 영화 데이터 가져오기 (20개 정도)
     const response = await axios(
       `${API_URL}movie/top_rated?api_key=${API_SECRET_KEY}&language=ko-KR&page=1`
     );
-    const movieList = response.data.results; // 일단 전체 가져오기
+    const movieList = response.data.results;
 
-    // 4단계: 각 영화의 트레일러 정보 확인
     const moviePromises = movieList.map(async (movie: any) => {
       try {
         const videoData = await axios(
@@ -46,14 +44,13 @@ export default async function handler(
         }
         return null;
       } catch (error) {
-        return null; // 개별 영화 에러 처리
+        return null;
       }
     });
 
     const results = await Promise.all(moviePromises);
 
-    // 5단계: 조건을 만족하는 영화들만 필터링 후 5개 선택
-    const validVideos = results.filter((video) => video !== null).slice(0, 5); // 여기서 5개로 제한
+    const validVideos = results.filter((video) => video !== null).slice(0, 5);
 
     res.status(200).json(validVideos);
   } catch (error) {

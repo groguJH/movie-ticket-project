@@ -18,16 +18,13 @@ export default async function bookingFetchMovies(
   res: NextApiResponse<MoviePayload[] | { message: string }>,
 ) {
   try {
-    // 1) GET 요청이 아니면 405
     if (req.method !== "GET") {
       res.setHeader("Allow", ["GET"]);
       return res.status(405).json({ message: "Method Not Allowed" });
     }
 
-    // 2) Service 호출
     const movies = await findBookingMoviesService();
 
-    // 3) 결과 응답
     res.status(200).json(movies);
   } catch (err: any) {
     console.error("영화 목록 조회 실패:", err);

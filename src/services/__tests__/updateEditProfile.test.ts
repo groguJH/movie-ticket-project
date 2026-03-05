@@ -41,7 +41,7 @@ describe("updateEditProfileService 테스트, 프로필을 수정합니다.", ()
 
   test("userId 기반으로 filter._id를 설정한다", async () => {
     (editProfile as unknown as jest.Mock).mockResolvedValue({ success: true });
-    const userId = "65c123456789abcd12345678"; // 예시 ObjectId 문자열
+    const userId = "65c123456789abcd12345678";
 
     await updateEditProfileService({
       userId,

@@ -15,7 +15,6 @@ export default async function handler(
     const list = await getShowtimes(movieId as string, date as string);
     res.status(200).json(list);
   } catch (err: any) {
-    // Service에서 던진 에러 메시지를 그대로 전달
     res
       .status(err.message.includes("필요합니다") ? 400 : 500)
       .json({ message: err.message });

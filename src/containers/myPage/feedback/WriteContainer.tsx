@@ -6,9 +6,6 @@ import { useMutation } from "@tanstack/react-query";
 import { message, RadioChangeEvent } from "antd";
 import { FeedbackRequest } from "../../../../types/feedbackModal";
 
-// 로그인 정보(세션) 상태를 통해 회원의 ID를 가져옵니다.
-// 제목 내용이 하나의 useState 로 관리됩니다.
-// 작성 완료 버튼 클릭 시, 작성된 피드백을 서버로 전송합니다.
 
 export default function WriteContainer() {
   const [title, setTitle] = useState("");
@@ -39,19 +36,16 @@ export default function WriteContainer() {
       }),
 
     onError: (error: any) => {
-      // alert(error.message);
       messageApi.error(error.message);
     },
 
     onSuccess: () => {
-      // 1) 로딩 메세지
       messageApi.open({
         key,
         type: "loading",
         content: "피드백 작성 중...",
       });
 
-      // 2) 성공 메시지로 변경
       setTimeout(() => {
         messageApi.open({
           key,
@@ -60,7 +54,6 @@ export default function WriteContainer() {
           duration: 2,
         });
 
-        // 3) 성공 메시지가 끝난 뒤 이동
         setTimeout(() => {
           router.push("/mypage/feedback");
         }, 2000);
@@ -96,8 +89,8 @@ export default function WriteContainer() {
         onSubmit={handleSubmit}
         satisfaction={satisfaction}
         setSatisfaction={setSatisfaction}
-        userName={userName} // 사용자 ID를 전달합니다.
-        isPending={mutation.isPending} // loading = pending
+        userName={userName}
+        isPending={mutation.isPending}
         isError={mutation.isError}
       />
     </>

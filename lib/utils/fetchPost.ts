@@ -1,6 +1,5 @@
 import { FeedbackListResponse } from "../../types/feedbackModal";
 
-// 피드백 리스트 조회하는 함수입니다.
 export default async function fetchPost(
   page: number,
   limit: number

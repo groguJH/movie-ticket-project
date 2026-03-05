@@ -42,8 +42,8 @@ declare module "next-auth/jwt" {
 export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60, // 30일
-    updateAge: 3 * 60 * 60, // 3시간마다 세션 업데이트
+    maxAge: 30 * 24 * 60 * 60,
+    updateAge: 3 * 60 * 60,
   },
   providers: [
     KakaoProvider({
@@ -200,7 +200,7 @@ export const authOptions: NextAuthOptions = {
         if (userDoc) {
           token.id = userDoc._id.toString();
           token.provider = provider;
-          token.role = userDoc.role ?? "user"; // 🚨
+          token.role = userDoc.role ?? "user";
           token.picture = userDoc.profileImage || null;
         }
       }
@@ -223,7 +223,6 @@ export const authOptions: NextAuthOptions = {
     signIn: "/authPage/signup",
     signOut: "/",
   },
-  // debug: process.env.NODE_ENV === "development", // 개발 모드에서만 디버그 활성화
   debug: false,
   secret: process.env.NEXTAUTH_SECRET,
   cookies: {

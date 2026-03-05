@@ -1,9 +1,9 @@
 export interface NonMemberEntity {
-  _id?: string; // MongoDB ObjectId가 문자열로 들어옴
+  _id?: string;
   name: string;
-  birth: string; // YYMMDD
-  phone: string; // 숫자만
-  password: string; // 숫자4자리
+  birth: string;
+  phone: string;
+  password: string;
   movieId: string;
   createdAt?: Date;
 }

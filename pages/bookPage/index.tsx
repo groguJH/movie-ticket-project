@@ -5,7 +5,6 @@ import { StyledTabs } from "../../src/components/presenters/booking/BookingFetch
 
 const { TabPane } = Tabs;
 
-// 컨테이너는 SSR 비활성화(선택사항)
 const FetchingMoviesContainer = dynamic(
   () => import("../../src/containers/booking/BookingFetchContainer"),
   { ssr: false }

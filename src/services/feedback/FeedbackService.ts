@@ -20,7 +20,6 @@ const ALLOWED_SATISFACTION = [
 ] as const;
 
 function normalizeSatisfaction(value: string) {
-  // 통계 집계 키와 맞추기 위해 공백 변형(매우 만족)을 저장 표준값(매우만족)으로 정규화합니다.
   return value === "매우 만족" ? "매우만족" : value;
 }
 
@@ -73,7 +72,6 @@ export async function UpdateFeedbackService(
     ) {
       throw new Error("허용되지 않은 만족도 값입니다.");
     }
-    // 업데이트 전 normalize 값을 반영해 저장/통계 키를 일관되게 유지합니다.
     updateData.satisfaction = normalized;
   }
 
@@ -94,7 +92,6 @@ export async function UpdateFeedbackService(
   return { message: "피드백이 수정되었습니다." };
 }
 
-// 페이지네이션
 export async function getFeedbackService({
   userId,
   page,
@@ -104,14 +101,11 @@ export async function getFeedbackService({
   page: number;
   limit: number;
 }) {
-  // 기본값 처리
   const currentPage = page > 0 ? page : 1;
   const perPage = limit > 0 ? limit : 10;
 
-  // Repository 호출 (DB 전체 데이터 조회)
   const allFeedbacks = await getFeedbackLists({ userId });
 
-  // 최신순 정렬
   const sorted = allFeedbacks.sort(
     (a, b) =>
       new Date(b.createdAt ?? 0).getTime() -

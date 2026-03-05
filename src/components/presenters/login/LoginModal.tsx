@@ -1,4 +1,3 @@
-// components/auth/LoginModal.tsx
 "use client";
 import { Form, Input, Button, Modal, Typography } from "antd";
 import styled from "@emotion/styled";
@@ -16,7 +15,6 @@ const TitleHeader = styled.div`
   border-radius: 8px 8px 0 0;
 `;
 
-// Divider 스타일
 const Divider = styled.div`
   display: flex;
   align-items: center;

@@ -1,4 +1,3 @@
-// components/LoginRequiredModal.tsx
 import { Modal } from "antd";
 import LoginRequiredBanner from "./LoginRequiredBanner";
 

@@ -20,11 +20,11 @@ export interface Seat {
 }
 
 export interface Booking {
-  _id: string; // 예매 번호
-  showtimeId: string; // 영화 제목
-  bookedAt: string; // 예매 날짜
+  _id: string;
+  showtimeId: string;
+  bookedAt: string;
   seats: Seat[];
-  movieTitle: string; // 추가!
+  movieTitle: string;
 }
 /**
  *  마이페이지 내부의 즐겨찾기 + 예매,구매내역 이 두 섹션을 보여주는 컨테이너
