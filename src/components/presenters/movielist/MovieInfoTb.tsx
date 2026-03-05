@@ -1,11 +1,5 @@
 import { Descriptions } from "antd";
-import type { TableColumnsType } from "antd";
-import styled from "@emotion/styled";
-import {
-  DataType,
-  MovieDetail,
-  MovieInfoTbProps,
-} from "../../../../types/fetchMovieBooking";
+import { MovieDetail, MovieInfoTbProps } from "../../../../types/fetchMovieBooking";
 
 export default function MovieInfoTb({ movie }: MovieInfoTbProps) {
   if (!movie) {
@@ -22,7 +16,7 @@ export default function MovieInfoTb({ movie }: MovieInfoTbProps) {
     "vote_average",
     "status",
     "popularity",
-  ];
+  ] as const;
 
   // 각 필드에 대한 한글 라벨 매핑
   const fieldMapping: { [key: string]: string } = {
@@ -36,32 +30,11 @@ export default function MovieInfoTb({ movie }: MovieInfoTbProps) {
     popularity: "인기도",
   };
 
-  // 테이블 컬럼 헤더이름도 한국어로 변경
-  const columns: TableColumnsType<DataType> = [
-    {
-      title: "항목",
-      dataIndex: "field",
-      key: "field",
-    },
-    {
-      title: "정보",
-      dataIndex: "value",
-      key: "value",
-    },
-  ];
-
-  // 영화 데이터에서 allowedFields만 추출하여 테이블 데이터 생성
-  const dataSource: DataType[] = allowedFields.map((key) => ({
-    key,
-    field: fieldMapping[key] || key,
-    value: movie[key as keyof MovieDetail],
-  }));
-
   return (
     <Descriptions title="Movie Info" bordered>
       {allowedFields.map((key) => (
         <Descriptions.Item key={key} label={fieldMapping[key] || key}>
-          {movie[key as keyof MovieDetail]}
+          {movie[key]}
         </Descriptions.Item>
       ))}
     </Descriptions>

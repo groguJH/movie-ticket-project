@@ -20,8 +20,10 @@ export interface MovieBannerProps {
 }
 
 export interface MovieDetail {
-  media_type: string;
-  credits: any;
+  mediaType: string;
+  credits?: {
+    cast: CastMember[];
+  };
   title: string;
   id: number;
   overview: string;

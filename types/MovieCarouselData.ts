@@ -9,6 +9,8 @@ export interface Movie {
   releaseDate: string;
 }
 
+export type MovieProps = Movie;
+
 export interface CarouselProps {
   movies: Movie[];
 }

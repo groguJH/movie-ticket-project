@@ -1,15 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useState } from "react";
-import { TvDetail } from "../../../types/fetchTvList";
+import { TvDetailProps } from "../../../types/fetchTvList";
 import { PageWrapper } from "../../components/utils/MovieCastListLayout";
 import {
-  ButtonContainer,
   CardWrapper,
   LikeButtonWrapper,
 } from "../../components/utils/MovieDetailLists";
-import { Button } from "antd";
 import FavoriteContainer from "../buttonFavorite/FavoriteContainer";
 import TvBanner from "../../components/presenters/TvList/TvBanner";
 import TvInfoTb from "../../components/presenters/TvList/TvInfo";
@@ -40,7 +37,7 @@ export default function TvDetailListContainer() {
     data: tvData,
     isLoading,
     error,
-  } = useQuery<TvDetail>({
+  } = useQuery<TvDetailProps>({
     queryKey: ["tvDetail", id],
     queryFn: async () => {
       const res = await fetch(`/api/TV/${id}`);
@@ -69,30 +66,12 @@ export default function TvDetailListContainer() {
               movieTitle={tvData.name}
               moviePost={tvData.backdrop_path}
               movieRunTime={tvData.episode_run_time?.[0] || 0}
-              mediaType={tvData.media_type ?? "on_air_show"} // ✅ 추가
+              mediaType={tvData.mediaType ?? "on_air_show"}
               bookingId={""}
             />
           )}
         </LikeButtonWrapper>
-        {tvData && (
-          <TvInfoTb
-            tv={tvData}
-            id={tvData.id}
-            name={tvData.name}
-            overview={tvData.overview}
-            backdrop_path={tvData.backdrop_path}
-            episode_run_time={tvData.episode_run_time}
-            vote_average={tvData.vote_average}
-            vote_count={tvData.vote_count}
-            first_air_date={tvData.first_air_date}
-            status={tvData.status}
-            popularity={tvData.popularity}
-            imageBaseUrl={tvData.imageBaseUrl}
-            number_of_seasons={tvData.number_of_seasons}
-            number_of_episodes={tvData.number_of_episodes}
-            media_type={"on_air_show"}
-          />
-        )}
+        {tvData && <TvInfoTb tv={tvData} />}
       </CardWrapper>
     </PageWrapper>
   );

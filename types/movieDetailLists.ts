@@ -11,5 +11,12 @@ export interface MovieDetail {
   release_date: string;
   status: string;
   popularity: number;
-  credits?: any;
+  credits?: {
+    cast?: {
+      id: number;
+      name: string;
+      character: string;
+      profile_path?: string;
+    }[];
+  };
 }

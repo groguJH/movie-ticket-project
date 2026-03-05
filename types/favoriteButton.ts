@@ -1,12 +1,14 @@
-export interface FavoriteProps {
+export interface FavoriteEntity {
   movieId: string;
   movieTitle: string;
   moviePost: string;
   movieRunTime: number;
-  userId: string;
   mediaType: string;
+  userId: string;
   bookingId: string;
 }
+
+export type FavoriteContainerProps = FavoriteEntity;
 
 export interface ButtonProps {
   isFavorited: boolean;

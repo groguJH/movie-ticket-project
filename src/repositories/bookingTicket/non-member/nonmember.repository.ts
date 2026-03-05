@@ -1,6 +1,9 @@
 import { ObjectId } from "mongodb";
 import clientPromise from "../../../../lib/mongodb";
-import { NonMemberSearchResponse } from "../../../../types/nonmember";
+import {
+  NonMemberBookingFormValues,
+  NonMemberSearchResponse,
+} from "../../../../types/nonmember";
 import bcrypt from "bcryptjs";
 
 /**
@@ -11,12 +14,7 @@ import bcrypt from "bcryptjs";
  * @returns
  */
 
-export async function findNonMemberByInfo(payload: {
-  name: string;
-  birth: string;
-  phone: string;
-  password: string;
-}) {
+export async function findNonMemberByInfo(payload: NonMemberBookingFormValues) {
   const client = await clientPromise;
   const db = client.db("mymovieticket");
 
@@ -32,13 +30,7 @@ export async function findNonMemberByInfo(payload: {
   return user;
 }
 
-export async function createNonMember(payload: {
-  name: string;
-  birth: string;
-  phone: string;
-  password: string;
-  movieId?: string;
-}) {
+export async function createNonMember(payload: NonMemberSearchResponse) {
   const hashedPassword = await bcrypt.hash(payload.password, 10);
   const client = await clientPromise;
   const db = client.db("mymovieticket");

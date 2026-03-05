@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 import clientPromise from "../../../lib/mongodb";
-import { FeedbackEntity } from "../../../types/feedbackModal";
+import { FeedbackDetail } from "../../../types/feedbackModal";
 
 type Filter = {
   q?: string;
@@ -22,7 +22,7 @@ async function getCollection() {
   const client = await clientPromise;
   const db = client.db("mymovieticket");
 
-  return db.collection<FeedbackEntity>("feedback");
+  return db.collection<FeedbackDetail>("feedback");
 }
 
 /**

@@ -1,23 +1,25 @@
 import { ObjectId } from "mongodb";
 import clientPromise from "../../../lib/mongodb";
 import {
-  FeedbackEntity,
+  FeedbackDetail,
   UpdateFeedbackRequest,
 } from "../../../types/feedbackModal";
+
+type CreateFeedbackInput = Omit<FeedbackDetail, "_id" | "createdAt">;
 
 async function getCollection() {
   const client = await clientPromise;
   const db = client.db("mymovieticket");
-  return db.collection<FeedbackEntity>("feedback");
+  return db.collection<FeedbackDetail>("feedback");
 }
 
 /**
  * 피드백을 생성하는 레포지토리 함수
  * @param feedback
- * @return 생성된 FeedbackEntity 객체
+ * @return 생성된 FeedbackDetail 객체
  *
  */
-export async function createFeedback(feedback: FeedbackEntity) {
+export async function createFeedback(feedback: CreateFeedbackInput) {
   const collection = await getCollection();
   const result = await collection.insertOne({
     ...feedback,
@@ -32,7 +34,7 @@ export async function createFeedback(feedback: FeedbackEntity) {
 }
 
 // 전체 피드백 조회
-export async function getFeedbackLists(filter: Partial<FeedbackEntity> = {}) {
+export async function getFeedbackLists(filter: Partial<FeedbackDetail> = {}) {
   const collection = await getCollection();
   const res = await collection.find(filter).toArray();
   return res.map((item) => ({

@@ -1,10 +1,8 @@
 import React from "react";
 import { Card } from "antd";
 import dayjs from "dayjs";
-import { NonMemberBookingFormValues } from "../../../../types/nonmember";
 
 interface PresenterProps {
-  onSearch: (values: NonMemberBookingFormValues) => void;
   error: string | null;
   loading: boolean;
   upcoming: any[];

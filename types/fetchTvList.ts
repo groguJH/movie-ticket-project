@@ -1,5 +1,4 @@
-export interface TvDetail {
-  tv: TvDetail;
+export interface TvDetailEntity {
   id: number;
   name: string;
   overview: string;
@@ -10,14 +9,17 @@ export interface TvDetail {
   first_air_date: string;
   status: string;
   popularity: number;
-  imageBaseUrl: string;
   number_of_seasons: number;
   number_of_episodes: number;
-  media_type: string;
+  mediaType: string;
+}
+export type TvDetailProps = TvDetailEntity;
+
+export interface TvBannerProps {
+  tv: TvDetailEntity;
+  imageBaseUrl: string;
 }
 
-// TvBanner.tsx도 비슷하게 수정
-export interface TvBannerProps {
-  tv: TvDetail;
-  imageBaseUrl: string;
+export interface TvInfoProps {
+  tv: TvDetailEntity;
 }

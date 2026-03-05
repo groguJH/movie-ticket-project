@@ -2,7 +2,7 @@ import { ObjectId } from "mongodb";
 import { Dayjs } from "dayjs";
 
 export interface Movie {
-  movieTitle: any;
+  movieTitle?: string;
   _id: string;
   tmdbId: number;
   title: string;
@@ -11,10 +11,12 @@ export interface Movie {
   releaseDate: Date;
 }
 
+export type MoviePayload = Movie;
+
 export interface Showtime {
-  _id: ObjectId; // string에서 ObjectId로 변경
-  movieId: ObjectId | string; // ObjectId 또는 string 허용
-  tmdbId: ObjectId | string;
+  _id: ObjectId | string;
+  movieId: ObjectId | string;
+  tmdbId: number | string;
   theater: string[];
   screen: string;
   startTime: Date;
@@ -46,15 +48,17 @@ export interface BookingRecord {
 }
 
 export interface BookingReceiptProps {
-  startTime(startTime: any): unknown;
-  _id: string;
+  _id: string | ObjectId;
   showtimeId: string | ObjectId;
+  bookingNumber: string;
   seats: {
-    status: string;
+    status: SeatStatus;
     row: string;
     number: number;
   }[];
   bookedAt: Date;
+  userId?: string | ObjectId | null;
+  guestId?: string | ObjectId | null;
 }
 
 export type StepKey = "movie" | "date" | "seat" | "book" | "confirm";

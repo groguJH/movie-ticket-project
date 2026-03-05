@@ -43,15 +43,15 @@ test.describe("Auth & Admin middleware", () => {
     ).toBeVisible();
   });
 
-  test("로그인하지 않은 사용자가 /admin 접속 시 관리자 권한 리다이렉트", async ({
+  test("로그인하지 않은 사용자가 /feedbackAdmin 접속 시 관리자 권한 리다이렉트", async ({
     page,
   }) => {
-    await page.goto(`${BASE}/admin`);
+    await page.goto(`${BASE}/feedbackAdmin`);
     await expect(page).toHaveURL(/\/\?reason=admin/);
     await expect(page.locator("text=접근 권한이 없습니다")).toBeVisible();
   });
 
-  test("일반 사용자(user role)가 /admin 접속 시 관리자 권한 리다이렉트", async ({
+  test("일반 사용자(user role)가 /feedbackAdmin 접속 시 관리자 권한 리다이렉트", async ({
     page,
     context,
   }) => {
@@ -76,12 +76,12 @@ test.describe("Auth & Admin middleware", () => {
       },
     ]);
 
-    await page.goto(`${BASE}/admin`);
+    await page.goto(`${BASE}/feedbackAdmin`);
     await expect(page).toHaveURL(/\/\?reason=admin/);
     await expect(page.locator("text=접근 권한이 없습니다")).toBeVisible();
   });
 
-  test("관리자(admin role)가 /admin 접속 시 접근 허용", async ({
+  test("관리자(admin role)가 /feedbackAdmin 접속 시 접근 허용", async ({
     page,
     context,
   }) => {
@@ -106,8 +106,8 @@ test.describe("Auth & Admin middleware", () => {
       },
     ]);
 
-    await page.goto(`${BASE}/admin`);
-    await expect(page).toHaveURL(/\/admin/);
+    await page.goto(`${BASE}/feedbackAdmin`);
+    await expect(page).toHaveURL(/\/feedbackAdmin/);
     await expect(page).not.toHaveURL(/\?reason=/);
   });
 });

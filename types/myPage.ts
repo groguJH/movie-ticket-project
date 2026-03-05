@@ -43,7 +43,7 @@ export interface MyPagePresenterProps {
 
 export interface Movie {
   _id: string;
-  bookingId: any;
+  bookingId: string;
   userId: string;
   mediaType: string;
   key: string;

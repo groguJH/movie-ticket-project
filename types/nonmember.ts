@@ -1,4 +1,4 @@
-export interface NonMemberprops {
+export interface NonMemberEntity {
   _id?: string; // MongoDB ObjectId가 문자열로 들어옴
   name: string;
   birth: string; // YYMMDD
@@ -13,8 +13,6 @@ export interface NonMemberBookingFormValues {
   birth: string;
   phone: string;
   password: string;
-  loading: boolean;
-  onCreate: (values: NonMemberBookingFormValues) => void;
 }
 
 export interface NonMemberSearchResponse {
@@ -22,6 +20,6 @@ export interface NonMemberSearchResponse {
   birth: string;
   phone: string;
   password: string;
-  createdAt: Date;
+  createdAt?: Date;
   movieId?: string | null;
 }

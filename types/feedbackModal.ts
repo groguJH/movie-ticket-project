@@ -1,23 +1,17 @@
 /**
- * 피드백 모달 관련 타입 정의 파일
- * @Entity 피드백 데이터베이스 엔티티 정의, 중요한 데이터는 아니라고 생각해서 요청DTO와 동일하게 작성했습니다. responseDTO는 분리합니다.
- * @Response 피드백 응답 DTO 정의
- * @Request 피드백 요청 DTO 정의
- * @UpdateFeedbackRequest 피드백 수정 요청 DTO 정의
- * @description
- *  - 이 파일은 피드백 모달과 관련된 타입들을 정의합니다.
- *  - 피드백 작성, 조회, 수정 등에 사용되는 데이터 구조를 명확히 합니다.
+ * 피드백 타입 모음(작은 프로젝트용)
+ * 파일 분리는 하지 않되, 한 파일 안에서 Entity / Request DTO / Response DTO를 구분합니다.
  */
 
 import { ObjectId } from "mongodb";
 
 export interface FeedbackEntity {
-  _id: string | ObjectId;
+  _id?: string | ObjectId;
   title: string;
   content: string;
   userId: string;
   userName: string;
-  role: string;
+  role?: string;
   satisfaction: string;
   createdAt: Date | string;
 
@@ -30,12 +24,15 @@ export interface FeedbackEntity {
   response?: FeedbackAdResponse[];
 }
 
+export type FeedbackDetail = FeedbackEntity;
+
 export interface FeedbackResponse {
+  _id?: string;
   title: string;
   content: string;
   userName: string;
   satisfaction?: string;
-  createdAt: string;
+  createdAt: Date | string;
   response?: FeedbackAdResponse[];
 }
 
@@ -49,7 +46,6 @@ export interface FeedbackAdResponse {
 }
 
 export interface FeedbackListResponse {
-  id: string;
   page: number;
   limit: number;
   total: number;
@@ -62,7 +58,6 @@ export interface FeedbackRequest {
   satisfaction?: string;
 }
 
-// 피드백 수정 요청 DTO
 export interface UpdateFeedbackRequest {
   title?: string;
   content?: string;

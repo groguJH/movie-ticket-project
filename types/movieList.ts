@@ -1,4 +1,4 @@
-export interface TMDBMovieResponse {
+export interface TMDBMovieEntity {
   id: number;
   title: string;
   overview: string;
@@ -8,7 +8,9 @@ export interface TMDBMovieResponse {
   // media_type 없음 (원본 API 응답)
 }
 
-export interface MovieRequest extends TMDBMovieResponse {
+export type TMDBMovieResponse = TMDBMovieEntity;
+
+export interface MovieRequest extends TMDBMovieEntity {
   media_type: "movie"; // 우리가 추가하는 필드
 }
 

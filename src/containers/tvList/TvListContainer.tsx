@@ -60,7 +60,7 @@ export default function TvListContainer() {
     if (!TvImage && allTvItems.length > 0) {
       setTvImage(allTvItems[0]);
     }
-  }, [data]);
+  }, [data, TvImage, TvInfo]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -75,7 +75,7 @@ export default function TvListContainer() {
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [isFetching, hasNextPage]);
+  }, [isFetching, hasNextPage, fetchNextPage]);
 
   if (isLoading && TvInfo.length === 0) {
     return <FullPageSkeleton />;

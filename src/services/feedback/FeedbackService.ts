@@ -1,5 +1,6 @@
 import {
-  FeedbackEntity,
+  FeedbackDetail,
+  FeedbackRequest,
   UpdateFeedbackRequest,
 } from "../../../types/feedbackModal";
 import {
@@ -23,7 +24,12 @@ function normalizeSatisfaction(value: string) {
   return value === "매우 만족" ? "매우만족" : value;
 }
 
-export async function CreateFeedbackService(feedback: any) {
+type CreateFeedbackPayload = Omit<FeedbackRequest, "satisfaction"> & {
+  satisfaction: string;
+} & Pick<FeedbackDetail, "userId" | "userName"> &
+  Pick<FeedbackDetail, "status" | "role">;
+
+export async function CreateFeedbackService(feedback: CreateFeedbackPayload) {
   const { title, content, satisfaction } = feedback;
 
   if (!title || !content || !satisfaction) {

@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { Movie } from "../../../types/movieBooking";
+import { MoviePayload } from "../../../types/movieBooking";
 import { findBookingMoviesService } from "../../../src/services/bookingTicket/bookingfindMoviesService";
 
 /**
@@ -8,14 +8,14 @@ import { findBookingMoviesService } from "../../../src/services/bookingTicket/bo
  * @param res
  * @description
  *  - Method: GET
- *  - Response: Movie[] 영화 목록
+ *  - Response: MoviePayload[] 영화 목록
  * @throws 405 - 허용되지 않은 메서드
  * @throws 500 - 서버 오류
  */
 
 export default async function bookingFetchMovies(
   req: NextApiRequest,
-  res: NextApiResponse<Movie[] | { message: string }>
+  res: NextApiResponse<MoviePayload[] | { message: string }>,
 ) {
   try {
     // 1) GET 요청이 아니면 405

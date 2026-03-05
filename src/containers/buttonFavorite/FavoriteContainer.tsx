@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import ButtonFavoritePresenter from "../../components/presenters/favorite/ButtonFavoritePresenter";
-import { FavoriteProps } from "../../../types/favoriteButton";
+import { FavoriteContainerProps } from "../../../types/favoriteButton";
 
 /**
  *
@@ -18,7 +18,7 @@ export default function FavoriteContainer({
   moviePost,
   movieRunTime,
   mediaType,
-}: FavoriteProps) {
+}: FavoriteContainerProps) {
   const [favoriteNumber, setFavoriteNumber] = useState<number>(0);
   const [favorited, setFavorited] = useState<boolean>(false);
   const { data: session, status } = useSession();

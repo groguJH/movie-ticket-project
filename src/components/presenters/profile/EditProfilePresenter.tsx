@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Button, Checkbox, Divider, Form, Input, Typography } from "antd";
 import { MyInfoEditPresenterProps } from "../../../../types/user";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 
 const { Title, Text } = Typography;
 
@@ -83,7 +84,7 @@ export default function EditProfilePresenter({
                   backgroundColor: "white",
                 }}
               >
-                <img
+                <Image
                   src={img.url}
                   alt={img.label}
                   style={{

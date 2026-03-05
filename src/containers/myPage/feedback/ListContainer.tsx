@@ -3,7 +3,7 @@ import { useState } from "react";
 import fetchPost from "../../../../lib/utils/fetchPost";
 import ListPresenter from "../../../components/presenters/feedback/ListPresenter";
 import useUpdateFeedback from "../../../components/utils/useUpdateFeedback";
-import { FeedbackEntity } from "../../../../types/feedbackModal";
+import { FeedbackDetail } from "../../../../types/feedbackModal";
 import { message } from "antd";
 
 /**
@@ -21,7 +21,7 @@ import { message } from "antd";
 export default function ListContainer() {
   const [page, setPage] = useState(1);
   const [modal, setModal] = useState(false);
-  const [selectedList, setSelectedList] = useState<FeedbackEntity | null>(null);
+  const [selectedList, setSelectedList] = useState<FeedbackDetail | null>(null);
   const totalPages = Math.ceil(100 / 10);
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -29,7 +29,7 @@ export default function ListContainer() {
   const [isEditMode, setIsEditMode] = useState(false); // 수정모드 상태
   const [editTitle, setEditTitle] = useState("");
   const [editContent, setEditContent] = useState("");
-  const [backupData, setBackupData] = useState<FeedbackEntity | null>(null);
+  const [backupData, setBackupData] = useState<FeedbackDetail | null>(null);
   const updateMutation = useUpdateFeedback();
 
   const { data, isLoading, isError } = useQuery({

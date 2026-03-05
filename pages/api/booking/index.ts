@@ -11,6 +11,7 @@ import { authOptions } from "../auth/[...nextauth]";
  * - Method: POST
  * - Request Body: { movieId: string; showtimeId: string; seats: string[] }
  * - Response: { success: boolean; bookInfo?: any; message?: string }
+ * - 좌석은 오직 한좌석만 예약 가능합니다.
  * @throws 400 - 잘못된 요청
  * @throws 500 - 서버 오류
  */
@@ -31,22 +32,51 @@ export default async function booking(
     return res.status(400).json({ message: "필수 정보가 누락되었습니다." });
   }
 
+  if (!Array.isArray(seats) || seats.length !== 1) {
+    return res.status(400).json({
+      message: "현재는 한 번에 한 좌석만 예매할 수 있습니다.",
+    });
+  }
+
+  const [seat] = seats;
+  if (
+    !seat ||
+    typeof seat.row !== "string" ||
+    typeof seat.number !== "number"
+  ) {
+    return res
+      .status(400)
+      .json({ message: "좌석 정보 형식이 올바르지 않습니다." });
+  }
+
   try {
-    // 유저 예매(로그인)와 비회원 예매(bookingId)를 구분하여 서비스 호출
     let bookInfo;
     if (bookingId) {
-      // 비회원 예매: bookingId 기반 처리 (서비스가 bookingId를 받도록 구현되어 있어야 함)
       bookInfo = await bookService(null, showtimeId, seats, bookingId);
     } else {
-      // 로그인 사용자 예매
       const userId = session!.user!.id;
       bookInfo = await bookService(userId, showtimeId, seats);
     }
 
     return res.status(201).json({ success: true, bookInfo });
   } catch (err: any) {
-    res
-      .status(500)
-      .json({ success: false, message: err.message ?? "예매 실패" });
+    const message = err?.message ?? "예매 실패";
+
+    if (err?.name === "BSONError") {
+      return res.status(400).json({
+        success: false,
+        message: "유효하지 않은 상영 정보입니다.",
+      });
+    }
+
+    if (message.includes("한 번에 한 좌석만")) {
+      return res.status(400).json({ success: false, message });
+    }
+
+    if (message.includes("이미 예약") || message.includes("찾을 수 없습니다")) {
+      return res.status(409).json({ success: false, message });
+    }
+
+    return res.status(500).json({ success: false, message: "예매 실패" });
   }
 }

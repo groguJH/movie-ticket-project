@@ -10,7 +10,7 @@ import { App } from "antd";
 
 const clientSideEmotionCache = createEmotionCache();
 
-function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(() => new QueryClient());
 
   return (

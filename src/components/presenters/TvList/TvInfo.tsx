@@ -1,7 +1,7 @@
 import { Descriptions } from "antd";
-import { TvDetail } from "../../../../types/fetchTvList";
+import { TvInfoProps } from "../../../../types/fetchTvList";
 
-export default function TvInfoTb({ tv }: TvDetail) {
+export default function TvInfoTb({ tv }: TvInfoProps) {
   if (!tv) {
     return <div>TV 시리즈 정보를 불러오는 중입니다...</div>;
   }

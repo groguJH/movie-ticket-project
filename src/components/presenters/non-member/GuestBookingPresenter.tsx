@@ -4,7 +4,7 @@ import { JSX } from "react";
 import { NonMemberBookingFormValues } from "../../../../types/nonmember";
 import BookingSearchPresenter from "./BookingSearchPresenter";
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 const Warning = styled(Text)`
   display: block;
@@ -12,11 +12,10 @@ const Warning = styled(Text)`
   color: #999;
 `;
 
-interface PresenterProps {
+interface GuestBookingPresenterProps {
   onCreate: (values: NonMemberBookingFormValues) => void;
   onSearch: (values: NonMemberBookingFormValues) => void;
   loading: boolean;
-  // 조회 결과는 컨테이너가 관리해서 전달
   upcoming: any[];
   past: any[];
   error: string | null;
@@ -31,7 +30,7 @@ export function GuestBookingPresenter({
   past,
   error,
   searching,
-}: PresenterProps): JSX.Element {
+}: GuestBookingPresenterProps): JSX.Element {
   const [form] = Form.useForm();
 
   const handleCreateClick = async () => {
@@ -138,7 +137,6 @@ export function GuestBookingPresenter({
           error={error}
           upcoming={upcoming}
           past={past}
-          onSearch={() => {}}
         />
       )}
     </div>

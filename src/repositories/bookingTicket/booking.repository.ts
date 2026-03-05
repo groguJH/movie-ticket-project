@@ -9,6 +9,10 @@ export async function insertBooking(
   session: ClientSession,
   bookingId?: string,
 ) {
+  if (!Array.isArray(seats) || seats.length !== 1) {
+    throw new Error("현재는 한 번에 한 좌석만 예매할 수 있습니다.");
+  }
+
   const client = await clientPromise;
   let bookingNumber = "";
   let insertedBookingId = "";
@@ -36,7 +40,7 @@ export async function insertBooking(
       },
     );
 
-  if (result.modifiedCount !== seats.length) {
+  if (result.modifiedCount !== 1) {
     throw new Error(
       "일부 좌석이 이미 예약되었거나 선택한 좌석을 찾을 수 없습니다.",
     );

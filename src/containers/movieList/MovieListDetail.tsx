@@ -56,7 +56,7 @@ export default function MovieListDetailContainer() {
         throw new Error(`API 요청 실패: ${creditsRes.status}`);
       }
       const crewData: MovieDetail = await creditsRes.json();
-      setCasts(crewData?.credits?.cast);
+      setCasts(crewData?.credits?.cast ?? []);
     } catch (error) {
       console.error("출연진데이터 에러발생", error);
     }
@@ -94,7 +94,7 @@ export default function MovieListDetailContainer() {
               movieTitle={movie.title}
               moviePost={movie.backdrop_path}
               movieRunTime={movie.runtime}
-              mediaType={movie.media_type ?? "movie"}
+              mediaType={movie.mediaType ?? "movie"}
               bookingId={""}
             />
           )}

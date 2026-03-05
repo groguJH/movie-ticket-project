@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 
-const PROTECTED_PATHS = ["/mypage", "/bookPage"];
+const PROTECTED_PATHS = ["/mypage"];
 const ADMIN_PROTECTED_PATHS = ["/feedbackAdmin"];
 
 /**

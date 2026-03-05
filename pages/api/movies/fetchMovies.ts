@@ -10,7 +10,7 @@ const API_SECRET_KEY = process.env.API_SECRET_KEY;
 
 export default async function fetchHandler(
   req: NextApiRequest,
-  res: NextApiResponse<MovieResponse | { error: string }>
+  res: NextApiResponse<MovieResponse | { error: string }>,
 ) {
   try {
     if (req.method !== "GET") {
@@ -23,10 +23,9 @@ export default async function fetchHandler(
       return res.status(400).json({ error: "잘못된 페이지 번호입니다." });
 
     const response = await fetch(
-      `${API_URL}movie/popular?api_key=${API_SECRET_KEY}&language=ko-KR&page=${pageNumber}`
+      `${API_URL}movie/popular?api_key=${API_SECRET_KEY}&language=ko-KR&page=${pageNumber}`,
     );
 
-    // 원본 TMDB API 응답 타입
     const data: {
       results: TMDBMovieResponse[];
       page: number;
@@ -34,7 +33,6 @@ export default async function fetchHandler(
       total_results: number;
     } = await response.json();
 
-    // media_type 추가
     const moviesWithType: MovieRequest[] = data.results.map((movie) => ({
       ...movie,
       media_type: "movie" as const,
