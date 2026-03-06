@@ -28,6 +28,7 @@ TMDB API로 영화/TV를 검색·탐색하고 회원·비회원 예매, 즐겨�
 <br/>
 예매 정책은 현재 1회 요청당 1좌석(`seats.length === 1`)입니다.
 <br/>
+([포트폴리오 사이트 보러가기](https://movie-ticket-project-theta.vercel.app/))
 <br/>
 
 ### 기술 스택
@@ -42,27 +43,21 @@ TMDB API로 영화/TV를 검색·탐색하고 회원·비회원 예매, 즐겨�
 
   "/>
 
-- React Query<img src="https://img.shields.io/badge/v5.71.5-red?style=plastic&logo=React%20Query&logoColor=%23FF4154&label=React%20Query&labelColor=red&color=red
-  "/>
-- Emotion (styled)<img src="https://img.shields.io/badge/v11.14.0-pink?style=plastic&logo=styled-components&logoColor=%23DB7093&label=styled-components&labelColor=pink&color=pink
-  "/>
+- React Query<img src="https://img.shields.io/badge/v5.71.5-red?style=plastic&logo=React%20Query&logoColor=%23FF4154&label=React%20Query&labelColor=red&color=red"/>
+- Emotion (styled)<img src="https://img.shields.io/badge/v11.14.0-pink?style=plastic&logo=styled-components&logoColor=%23DB7093&label=styled-components&labelColor=pink&color=pink"/>
 
 **Backend**
 
-- Next.js API Routes<img src="https://img.shields.io/badge/v14-version?style=plastic&logo=nextdotjs&logoColor=ffffff&label=Nextjs&labelColor=black&color=black
-  "/>
-- MongoDB<img src="https://img.shields.io/badge/v6.15.0-green?style=plastic&logo=MongoDB&logoColor=%2347A248&label=MongoDB&labelColor=green&color=green
-  "/>
-- NextAuth (Credentials / Kakao / Naver)<img src="https://img.shields.io/badge/v4.24.11-blue?style=plastic&logo=next-auth&logoColor=blue&label=next-auth&labelColor=blue&color=blue
-  "/>
+- Next.js API Routes<img src="https://img.shields.io/badge/v14-version?style=plastic&logo=nextdotjs&logoColor=ffffff&label=Nextjs&labelColor=black&color=black"/>
+- MongoDB<img src="https://img.shields.io/badge/v6.15.0-green?style=plastic&logo=MongoDB&logoColor=%2347A248&label=MongoDB&labelColor=green&color=green"/>
+- NextAuth (Credentials / Kakao / Naver)<img src="https://img.shields.io/badge/v4.24.11-blue?style=plastic&logo=next-auth&logoColor=blue&label=next-auth&labelColor=blue&color=blue"/>
 
 **ETC**
 
-- TMDB API<img src="https://img.shields.io/badge/TMDB-blue?style=plastic&logo=The%20Movie%20Database&logoColor=%2301B4E4&label=The%20Movie%20Database&labelColor=blue&color=blue
-  "/>
-- Yarn <img src="https://img.shields.io/badge/-blue?style=plastic&logo=Yarn&logoColor=%232C8EBB&label=Yarn&labelColor=blue&color=blue
+- TMDB API<img src="https://img.shields.io/badge/TMDB-blue?style=plastic&logo=The%20Movie%20Database&logoColor=%2301B4E4&label=The%20Movie%20Database&labelColor=blue&color=blue"/>
+- Yarn<img src="https://img.shields.io/badge/-blue?style=plastic&logo=Yarn&logoColor=%232C8EBB&label=Yarn&labelColor=blue&color=blue
   ">
-- Vercel 배포 <img src="https://img.shields.io/badge/Vercel-000000?style=flat&logo=vercel&logoColor=white"/>
+- Vercel 배포<img src="https://img.shields.io/badge/Vercel-000000?style=flat&logo=vercel&logoColor=white"/>
 
   <br/>
   <br/>
