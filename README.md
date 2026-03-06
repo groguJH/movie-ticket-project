@@ -289,7 +289,7 @@ graph TD
 
     Home --> MyPage["mypage: 마이페이지 메인"]
     MyPage --> MyTickets["mypage/tickets.tsx: 예매 내역"]
-    MyPage --> MyFavs["mypage/favoriteList.tsx: 즐겨찾기]
+    MyPage --> MyFavs["mypage/favoriteList.tsx: 즐겨찾기"]
     MyPage --> ProfileEdit["mypage/edit.tsx: 회원정보 수정"]
 
     MyPage --> FeedbackList["mypage/feedback: 피드백 목록"]
@@ -297,7 +297,7 @@ graph TD
 
     Home --> AdminFeedback["feedbackAdmin/index.tsx: 관리자 피드백"]
 ```
-
+<br/>
 [개인 벨로그 링크](https://velog.io/@jh_000velog/%EC%98%81%ED%99%94-%EC%98%88%EB%A7%A4-%EC%82%AC%EC%9D%B4%ED%8A%B8-%EC%9C%A0%EC%A0%80%ED%94%8C%EB%A1%9C%EC%9A%B0)
 <br/>
 <br/>
