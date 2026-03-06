@@ -30,6 +30,11 @@ export async function findNonMemberByInfo(payload: NonMemberBookingFormValues) {
   return user;
 }
 
+/**
+ *
+ * @param payload
+ * @returns result.insertedId
+ */
 export async function createNonMember(payload: NonMemberSearchResponse) {
   const hashedPassword = await bcrypt.hash(payload.password, 10);
   const client = await clientPromise;

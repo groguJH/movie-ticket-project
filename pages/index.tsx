@@ -28,7 +28,7 @@ export default function HomePage() {
     router.replace("/", undefined, { shallow: true });
   }, [router.isReady]);
 
-  function handleClick(event: React.MouseEvent): void {
+  function handleClick(): void {
     setIsModalOpen(true);
   }
 
@@ -40,11 +40,12 @@ export default function HomePage() {
     "최신 영화 예매, 방영중인 TV프로그램 정보확인, 좋아요 기능이 있는 개인 프로젝트입니다.";
   const noindex = false;
   const seoImage = "/movie.png";
-  const seoUrl = "https:/localhost:3000/";
+  const seoUrl = "/";
 
   return (
     <>
       <Seo
+        title="홈"
         description={description}
         noindex={noindex}
         image={seoImage}

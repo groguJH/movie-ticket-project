@@ -64,6 +64,7 @@ export default function BookingContainer({
   const [activeTab, setActiveTab] = useState<StepKey>("date");
 
   useEffect(() => {
+    if (!router.isReady) return;
     if (status === "unauthenticated" && !isGuest) {
       router.replace("/non-member");
     }

@@ -4,7 +4,7 @@ export interface TMDBMovieEntity {
   overview: string;
   backdrop_path: string;
   original_title: string;
-  description: string;
+  description?: string;
 }
 
 export type TMDBMovieResponse = TMDBMovieEntity;

@@ -1,7 +1,6 @@
 import Seo from "../../src/components/hoc/Seo";
 import MovieListContainer from "../../src/containers/movieList/MovieList";
 
-const seoUrl = "https:/localhost:3000/";
 const IMAGE_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_BASE_URL;
 export default function MovieListPage({
   initialMovies,
@@ -10,10 +9,17 @@ export default function MovieListPage({
   initialMovies: any[];
   firstMovie: any;
 }) {
+  const seoUrl = "/moviePage";
+  const description =
+    firstMovie?.overview ||
+    firstMovie?.description ||
+    "최신 상영 영화 정보를 확인할 수 있습니다.";
+
   return (
     <>
       <Seo
-        description={firstMovie.description}
+        title="영화 목록"
+        description={description}
         noindex={false}
         image={
           firstMovie?.backdrop_path

@@ -4,7 +4,6 @@ import TvListContainer from "../../src/containers/tvList/TvListContainer";
 const IMAGE_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_BASE_URL as
   | string
   | undefined;
-const seoUrl = "https:/localhost:3000/";
 export default function index({
   initialMovies,
   firstTv,
@@ -12,10 +11,17 @@ export default function index({
   initialMovies: any[];
   firstTv: any;
 }) {
+  const seoUrl = "/TVbroadcast";
+  const description =
+    firstTv?.overview ||
+    firstTv?.description ||
+    "현재 방영 중인 TV 프로그램 정보를 확인할 수 있습니다.";
+
   return (
     <div>
       <Seo
-        description={firstTv.description}
+        title="TV 방송 목록"
+        description={description}
         noindex={false}
         image={
           firstTv?.backdrop_path
@@ -41,7 +47,7 @@ export async function getServerSideProps(context: any) {
   return {
     props: {
       initialMovies: data.resultData,
-      firstTv: data.resultData?.[0] || null,
+      firstTv: data?.resultData?.[0] || null,
     },
   };
 }
