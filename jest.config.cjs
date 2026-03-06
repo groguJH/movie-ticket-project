@@ -1,0 +1,11 @@
+module.exports = {
+  testEnvironment: "node",
+
+  testMatch: ["<rootDir>/src/**/*.test.ts"],
+
+  testPathIgnorePatterns: ["/node_modules/", "/tests/"],
+
+  transform: {
+    "^.+\\.tsx?$": ["ts-jest", { tsconfig: "tsconfig.json" }],
+  },
+};

@@ -1,0 +1,18 @@
+{
+  "source": {
+    "include": ["pages", "components", "lib"],
+    "includePattern": ".+\\.(js|jsx|ts|tsx)$",
+    "excludePattern": "(^|\\/|\\\\|docs)_"
+  },
+  "plugins": ["@jsdoc/react"],
+  "opts": {
+    "encoding": "utf8",
+    "destination": "./docs",
+    "recurse": true,
+    "verbose": true
+  },
+  "docdash": {
+    "static": true,
+    "sort": true
+  }
+}

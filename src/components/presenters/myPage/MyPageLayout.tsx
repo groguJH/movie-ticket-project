@@ -1,0 +1,37 @@
+import { MyPagePresenterProps } from "../../../../types/myPage";
+import {
+  Card,
+  Cards,
+  CardTitle,
+  Container,
+  Greeting,
+  GreetingSection,
+  LinkRow,
+} from "../../utils/MyPageLayout";
+
+export default function MyPageLayout({ name, children }: MyPagePresenterProps) {
+  return (
+    <Container>
+      {/* 1. 인사 + 링크 */}
+      <GreetingSection>
+        <Greeting>안녕하세요 {name} 님</Greeting>
+        <LinkRow>
+          <a href="/mypage/edit">개인정보 수정</a>
+          <a href="/mypage/feedback/write">소중한 의견 보내기</a>
+        </LinkRow>
+      </GreetingSection>
+
+      {/* 2. 카드형 컨텐츠 */}
+      <Cards>
+        <Card>
+          <CardTitle>나의 즐겨찾기</CardTitle>
+          {children.favorites}
+        </Card>
+        <Card>
+          <CardTitle>예매·구매 내역</CardTitle>
+          {children.bookings}
+        </Card>
+      </Cards>
+    </Container>
+  );
+}
