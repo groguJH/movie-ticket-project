@@ -57,7 +57,6 @@ export default function FavListContainer() {
     }
   };
 
-
   const mutation = useMutation({
     mutationFn: async (movieId: string) => {
       const res = await fetch("/api/favorite/remove", {
@@ -86,7 +85,6 @@ export default function FavListContainer() {
 
   return (
     <>
-      {/* 🎬 영화 섹션 */}
       {favorites.some((item) => item.mediaType === "movie") && (
         <>
           {favorites
@@ -110,7 +108,6 @@ export default function FavListContainer() {
         </>
       )}
 
-      {/* 📺 TV 방송 섹션 */}
       {favorites.some((item) => item.mediaType === "on_air_show") && (
         <>
           <Divider style={{ marginTop: "50px" }}>

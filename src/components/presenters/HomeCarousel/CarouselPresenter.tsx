@@ -1,5 +1,5 @@
 import { Carousel } from "antd";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   CarouselWrapper,
   ContentDiv,
@@ -21,10 +21,18 @@ export default function CarouselPresenter({
 }) {
   const carouselRef = useRef<any>(null);
   const router = useRouter();
+  const getItemsPerSlide = () => {
+    if (typeof window === "undefined") {
+      return 4;
+    }
+
+    return window.innerWidth <= 768 ? 2 : 4;
+  };
+  const [itemsPerSlide, setItemsPerSlide] = useState(getItemsPerSlide);
 
   const groupedMovies: MovieProps[][] = [];
-  for (let i = 0; i < movies.length; i += 4) {
-    groupedMovies.push(movies.slice(i, i + 4));
+  for (let i = 0; i < movies.length; i += itemsPerSlide) {
+    groupedMovies.push(movies.slice(i, i + itemsPerSlide));
   }
 
   const settings = {
@@ -55,6 +63,19 @@ export default function CarouselPresenter({
   };
 
   useEffect(() => {
+    const handleResize = () => {
+      setItemsPerSlide(getItemsPerSlide());
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
     hideClonedSlides();
 
     const interval = setInterval(() => {
@@ -69,7 +90,7 @@ export default function CarouselPresenter({
       clearInterval(interval);
       clearTimeout(timeout);
     };
-  }, [movies]);
+  }, [movies, itemsPerSlide]);
 
   const handleMoreContents = () => {
     router.push("/bookPage");
@@ -88,7 +109,7 @@ export default function CarouselPresenter({
         <Carousel ref={carouselRef} className="movie-carousel" {...settings}>
           {groupedMovies.map((movieGroup: MovieProps[], groupIndex: number) => (
             <div key={`movie-group-${groupIndex}`}>
-              <ContentDiv>
+              <ContentDiv itemCount={itemsPerSlide}>
                 {movieGroup.map((movie: MovieProps) => (
                   <MovieItemPresenter
                     key={movie._id}

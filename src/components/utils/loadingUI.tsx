@@ -100,10 +100,9 @@ export const ItemBlock = styled.div`
   width: 60px;
   height: 20px;
 
-  border-radius: 4px; /* 모서리 둥글게 */
-  margin: 0 10px; /* 좌우 간격 */
+  border-radius: 4px;
+  margin: 0 10px;
 
-  /* 스켈레톤 애니메이션 효과 (선택 사항) */
   animation: skeleton-glow 1.5s infinite ease-in-out;
   @keyframes skeleton-glow {
     0% {

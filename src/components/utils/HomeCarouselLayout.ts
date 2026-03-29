@@ -25,7 +25,6 @@ export const CarouselWrapper = styled.div`
     padding: 0 20px;
   }
 
-  /* Slick 화살표 스타일 */
   .slick-arrow {
     width: 40px !important;
     height: 40px !important;
@@ -37,7 +36,6 @@ export const CarouselWrapper = styled.div`
     }
     &::after {
       display: none !important;
-      /* 불필요한 화살표 제거 */
     }
   }
 
@@ -57,11 +55,10 @@ export const CarouselWrapper = styled.div`
     }
   }
 
-  /* ✨여기서부터 명시해주기위해 추가했습니다. */
   .movie-carousel {
     .slick-list {
       overflow: hidden !important;
-      margin: 0 -10px; /* 아이템 간격 보정 */
+      margin: 0 -10px;
     }
 
     .slick-track {
@@ -70,12 +67,11 @@ export const CarouselWrapper = styled.div`
     }
 
     .slick-slide {
-      padding: 0 10px; /* 아이템 간격 */
+      padding: 0 10px;
       > div {
         height: 100%;
       }
     }
-    /* ✨ MODIFIED: clone은 layout 유지하되, 화면에만 투명·숨김 처리 */
     .slick-cloned {
       opacity: 0 !important;
       visibility: hidden !important;
@@ -163,36 +159,34 @@ export const MoreContentsLink = styled.span`
   }
 `;
 
-export const ContentDiv = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: stretch;
+export const ContentDiv = styled.div<{ itemCount: number }>`
+  display: grid;
+  grid-template-columns: repeat(${({ itemCount }) => itemCount}, minmax(0, 1fr));
   width: 100%;
-  height: 350px; /* 고정 높이 */
+  min-height: 350px;
   box-sizing: border-box;
   gap: 15px;
 
   @media (max-width: 480px) {
-    height: 280px;
+    min-height: 280px;
     gap: 8px;
   }
 
   @media (min-width: 481px) and (max-width: 768px) {
-    height: 320px;
+    min-height: 320px;
     gap: 12px;
   }
 
   @media (min-width: 769px) {
-    height: 350px;
+    min-height: 350px;
     gap: 15px;
   }
 `;
 
 export const ContentItem = styled.div`
   position: relative;
-  flex: 1;
-  max-width: calc(25% - 11.25px); /* 4개 아이템을 위한 계산 */
+  width: 100%;
+  min-width: 0;
   aspect-ratio: 2 / 3;
   border-radius: 12px;
   overflow: hidden;
@@ -201,12 +195,10 @@ export const ContentItem = styled.div`
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 
   @media (max-width: 480px) {
-    max-width: calc(25% - 6px);
     border-radius: 8px;
   }
 
   @media (min-width: 481px) and (max-width: 768px) {
-    max-width: calc(25% - 9px);
     border-radius: 10px;
   }
 

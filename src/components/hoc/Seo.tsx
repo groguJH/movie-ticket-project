@@ -48,8 +48,6 @@ export default function Seo({
       <title>{titleContent}</title>
       {description && <meta name="description" content={description} />}
       {noindex && <meta name="robots" content="noindex,nofollow" />}
-
-      {/* open graph 공유용 */}
       <meta property="og:title" content={titleContent} />
       {description && <meta property="og:description" content={description} />}
       {resolvedImage && <meta property="og:image" content={resolvedImage} />}

@@ -51,7 +51,7 @@ export default function FeedbackDetailPresenter({
   return (
     <ModalOverlay role="dialog" aria-modal="true" onClick={onClose}>
       <ModalBox onClick={(e) => e.stopPropagation()}>
-        <DetailSection style={{ width: "100%", height: "100%", padding: 20 }}>
+        <DetailSection style={{ width: "100%", height: "100%" }}>
           <DetailHeader>
             <DetailTitle>
               {loading ? "로딩 중..." : (data?.title ?? "제목 없음")}
@@ -81,7 +81,15 @@ export default function FeedbackDetailPresenter({
 
                 <DetailItem>
                   <strong>상태</strong>
-                  <div style={{ marginTop: 8 }}>
+                  <div
+                    style={{
+                      marginTop: 8,
+                      display: "flex",
+                      flexWrap: "wrap",
+                      alignItems: "center",
+                      gap: 8,
+                    }}
+                  >
                     <select
                       value={status}
                       onChange={(e) =>
@@ -94,7 +102,7 @@ export default function FeedbackDetailPresenter({
                     </select>
                     <EditButton
                       onClick={onSaveStatus}
-                      style={{ marginLeft: 8 }}
+                      style={{ marginLeft: 0 }}
                     >
                       저장
                     </EditButton>
@@ -106,7 +114,6 @@ export default function FeedbackDetailPresenter({
                   <ContentText>{data.content}</ContentText>
                 </DetailItem>
 
-                {/* response 목록 */}
                 <DetailItem>
                   <strong>관리자 응답</strong>
 
@@ -117,6 +124,7 @@ export default function FeedbackDetailPresenter({
                         style={{
                           padding: "8px 0",
                           borderBottom: "1px dashed #444",
+                          wordBreak: "break-word",
                         }}
                       >
                         <div style={{ fontSize: 13, color: "#cfcfcf" }}>
@@ -125,7 +133,7 @@ export default function FeedbackDetailPresenter({
                             : " "}
                         </div>
 
-                        <div style={{ marginTop: 6 }}>
+                        <div style={{ marginTop: 6, display: "grid", gap: 4 }}>
                           <span style={{ fontWeight: "bold", fontSize: 16 }}>
                             {String(r.adminName)}
                           </span>
@@ -142,7 +150,6 @@ export default function FeedbackDetailPresenter({
                   )}
                 </DetailItem>
 
-                {/* 응답 작성 폼 */}
                 <DetailItem>
                   <strong>응답 작성</strong>
                   <textarea
@@ -151,7 +158,14 @@ export default function FeedbackDetailPresenter({
                     rows={4}
                     placeholder="응답 내용을 입력하세요"
                   />
-                  <div style={{ marginTop: 8, display: "flex", gap: 8 }}>
+                  <div
+                    style={{
+                      marginTop: 8,
+                      display: "flex",
+                      gap: 8,
+                      flexWrap: "wrap",
+                    }}
+                  >
                     <EditButton
                       onClick={() => {
                         if (!responseText.trim()) {

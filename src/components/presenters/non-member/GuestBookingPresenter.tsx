@@ -46,22 +46,23 @@ export function GuestBookingPresenter({
   return (
     <div
       style={{
+        width: "100%",
         padding: 5,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
       }}
     >
-      <Card title="비회원 예매 / 조회" style={{ marginBottom: 16 }}>
-        <Form form={form} layout="vertical" style={{ width: 600 }}>
+      <Card title="비회원 예매 / 조회" style={{ marginBottom: 16, width: "100%" }}>
+        <Form form={form} layout="vertical" style={{ width: "100%" }}>
           <Row gutter={12}>
-            <Col span={6}>
+            <Col xs={24} sm={12} md={6}>
               <Form.Item name="name" label="이름" rules={[{ required: true }]}>
                 <Input placeholder="홍길동" />
               </Form.Item>
             </Col>
 
-            <Col span={6}>
+            <Col xs={24} sm={12} md={6}>
               <Form.Item
                 name="birth"
                 label="생년월일 (앞 6자리)"
@@ -71,7 +72,7 @@ export function GuestBookingPresenter({
               </Form.Item>
             </Col>
 
-            <Col span={6}>
+            <Col xs={24} sm={12} md={6}>
               <Form.Item
                 name="phone"
                 label="휴대폰번호"
@@ -81,7 +82,7 @@ export function GuestBookingPresenter({
               </Form.Item>
             </Col>
 
-            <Col span={6}>
+            <Col xs={24} sm={12} md={6}>
               <Form.Item
                 name="password"
                 label="비밀번호"
@@ -105,7 +106,10 @@ export function GuestBookingPresenter({
           <Form.Item
             style={{
               display: "flex",
-              flexDirection: "column",
+              flexDirection: "row",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              gap: 8,
               alignItems: "center",
               margin: "0",
             }}
@@ -114,7 +118,6 @@ export function GuestBookingPresenter({
               type="primary"
               htmlType="button"
               loading={loading}
-              style={{ marginRight: 8 }}
               onClick={handleCreateClick}
             >
               예매 진행하기

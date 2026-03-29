@@ -12,22 +12,35 @@ const ListWrapper = styled.div`
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 16px;
   padding: 20px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+    padding: 12px 0;
+  }
 `;
 export const StyledTabs = styled(Tabs)`
-  /* 네비 전체를 이벤트 무시 */
   .ant-tabs-nav-list {
     pointer-events: none !important;
   }
-  /* 탭 버튼 텍스트 기본/활성 색상 */
   .ant-tabs-nav .ant-tabs-tab-btn {
     color: #eee;
   }
   .ant-tabs-nav .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
     color: #1890ff;
   }
-  /* hover 시에도 색 변화 없음 */
   .ant-tabs-nav .ant-tabs-tab:hover .ant-tabs-tab-btn {
     color: #eee !important;
+  }
+
+  @media (max-width: 768px) {
+    .ant-tabs-tab {
+      padding: 8px 0 !important;
+    }
+
+    .ant-tabs-tab-btn {
+      font-size: 13px;
+    }
   }
 `;
 
@@ -93,7 +106,7 @@ export default function FetchingMoviesPresenter({
           }
           actions={[
             <Button
-              style={{ width: 90, fontSize: 12 }}
+              style={{ width: "100%", fontSize: 12 }}
               key="book"
               type="primary"
               onClick={() => onBookClick(movie._id, "", [])}

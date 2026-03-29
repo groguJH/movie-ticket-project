@@ -7,6 +7,12 @@ export const FavoriteItem = styled.div`
   &:last-child {
     border-bottom: none;
   }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
 `;
 
 export const MoviePoster = styled.div`
@@ -16,6 +22,12 @@ export const MoviePoster = styled.div`
   background-position: center;
   border-radius: 4px;
   margin-right: 16px;
+
+  @media (max-width: 768px) {
+    width: 100px;
+    height: 150px;
+    margin-right: 0;
+  }
 `;
 
 export const MovieInfo = styled.div`
@@ -40,6 +52,11 @@ export const ButtonGroup = styled.div`
   display: flex;
   gap: 8px;
   margin-top: auto;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    flex-wrap: wrap;
+  }
 `;
 
 export const Button = styled.button`
@@ -57,5 +74,9 @@ export const Button = styled.button`
   &.remove {
     background: #f0f0f0;
     color: #333;
+  }
+
+  @media (max-width: 768px) {
+    flex: 1 1 140px;
   }
 `;

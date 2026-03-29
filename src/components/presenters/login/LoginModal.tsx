@@ -13,6 +13,11 @@ const TitleHeader = styled.div`
   font-size: 18px;
   font-weight: bold;
   border-radius: 8px 8px 0 0;
+
+  @media (max-width: 768px) {
+    padding: 12px;
+    font-size: 16px;
+  }
 `;
 
 const Divider = styled.div`
@@ -95,10 +100,11 @@ export default function LoginModal({
       open={open}
       onCancel={onClose}
       footer={null}
-      width={350}
+      width="min(92vw, 350px)"
       style={{
         borderRadius: "5px",
         padding: "10px",
+        maxWidth: "calc(100vw - 24px)",
       }}
       centered
     >

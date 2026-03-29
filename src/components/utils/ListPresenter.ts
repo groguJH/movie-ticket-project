@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 
 const FadeIn = keyframes`
   from {
-    opacity: 0;   
+    opacity: 0;
   }
   to {
     opacity: 1;
@@ -20,6 +20,10 @@ export const Wrapper = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  @media (max-width: 768px) {
+    padding: 28px 12px;
+  }
 `;
 
 export const WrapperSection = styled.div`
@@ -33,37 +37,32 @@ export const WrapperSection = styled.div`
   box-sizing: border-box;
   margin: 0 auto 40px;
 
-  /* 기본(데스크탑) : 각 카드 고정폭으로 정확하게 맞추기 */
   > div {
-    flex: 0 0 580px; /* 카드 고정폭(데스크탑) */
+    flex: 0 0 580px;
     max-width: 580px;
     min-width: 0;
 
     transition: transform 0.3s ease, opacity 0.3s ease;
   }
 
-  /* 중간 브레이크포인트 (태블릿/좁은 데스크탑)
-     - 부모가 1200보다 작아지면 두 카드를 비율로 줄여서 같이 들어가게 함.
-     - 48% 정도로 두 개를 배치(간격 포함). */
   @media (max-width: 1199px) and (min-width: 901px) {
     justify-content: center;
 
     > div {
-      flex: 1 1 48%; /* 유연하게 줄어들고 늘어남 */
+      flex: 1 1 48%;
       max-width: 48%;
       transform: translateY(0);
     }
   }
 
-  /* 모바일: 폭이 좁으면 세로로 쌓기 */
   @media (max-width: 900px) {
     flex-direction: column;
-    align-items: center; /* 각 카드 가운데 정렬 */
+    align-items: center;
 
     > div {
       flex: 0 0 auto;
       width: 100%;
-      max-width: 580px; /* 카드가 지나치게 넓지 않게 제한 (선택사항) */
+      max-width: 580px;
       transform: translateY(15px);
     }
   }
@@ -74,6 +73,12 @@ export const Title = styled.h2`
   font-weight: 700;
   color: #ffffff;
   align-items: center;
+
+  @media (max-width: 768px) {
+    margin-bottom: 28px;
+    font-size: 1.35rem;
+    text-align: center;
+  }
 `;
 
 export const SectionText = styled.span`
@@ -86,8 +91,7 @@ export const Text = styled.p`
 `;
 
 export const StatCard = styled.div`
-  /* width: 560px; */
-  height: 260px;
+  min-height: 260px;
   border-radius: 16px;
   padding: 24px;
   background: rgba(255, 255, 255, 0.02);
@@ -97,26 +101,34 @@ export const StatCard = styled.div`
   display: flex;
   text-align: center;
   flex-direction: column;
-  align-items: stretch; /* ✅ 수정: 카드가 항상 부모 너비 꽉 채우도록 */
-  overflow: hidden; /* ✅ 수정: 내부 요소가 튀어나오지 않게 */
+  align-items: stretch;
+  overflow: hidden;
+
+  @media (max-width: 768px) {
+    min-height: 220px;
+    height: auto;
+    padding: 18px;
+  }
 `;
 
-/* 카드 헤더(작은 제목) */
 export const StatCardHeader = styled.div`
   font-weight: 700;
   color: #fff;
   font-size: 16px;
 `;
 
-/* 카드 본문 */
 export const StatCardBody = styled.div`
   width: 100%;
-  height: 100%; /* ✅ 카드 높이 안에서만 */
+  height: 100%;
   display: flex;
   flex-direction: column;
   padding: 24px;
   gap: 12px;
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    padding: 16px 0 0;
+  }
 `;
 
 export const WrapperContent = styled.div`
@@ -126,11 +138,6 @@ export const WrapperContent = styled.div`
   flex-direction: row;
   gap: 20px;
 
-  /* 말줄임표 */
-  /* overflow: hidden;
-  text-overflow: ellipsis; */
-
-  /* 선택된 항목이 있을 때 적용될 스타일 */
   &.has-selection {
     .list-section {
       width: 50%;
@@ -143,7 +150,6 @@ export const WrapperContent = styled.div`
     }
   }
 
-  /* 선택된 항목이 없을 때 */
   .list-section {
     width: 100%;
   }
@@ -151,17 +157,33 @@ export const WrapperContent = styled.div`
   .detail-section {
     display: none;
   }
+
+  @media (max-width: 900px) {
+    height: auto;
+    flex-direction: column;
+
+    &.has-selection {
+      .list-section,
+      .detail-section {
+        width: 100%;
+      }
+    }
+  }
 `;
 
 export const ListWrapper = styled.div`
   width: 100%;
-  max-width: 1200px; /* ✅ 추가 */
-  margin: 0 auto; /* ✅ 가운데 정렬 */
+  max-width: 1200px;
+  margin: 0 auto;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 24px 5px;
+
+  @media (max-width: 768px) {
+    padding: 16px 0;
+  }
 `;
 
 export const List = styled.ul`
@@ -174,11 +196,8 @@ export const List = styled.ul`
 
 export const Item = styled.li`
   display: block;
-  /* border-bottom: 1px solid #eee; */
 
-  /* 선택된 항목 스타일 */
   &.selected {
-    /* background-color: #fafafa; */
   }
 `;
 
@@ -193,9 +212,7 @@ export const HeaderButton = styled.button`
   cursor: pointer;
   text-align: left;
 
-  /* 리스트 호버시 색상 인식을 할 수 있습니다.  */
   &:hover {
-    /* background-color: #f9f9f9; */
     border: 1px solid #0070f3;
   }
 
@@ -203,12 +220,24 @@ export const HeaderButton = styled.button`
     outline: 2px solid #0070f3;
     border-radius: 4px;
   }
+
+  @media (max-width: 768px) {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
 `;
 
 export const HeaderMain = styled.div`
   display: flex;
   flex-direction: row;
   gap: 4px;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    flex-direction: column;
+    gap: 6px;
+  }
 `;
 
 export const TitleText = styled.span`
@@ -220,6 +249,10 @@ export const MetaInfo = styled.div`
   gap: 8px;
   font-size: 12px;
   color: #a9a9a9;
+
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+  }
 `;
 
 export const Direction = styled.span`
@@ -238,6 +271,10 @@ export const DetailSection = styled.div`
 
   box-shadow: -7px -7px 15px rgba(255, 255, 255, 0.05),
     7px 7px 15px rgba(0, 0, 0, 0.3);
+
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
 `;
 
 export const DetailHeader = styled.div`
@@ -260,6 +297,11 @@ export const DetailHeader = styled.div`
     font-size: 18px;
     color: #d3d3d3;
   }
+
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
 `;
 
 export const DetailTitle = styled.h3`
@@ -272,6 +314,7 @@ export const DetailTitle = styled.h3`
 export const ButtonGroup = styled.div`
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 `;
 
 export const EditButton = styled.button`
@@ -326,6 +369,12 @@ export const DetailContent = styled.div`
   flex-grow: 1;
   height: 550px;
   overflow-y: scroll;
+
+  @media (max-width: 768px) {
+    padding: 5px 0;
+    height: auto;
+    max-height: 60vh;
+  }
 `;
 
 export const DetailItem = styled.div`
@@ -417,6 +466,11 @@ export const WriterInfo = styled.div`
     font-size: 14px;
     font-weight: 600;
   }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    flex-wrap: wrap;
+  }
 `;
 
 export const StatusBadge = styled.span<{ status: string }>`
@@ -450,10 +504,11 @@ export const ModalOverlay = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 1200;
+  padding: 12px;
 `;
 
 export const ModalBox = styled.div`
-  width: 900px;
+  width: min(900px, calc(100vw - 24px));
   max-height: 80vh;
   overflow: hidden;
   border-radius: 10px;
@@ -463,20 +518,19 @@ export const ModalBox = styled.div`
 export const StatLabel = styled.span`
   font-size: 16px;
   font-weight: 700;
-  color: #ffffff; /* 순백색으로 변경하여 가독성 확보 */
+  color: #ffffff;
   margin-top: 12px;
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
 `;
 
 export const StatValueText = styled.span`
   font-size: 14px;
-  color: #ffffff; /* MetaInfo와 유사한 회색 */
+  color: #ffffff;
   margin-right: 8px;
   min-width: 60px;
   display: inline-block;
 `;
 
-/* 검색어 창 */
 export const SearchRow = styled.div`
   width: 100%;
   display: flex;
@@ -486,5 +540,9 @@ export const SearchRow = styled.div`
   input {
     width: 100%;
     max-width: 1000px;
+  }
+
+  @media (max-width: 768px) {
+    margin: 16px 0;
   }
 `;

@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 
-/* HeaderBackground: 기본 이미지와 transition 효과 */
 export const HeaderBackground = styled.div`
   position: absolute;
   top: 0;
@@ -8,20 +7,27 @@ export const HeaderBackground = styled.div`
   width: 100%;
   height: 100%;
   z-index: -1;
-  transition: background-color 0.3s ease, opacity 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    opacity 0.3s ease;
 
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: all 0.3s ease;
   }
 
   &:hover {
     cursor: pointer;
   }
+  @media (min-width: 1200px) {
+    img {
+      object-fit: cover;
+    }
+  }
 `;
 
-/* HeadParagraph: 내부 텍스트에 transition 추가 */
 export const HeadParagraph = styled.div`
   position: relative;
   color: white;
@@ -40,50 +46,70 @@ export const HeadParagraph = styled.div`
     opacity: 0;
     font-size: 0.9rem;
     transition: transform 0.2s ease;
-    /* 텍스트 가리기에 필수 */
     display: -webkit-box;
-    -webkit-line-clamp: 3; /* 최대 3줄 */
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
     margin: 0;
   }
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    padding: 12px;
+
+    h3 {
+      font-size: 1.2rem;
+    }
+
+    p {
+      font-size: 0.85rem;
+    }
+  }
 `;
 
-/* HeaderWrapper: hover 시 .header-background와 .header-paragraph 내부 텍스트의 스타일을 변경 */
 export const HeaderWrapper = styled.div`
   position: relative;
   display: flex;
   width: 100%;
   height: 500px;
+  max-width: 1920px;
   flex-direction: column;
   justify-content: flex-end;
+  margin: 0 auto;
   padding: 20px;
   z-index: 2;
   transition: background-color 0.3s ease;
 
-  /* hover 시 .header-background에 회색 오버레이 효과 */
   &:hover .header-background {
     background-color: rgba(28, 27, 27, 0.65);
     opacity: 0.6;
   }
 
-  /* hover 시 .header-paragraph 내부의 h3, p 확대 */
   &:hover .header-paragraph h3,
   &:hover .header-paragraph p {
     transform: scale(1.05);
     opacity: 1;
   }
+
+  @media (max-width: 768px) {
+    height: 320px;
+    padding: 12px;
+  }
 `;
 
-/* ListWrapper: 영화 카드 리스트 레이아웃 */
 export const ListWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 16px;
   padding: 20px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+    padding: 12px;
+  }
 `;
 
-/* MovieCard: 영화 카드 스타일 */
 export const MovieCard = styled.div`
   max-height: 500px;
   border-radius: 12px;
@@ -103,9 +129,18 @@ export const MovieCard = styled.div`
     overflow: hidden;
     color: black;
   }
+
+  @media (max-width: 768px) {
+    h3 {
+      font-size: 1rem;
+    }
+
+    p {
+      font-size: 0.82rem;
+    }
+  }
 `;
 
-/* CardImage: 영화 카드의 이미지 스타일 */
 export const CardImage = styled.div<{ image: string }>`
   background-image: url(${(props) => props.image});
   background-size: cover;
@@ -124,7 +159,6 @@ export const CardImage = styled.div<{ image: string }>`
   }
 `;
 
-/* CardOverlay: 영화 카드 이미지 오버레이 스타일 */
 export const CardOverlay = styled.div`
   position: absolute;
   top: 0;
@@ -159,5 +193,17 @@ export const CardOverlay = styled.div`
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     color: white;
+  }
+
+  @media (max-width: 768px) {
+    padding: 12px;
+
+    h3 {
+      font-size: 1rem;
+    }
+
+    p {
+      font-size: 0.72rem;
+    }
   }
 `;

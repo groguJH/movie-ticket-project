@@ -6,6 +6,10 @@ export const BannerWrapper = styled.div`
   overflow: hidden;
   position: relative;
   margin-bottom: 1rem;
+
+  @media (max-width: 768px) {
+    max-height: 320px;
+  }
 `;
 
 export const BannerImage = styled.img`
@@ -42,9 +46,23 @@ export const HeaderParagraph = styled.div`
   p {
     margin-top: 0.5rem;
     display: -webkit-box;
-    -webkit-line-clamp: 3; /* 최대 3줄 */
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
     margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    padding: 1rem;
+
+    h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      font-size: 0.88rem;
+    }
   }
 `;

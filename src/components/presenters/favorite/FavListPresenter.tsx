@@ -41,7 +41,6 @@ export default function FavListPresenter({
             <MovieRunTime>{movieRunTime}분</MovieRunTime>
 
             <ButtonGroup>
-              {/* ✅ 조건에 따라 버튼 다르게 렌더링 */}
               {mediaType === "movie" ? (
                 <Button className="booking" onClick={onClickFavorite}>
                   예매하기

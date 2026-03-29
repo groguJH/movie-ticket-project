@@ -118,11 +118,8 @@ const NavigationContainer: React.FC<{ children: React.ReactNode }> = ({
           router.push("/non-member");
         }}
       >
-        {/* 이 부분이 중요 */}
-        {/* ✅ children 아래에 검색창이 붙도록 구조 수정 */}
         {children}
 
-        {/* ✅ SearchContainer를 Presenter 내부에서 조건부 렌더링할 수 있도록 이동 */}
         {isSearchOpen && <SearchContainer onSearchClick={onSearchClick} />}
       </NavigationPresenter>
 

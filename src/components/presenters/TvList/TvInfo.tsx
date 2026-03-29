@@ -29,11 +29,14 @@ export default function TvInfoTb({ tv }: TvInfoProps) {
   };
 
   return (
-    <Descriptions title="TV 시리즈 정보" bordered>
+    <Descriptions
+      title="TV 시리즈 정보"
+      bordered
+      size="small"
+      column={{ xs: 1, sm: 2, md: 3 }}
+    >
       {allowedFields.map((key) => (
         <Descriptions.Item key={key} label={fieldMapping[key] || key}>
-          {/* 어떤 필드는 string이 아닐 수 있으므로 toString()을 붙여주자 */}
-          {/* 또한 이 키는 안전하게  */}
           {tv[key] !== undefined ? tv[key].toString() : "정보 없음"}
         </Descriptions.Item>
       ))}

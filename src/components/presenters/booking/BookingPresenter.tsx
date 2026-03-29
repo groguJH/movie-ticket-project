@@ -33,6 +33,7 @@ export default function BookingPresenter({
   isSeatLoading,
 }: BookingPresenterProps) {
   const { TabPane } = Tabs;
+  const pickerStyle = { width: "100%", maxWidth: 250 };
 
   if (isCheckingCanBook) {
     return null;
@@ -44,8 +45,6 @@ export default function BookingPresenter({
 
   return (
     <>
-      {/* ✅ 상영 일정 있을 때만 예매 UI 렌더링 */}
-
       <>
         <Tabs
           activeKey={activeTab}
@@ -62,41 +61,51 @@ export default function BookingPresenter({
         {activeTab === "movie" && <h2>{movieTitle} 예매하기</h2>}
 
         <Container>
-          {/* 1) 날짜 선택 */}
           {activeTab === "date" && (
-            <DatePicker
-              style={{ width: 250, margin: "1rem 1rem 0 0" }}
-              onChange={(_, dateStr) =>
-                onDateChange(typeof dateStr === "string" ? dateStr : "")
-              }
-              disabledDate={(d) => !d || d.isBefore(dayjs(), "day")}
-            />
-          )}
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 12,
+                alignItems: "flex-start",
+              }}
+            >
+              <DatePicker
+                style={pickerStyle}
+                onChange={(_, dateStr) =>
+                  onDateChange(typeof dateStr === "string" ? dateStr : "")
+                }
+                disabledDate={(d) => !d || d.isBefore(dayjs(), "day")}
+              />
 
-          {/* 2) 영화관 선택 */}
-          {activeTab === "date" && availableTheaters.length > 0 && (
-            <Select
-              placeholder="영화관 선택"
-              style={{ width: 250, margin: "1rem 1rem 0 0" }}
-              options={availableTheaters.map((t) => ({ label: t, value: t }))}
-              value={selectedTheater || undefined}
-              onChange={onTheaterSelect}
-            />
-          )}
+              {availableTheaters.length > 0 && (
+                <Select
+                  placeholder="영화관 선택"
+                  style={pickerStyle}
+                  options={availableTheaters.map((t) => ({
+                    label: t,
+                    value: t,
+                  }))}
+                  value={selectedTheater || undefined}
+                  onChange={onTheaterSelect}
+                />
+              )}
 
-          {/* 3) 시간(회차) 선택 */}
-          {activeTab === "date" && (
-            <>
               {isShowtimeLoading ? (
                 <div
-                  style={{ display: "inline-block", margin: "1rem 1rem 0 0" }}
+                  style={{
+                    minHeight: 32,
+                    display: "flex",
+                    alignItems: "center",
+                  }}
                 >
                   <InlineSmallSpinner />
                 </div>
               ) : filteredShowtimes.length > 0 ? (
                 <Select
                   placeholder="시간 선택"
-                  style={{ width: 250, margin: "1rem 1rem 0 0" }}
+                  style={pickerStyle}
                   options={filteredShowtimes.map((s) => ({
                     label: dayjs(s.startTime).format("HH:mm"),
                     value: s._id,
@@ -107,16 +116,16 @@ export default function BookingPresenter({
               ) : selectedDate ? (
                 <div
                   style={{
-                    display: "inline-block",
-                    margin: "1rem 1rem 0 0",
+                    minHeight: 32,
+                    display: "flex",
+                    alignItems: "center",
                     color: "#888",
                   }}
                 ></div>
               ) : null}
-            </>
+            </div>
           )}
 
-          {/* seat 단계 */}
           {activeTab === "seat" && (
             <>
               {isSeatLoading ? (
@@ -152,7 +161,6 @@ export default function BookingPresenter({
             </>
           )}
 
-          {/* 예매하기book*/}
           {activeTab === "book" && (
             <Container>
               <RefundPresenter />
@@ -183,7 +191,7 @@ export default function BookingPresenter({
                 <Card
                   key={b._id}
                   title={`예매번호: ${bookInfo.bookingNumber}`}
-                  style={{ marginBottom: 16 }}
+                  style={{ marginBottom: 16, width: "100%" }}
                 >
                   <p>날짜: {selectedDate}</p>
                   <p>영화관: {selectedTheater}</p>

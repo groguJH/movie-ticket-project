@@ -16,7 +16,7 @@ export default function BookingSearchPresenter({
   past,
 }: PresenterProps) {
   return (
-    <div style={{ marginTop: 16, width: 648 }}>
+    <div style={{ marginTop: 16, width: "100%", maxWidth: 648 }}>
       <Card
         title={`상영 예정 (${upcoming.length}건)`}
         style={{ marginBottom: 16 }}

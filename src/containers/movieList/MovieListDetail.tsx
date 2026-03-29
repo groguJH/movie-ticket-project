@@ -70,7 +70,6 @@ export default function MovieListDetailContainer() {
   return (
     <PageWrapper>
       <CardWrapper>
-        {/* 영화 데이터가 있을 때 MovieBanner 컴포넌트를 렌더링 */}
         {movie && IMAGE_BASE_URL && (
           <MovieBanner movie={movie} imageBaseUrl={IMAGE_BASE_URL} />
         )}
@@ -97,7 +96,6 @@ export default function MovieListDetailContainer() {
             />
           )}
         </LikeButtonWrapper>
-        {/* casts 상태에 크루 정보(예: casts.credits)가 있다면 이를 화면에 출력 */}
         {showCasts && (
           <MovieCastList casts={casts} imageBaseUrl={IMAGE_BASE_URL!} />
         )}

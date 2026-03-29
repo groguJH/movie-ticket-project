@@ -246,7 +246,6 @@ export default function ListPresenter({
         </div>
       </WrapperContent>
 
-      {/* 페이지네이션 */}
       <Pagination>
         {Array.from({ length: Math.ceil(total / limit) }, (_, i) => i + 1).map(
           (p) => (

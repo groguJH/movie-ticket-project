@@ -5,6 +5,11 @@ export const Container = styled.div`
   max-width: 960px;
   margin: 40px auto;
   padding: 0 20px;
+
+  @media (max-width: 768px) {
+    margin: 24px auto;
+    padding: 0 12px;
+  }
 `;
 
 export const GreetingSection = styled.div`
@@ -13,11 +18,19 @@ export const GreetingSection = styled.div`
   border-radius: 8px;
   padding: 24px;
   text-align: left;
+
+  @media (max-width: 768px) {
+    padding: 18px;
+  }
 `;
 
 export const Greeting = styled.h2`
   margin: 0 0 8px;
   font-size: 24px;
+
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
 `;
 
 export const LinkRow = styled.div`
@@ -31,6 +44,11 @@ export const LinkRow = styled.div`
       text-decoration: underline;
     }
   }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 8px;
+  }
 `;
 
 export const Cards = styled.div`
@@ -38,6 +56,11 @@ export const Cards = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 18px;
   margin-top: 10px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
 `;
 
 export const Card = styled.div`
@@ -48,6 +71,10 @@ export const Card = styled.div`
   display: flex;
   flex-direction: column;
   color: #333;
+
+  @media (max-width: 768px) {
+    padding: 0.875rem;
+  }
 `;
 
 export const CardTitle = styled.h3`

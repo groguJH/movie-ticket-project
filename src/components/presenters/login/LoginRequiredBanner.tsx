@@ -12,6 +12,12 @@ const BannerBox = styled.div`
   justify-content: center;
   gap: 16px;
   margin: 1rem 0;
+
+  @media (max-width: 768px) {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
 `;
 
 const IconBox = styled.div`
@@ -36,6 +42,10 @@ const Message = styled.div`
   font-size: 15px;
   font-weight: 500;
   color: #595959;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
 `;
 
 const ButtonInnerBox = styled.div`
@@ -46,7 +56,7 @@ const ButtonInnerBox = styled.div`
   font-size: 14px;
   color: #1677ff;
   &:hover {
-    color: #69b1ff; /* 밝은 파랑으로 hover 효과 */
+    color: #69b1ff;
   }
 `;
 

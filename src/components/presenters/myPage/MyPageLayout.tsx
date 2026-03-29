@@ -12,7 +12,6 @@ import {
 export default function MyPageLayout({ name, children }: MyPagePresenterProps) {
   return (
     <Container>
-      {/* 1. 인사 + 링크 */}
       <GreetingSection>
         <Greeting>안녕하세요 {name} 님</Greeting>
         <LinkRow>
@@ -21,7 +20,6 @@ export default function MyPageLayout({ name, children }: MyPagePresenterProps) {
         </LinkRow>
       </GreetingSection>
 
-      {/* 2. 카드형 컨텐츠 */}
       <Cards>
         <Card>
           <CardTitle>나의 즐겨찾기</CardTitle>

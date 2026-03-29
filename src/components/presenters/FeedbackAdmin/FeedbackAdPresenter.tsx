@@ -23,7 +23,7 @@ import {
   WrapperSection,
   WriterInfo,
 } from "../../utils/ListPresenter";
-import { Flex, Progress, Space, Tooltip } from "antd";
+import { Progress, Tooltip } from "antd";
 
 interface FeedbackAdPresenterProps {
   search: string;
@@ -66,24 +66,22 @@ export default function FeedbackAdPresenter({
   selectedId,
   processedStats,
 }: FeedbackAdPresenterProps) {
-  const hasSelection = !!selectedId;
   const totalPages = Math.ceil(data?.total / data?.limit);
 
   return (
     <Wrapper>
-      {/* 제목은 최상단에 있다 */}
       <Title>피드백 관리자 페이지</Title>
 
-      {/* 통계 섹션: 두 개의 같은 너비 카드(1,2)를 가로 정렬 */}
       <WrapperSection>
-        {/* 카드 1: 원형 통계(답변 진행률, 사용자 만족도 원형 2개) */}
         <StatCard>
           <StatCardHeader>요약 통계</StatCardHeader>
           <StatCardBody>
             <div
               style={{
                 display: "flex",
-                gap: 20,
+                width: "100%",
+                flexWrap: "wrap",
+                gap: 16,
                 justifyContent: "space-around",
               }}
             >
@@ -94,7 +92,9 @@ export default function FeedbackAdPresenter({
                   style={{
                     display: "flex",
                     flexDirection: "column",
+                    alignItems: "center",
                     textAlign: "center",
+                    minWidth: 120,
                   }}
                 >
                   <Progress
@@ -112,7 +112,9 @@ export default function FeedbackAdPresenter({
                   style={{
                     display: "flex",
                     flexDirection: "column",
+                    alignItems: "center",
                     textAlign: "center",
+                    minWidth: 120,
                   }}
                 >
                   <Progress
@@ -128,57 +130,90 @@ export default function FeedbackAdPresenter({
           </StatCardBody>
         </StatCard>
 
-        {/* 카드 2: 세부 만족도 바 차트들 */}
         <StatCard>
           <StatCardHeader>세부 만족도</StatCardHeader>
           <StatCardBody>
-            <Flex
-              vertical
-              gap="small"
-              style={{ width: "100%", height: "100%" }}
+            <div
+              style={{
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                gap: 12,
+              }}
             >
-              <Space style={{ width: "100%", justifyContent: "space-between" }}>
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 12,
+                  flexWrap: "wrap",
+                }}
+              >
                 <StatValueText>매우 만족</StatValueText>
                 <Progress
                   percent={processedStats?.satisfaction?.verySatisfied ?? 0}
-                  style={{ width: 480, minWidth: 120 }}
+                  style={{ flex: 1, minWidth: 180 }}
                   strokeColor="#52c41a"
                 />
-              </Space>
+              </div>
 
-              <Space style={{ width: "100%", justifyContent: "space-between" }}>
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 12,
+                  flexWrap: "wrap",
+                }}
+              >
                 <StatValueText>만족</StatValueText>
                 <Progress
                   percent={processedStats?.satisfaction?.satisfied ?? 0}
-                  style={{ width: 480, minWidth: 120 }}
+                  style={{ flex: 1, minWidth: 180 }}
                 />
-              </Space>
+              </div>
 
-              <Space style={{ width: "100%", justifyContent: "space-between" }}>
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 12,
+                  flexWrap: "wrap",
+                }}
+              >
                 <StatValueText>보통</StatValueText>
                 <Progress
                   percent={processedStats?.satisfaction?.neutral ?? 0}
-                  style={{ width: 480, minWidth: 120 }}
+                  style={{ flex: 1, minWidth: 180 }}
                   strokeColor="orange"
                 />
-              </Space>
+              </div>
 
-              <Space style={{ width: "100%", justifyContent: "space-between" }}>
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 12,
+                  flexWrap: "wrap",
+                }}
+              >
                 <StatValueText>불만</StatValueText>
                 <Progress
                   percent={processedStats?.satisfaction?.veryUnsatisfied ?? 0}
-                  style={{ width: 480, minWidth: 120 }}
+                  style={{ flex: 1, minWidth: 180 }}
                   strokeColor="red"
                 />
-              </Space>
-            </Flex>
+              </div>
+            </div>
           </StatCardBody>
         </StatCard>
       </WrapperSection>
 
-      {/* 검색 + 리스트 영역 */}
       <ListWrapper>
-        {/* 변경: 검색영역을 중앙에 넓게 배치하기 위해 SearchRow 스타일 사용 */}
         <StatCardHeader>검색으로 피드백 조회하기</StatCardHeader>
         <SearchRow>
           <Input
@@ -221,7 +256,6 @@ export default function FeedbackAdPresenter({
           ))}
         </List>
 
-        {/* 페이지네이션 */}
         <Pagination>
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
             <PageButton

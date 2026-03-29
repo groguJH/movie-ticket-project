@@ -124,7 +124,6 @@ export default function MovieListContainer() {
           ))}
       </ListWrapper>
 
-      {/* Load More 버튼 (선택 사항) */}
       <div id="loadMore">{loading && <InlineSmallSpinner />}</div>
     </div>
   );

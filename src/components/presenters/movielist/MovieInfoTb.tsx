@@ -29,7 +29,12 @@ export default function MovieInfoTb({ movie }: MovieInfoTbProps) {
   };
 
   return (
-    <Descriptions title="Movie Info" bordered>
+    <Descriptions
+      title="Movie Info"
+      bordered
+      size="small"
+      column={{ xs: 1, sm: 2, md: 3 }}
+    >
       {allowedFields.map((key) => (
         <Descriptions.Item key={key} label={fieldMapping[key] || key}>
           {movie[key]}

@@ -82,6 +82,11 @@ export default function NavigationPresenter({
             label: "프로필 수정",
             onClick: onEditProfile,
           },
+          {
+            key: "logout",
+            label: "로그아웃",
+            onClick: onLogoutClick,
+          },
         ]
       : [
           {
@@ -99,6 +104,11 @@ export default function NavigationPresenter({
             label: "예매 내역",
             onClick: onBookingHistoryClick,
           },
+          {
+            key: "logout",
+            label: "로그아웃",
+            onClick: onLogoutClick,
+          },
         ],
   };
 
@@ -111,20 +121,28 @@ export default function NavigationPresenter({
               {isSideMenuVisible ? <CloseIcon /> : <MenuIcon />}
             </NavItem>
 
-            {/* 검색하기- 버튼은 클릭되어야함  */}
             <NavItem onClick={onSearchClick} aria-label="검색 토글">
               {isSearchVisible ? <SearchMinusIcon /> : <SearchIcon />}
             </NavItem>
-            <NavItem onClick={onMovieClick} aria-label="영화 페이지로 이동하기">
+            <NavItem
+              className="desktop-nav-item"
+              onClick={onMovieClick}
+              aria-label="영화 페이지로 이동하기"
+            >
               <span>영화</span>
             </NavItem>
             <NavItem
+              className="desktop-nav-item"
               onClick={onBookingClick}
               aria-label="예매 페이지로 이동버튼"
             >
               <span>예매</span>
             </NavItem>
-            <NavItem onClick={onTVClick} aria-label="방송 페이지로 이동하기">
+            <NavItem
+              className="desktop-nav-item"
+              onClick={onTVClick}
+              aria-label="방송 페이지로 이동하기"
+            >
               <span>방송</span>
             </NavItem>
           </LeftGroup>
@@ -145,25 +163,23 @@ export default function NavigationPresenter({
               </>
             ) : status === "authenticated" && userName ? (
               <>
-                {/* 로그인된 경우: PersonIcon에 hover 시 드롭다운 */}
                 <Dropdown
                   menu={menuProps}
-                  trigger={["hover"]}
+                  trigger={["hover", "click"]}
                   placement="bottomRight"
                 >
-                  <NavItem>
+                  <NavItem className="user-nav-item">
                     <PersonIcon className="navIcons" />
                     <span>{userName}님</span>
                   </NavItem>
                 </Dropdown>
-                <NavItem onClick={onLogoutClick}>
+                <NavItem className="auth-text-item" onClick={onLogoutClick}>
                   <span>로그아웃</span>
                 </NavItem>
               </>
             ) : (
               <>
                 {" "}
-                {/* 비로그인 상태: 기존 로그인/회원가입 */}
                 <NavItem
                   onClick={onLoginClick}
                   aria-label="로그인 페이지로 이동하기"
@@ -171,6 +187,7 @@ export default function NavigationPresenter({
                   <PersonIcon />
                 </NavItem>
                 <NavItem
+                  className="auth-text-item"
                   onClick={onSignupClick}
                   aria-label="회원가입 페이지로 이동하기"
                 >
@@ -191,7 +208,6 @@ export default function NavigationPresenter({
       <SideMenuContainer visible={isSideMenuVisible}>
         {userId ? (
           <SideMenuBanner>
-            {/* profileImage가 있을 때는 기존 MyAvatar, 없을 때는 antd Avatar 아이콘 사용 */}
             {userProfileImage ? (
               <MyAvatar src={`/${userProfileImage}.png`} alt="프로필 수정 전" />
             ) : (
@@ -214,7 +230,6 @@ export default function NavigationPresenter({
                   <EditBoxLine />
                 </EditButton>
               </UserTitle>
-              {/* profileImage가 없을 때만 텍스트를 '프로필을 꾸밀수있습니다'로 변경 */}
               {userProfileImage ? (
                 <UserText>좋은 하루 되세요🍀</UserText>
               ) : (

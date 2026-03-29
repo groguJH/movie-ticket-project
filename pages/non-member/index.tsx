@@ -3,9 +3,10 @@ import styled from "@emotion/styled";
 import GuestBookingContainer from "../../src/containers/non-member/GuestBookingContainer";
 
 const Container = styled.div`
-  max-width: 400px;
-  margin: 40px auto;
-  padding: 0 20px;
+  width: 100%;
+  max-width: 720px;
+  margin: 24px auto;
+  padding: 0 16px 24px;
 `;
 
 export default function NonMemberPage() {

@@ -12,6 +12,11 @@ export const NavContainer = styled.nav`
   top: 0;
   left: 0;
   z-index: 999;
+
+  @media (max-width: 768px) {
+    height: 64px;
+    padding: 0 0.5rem;
+  }
 `;
 
 export const NavList = styled.div`
@@ -19,6 +24,7 @@ export const NavList = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  gap: 0.5rem;
 `;
 
 export const NavGroup = styled.div`
@@ -28,10 +34,11 @@ export const NavGroup = styled.div`
 
 export const LeftGroup = styled(NavGroup)`
   gap: 1rem;
-  left: calc(16.666%); /* 기본: 1/6 */
+  left: calc(16.666%);
 
   @media (max-width: 768px) {
     left: calc(20%);
+    gap: 0.35rem;
   }
 
   @media (max-width: 480px) {
@@ -45,10 +52,11 @@ export const CenterGroup = styled(NavGroup)`
 
 export const RightGroup = styled(NavGroup)`
   gap: 1rem;
-  left: calc(83.333%); /* 기본: 5/6 */
+  left: calc(83.333%);
 
   @media (max-width: 768px) {
     left: calc(80%);
+    gap: 0.35rem;
   }
 
   @media (max-width: 480px) {
@@ -87,6 +95,29 @@ export const NavItem = styled.div`
     animation: none;
   }
 
+  @media (max-width: 768px) {
+    padding: 0.35rem;
+    margin-bottom: 0;
+
+    span {
+      font-size: 0.875rem;
+    }
+
+    .popcorn {
+      width: 32px;
+      height: 32px;
+    }
+
+    &.desktop-nav-item,
+    &.auth-text-item {
+      display: none;
+    }
+
+    &.user-nav-item span {
+      display: none;
+    }
+  }
+
   @keyframes pop {
     0% {
       transform: translateY(0) rotate(0deg);
@@ -111,13 +142,26 @@ export const SideMenuContainer = styled.div<{ visible: boolean }>`
   transition: left 0.3s ease;
   z-index: 1000;
   border-top-right-radius: 8px;
+
+  @media (max-width: 768px) {
+    top: 64px;
+    left: ${({ visible }) => (visible ? "0" : "-220px")};
+    width: 220px;
+    height: calc(100vh - 64px);
+  }
 `;
 
 export const MainContent = styled.main`
   margin-top: 80px;
   min-height: calc(100vh - 80px);
   background-color: #f5f5f5;
-  position: absolute;
+  position: relative;
+  width: 100%;
+
+  @media (max-width: 768px) {
+    margin-top: 64px;
+    min-height: calc(100vh - 64px);
+  }
 `;
 
 export const WhiteSpan = styled.span`
@@ -147,5 +191,17 @@ export const MenuItemWrapper = styled.div`
   span {
     font-size: 16px;
     line-height: 1;
+  }
+
+  @media (max-width: 768px) {
+    gap: 8px;
+
+    svg {
+      font-size: 18px;
+    }
+
+    span {
+      font-size: 14px;
+    }
   }
 `;

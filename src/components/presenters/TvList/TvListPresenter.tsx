@@ -40,7 +40,6 @@ export default function TvListPresenter({
         )}
       </HeaderWrapper>
 
-      {/* TV 리스트 */}
       <ListWrapper>
         {TvInfo.filter((tv) => tv.overview).map((tv) => (
           <Link key={tv.id} href={`/TVbroadcast/${tv.id}`}>
@@ -56,7 +55,6 @@ export default function TvListPresenter({
         ))}
       </ListWrapper>
 
-      {/* 하단 로딩 표시 */}
       {isFetching && <InlineSmallSpinner />}
     </div>
   );

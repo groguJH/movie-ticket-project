@@ -4,12 +4,21 @@ export const Wrapper = styled.section`
   max-width: 1200px;
   margin: 0 auto;
   padding: 32px 16px;
+
+  @media (max-width: 768px) {
+    padding: 20px 12px;
+  }
 `;
 
 export const Title = styled.h2`
   text-align: center;
   font-size: 24px;
   margin-bottom: 24px;
+
+  @media (max-width: 768px) {
+    font-size: 20px;
+    margin-bottom: 18px;
+  }
 `;
 
 export const Top5Wrapper = styled.div`
@@ -48,6 +57,15 @@ export const MovieCard = styled.div<{ isSelected: boolean }>`
     font-size: 18px;
     margin: 1rem;
   }
+
+  @media (max-width: 768px) {
+    padding: 14px;
+
+    h3 {
+      font-size: 16px;
+      margin: 0;
+    }
+  }
 `;
 
 export const Overview = styled.p`
@@ -79,6 +97,8 @@ export const VideoWrapper = styled.div`
   }
 
   @media (max-width: 768px) {
+    padding: 12px;
+
     iframe {
       height: 200px;
     }

@@ -24,7 +24,6 @@ export default function MyPageBookingPresenter({
 }: MyPageBookingPresenterProps) {
   return (
     <Card style={{ marginBottom: 40 }}>
-      {/* antd Card의 title 대신 직접 렌더링 */}
       <CardTitle>예매번호: {userId}</CardTitle>
       <MovieInfo style={{ marginTop: "1.7rem" }}>
         <MovieTitle> {movieTitle} </MovieTitle>

@@ -42,12 +42,29 @@ export async function getServerSideProps(context: any) {
     (req.connection && (req.connection as any).encrypted ? "https" : "http");
   const host = req.headers.host;
   const origin = `${proto}://${host}`;
-  const res = await fetch(`${origin}/api/TV?page=1`);
-  const data = await res.json();
-  return {
-    props: {
-      initialMovies: data.resultData,
-      firstTv: data?.resultData?.[0] || null,
-    },
-  };
+  try {
+    const res = await fetch(`${origin}/api/TV?page=1`);
+
+    if (!res.ok) {
+      throw new Error("방영중인 TV 데이터를 가져오는 데 실패했습니다.");
+    }
+
+    const data = await res.json();
+
+    return {
+      props: {
+        initialMovies: data.resultData || [],
+        firstTv: data?.resultData?.[0] || null,
+      },
+    };
+  } catch (error) {
+    console.error("Tv 데이터 가져오기 실패", error);
+
+    return {
+      props: {
+        initialMovies: [],
+        firstTv: null,
+      },
+    };
+  }
 }

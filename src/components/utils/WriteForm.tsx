@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { Radio } from "antd";
 
 export const Wrapper = styled.section`
-  max-width: 80vw;
+  max-width: 100%;
   width: 100%;
   margin: 0 auto;
   padding: 32px 16px;
@@ -19,13 +19,23 @@ export const Wrapper = styled.section`
     padding-top: 2px;
   }
 
-  @media (min-width: 768px) {
-    /* padding: 32px 24px; */
+  @media (max-width: 768px) {
+    padding: 20px 12px;
+
+    h2 {
+      flex-wrap: wrap;
+      text-align: center;
+    }
   }
 `;
 
 export const Title = styled.h2`
   margin: 0 0 32px 0;
+
+  @media (max-width: 768px) {
+    margin-bottom: 24px;
+    font-size: 1.2rem;
+  }
 `;
 
 export const Form = styled.form`
@@ -37,6 +47,10 @@ export const Form = styled.form`
   justify-content: center;
   padding: 1rem;
   background-color: #f8f8f8;
+
+  @media (max-width: 768px) {
+    padding: 0.875rem;
+  }
 `;
 
 export const Label = styled.label`
@@ -57,6 +71,11 @@ export const SatisfactionLabel = styled.label`
   span {
     font-weight: normal;
     color: #f8f8f8;
+  }
+
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+    gap: 12px 16px;
   }
 `;
 
@@ -84,6 +103,10 @@ export const Textarea = styled.textarea`
   &:focus {
     box-shadow: 0 0 10px #304be4;
   }
+
+  @media (max-width: 768px) {
+    height: 120px;
+  }
 `;
 
 export const SubmitButton = styled.button`
@@ -103,5 +126,9 @@ export const SubmitButton = styled.button`
     text-shadow: none;
     box-shadow: 0 0 #0051cc;
     background: #003399;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
   }
 `;

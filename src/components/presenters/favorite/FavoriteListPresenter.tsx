@@ -19,6 +19,11 @@ const CardWrapper = styled.div`
   background: #fff;
   margin-bottom: 16px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `;
 
 const Poster = styled.img`
@@ -54,6 +59,10 @@ const RemoveButton = styled.button`
 
   &:hover {
     background-color: #e94a4a;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
   }
 `;
 

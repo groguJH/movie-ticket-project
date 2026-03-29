@@ -52,17 +52,14 @@ export default function HomePage() {
         url={seoUrl}
       />
       <main>
-        {/* 캐러셀 페이지 */}
         <section>
           <CarouselContainer />
         </section>
 
         <section>
-          {/* 꼭 한번 관람해야할 영화 TOP 5 */}
           <TopRatedContainer />
         </section>
 
-        {/* 페이지 설명서 툴팁 */}
         <section>
           <FloatButtonStyled
             onClick={handleClick}
@@ -75,8 +72,6 @@ export default function HomePage() {
               color: "#4445465f",
             }}
           />
-
-          {/* 페이지 설명서 모달 */}
           <HelpInfoModal isOpen={isModalOpen} onClose={handleModalClose} />
         </section>
       </main>

@@ -39,7 +39,6 @@ const SignupPresenter: React.FC<SignupPresenterProps> = ({
         onFinish={onBasicSignup}
         style={{ width: "100%" }}
       >
-        {/* 기본 회원가입 폼 항목 */}
         <Form.Item
           label={whiteLabel("이메일")}
           name="email"
@@ -109,7 +108,6 @@ const SignupPresenter: React.FC<SignupPresenterProps> = ({
           </Button>
         </Form.Item>
 
-        {/* 소셜 회원가입 */}
         <Form.Item>
           <Divider style={{ color: "white", margin: "24px 0 12px 0" }}>
             또는 소셜 계정으로 회원가입

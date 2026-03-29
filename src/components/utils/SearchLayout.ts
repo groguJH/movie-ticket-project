@@ -10,25 +10,30 @@ export const SearchWrapper = styled.div`
   top: 80px;
   left: 0;
   width: 100%;
-  height: 20rem;
+  min-height: 16rem;
   padding: 0 16px;
   z-index: 1000;
   background-color: black;
+
+  @media (max-width: 768px) {
+    top: 64px;
+    padding: 0 12px 16px;
+  }
 `;
 
 export const Wrapper = styled.div`
   position: relative;
-  width: 400px;
+  width: min(100%, 400px);
 `;
 
 export const ResultList = styled.li`
   position: absolute;
-  top: calc(100% + 4px); /* input 높이만큼 내려서 붙임 */
+  top: calc(100% + 4px);
   width: 100%;
   z-index: 9999;
   background-color: white;
-  max-height: 1200px;
-  overflow-y: hidden;
+  max-height: min(60vh, 420px);
+  overflow-y: auto;
   z-index: 5;
   margin: 0;
   padding: 0;
@@ -51,7 +56,7 @@ export const ResultItem = styled.ul`
 
 export const SearchInput = styled.input`
   width: 100%;
-  padding: 8px;
+  padding: 10px 12px;
   margin-top: 5rem;
   font-size: 16px;
   border: none;
@@ -63,5 +68,10 @@ export const SearchInput = styled.input`
   &:focus {
     outline: none;
     box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 8px;
+  }
+
+  @media (max-width: 768px) {
+    margin-top: 2rem;
+    font-size: 15px;
   }
 `;

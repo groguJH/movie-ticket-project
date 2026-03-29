@@ -51,7 +51,6 @@ export default function EditProfilePresenter({
         onFinish={handleFinish}
         initialValues={{ ...initialValues }}
       >
-        {/* 프로필 이미지 선택 */}
         <Form.Item label={whiteLabel("프로필 사진")} name="profileImage">
           <div
             style={{
@@ -100,7 +99,6 @@ export default function EditProfilePresenter({
           </Form.Item>
         </Form.Item>
 
-        {/* 일반 로그인 사용자 전용 필드 */}
         <div
           style={{
             pointerEvents: isSocialUser ? "none" : "auto",
@@ -139,7 +137,6 @@ export default function EditProfilePresenter({
 
         <Divider style={{ borderColor: "white", marginTop: "35px" }} />
 
-        {/* 마케팅 동의 */}
         <div style={{ marginTop: 20, marginBottom: 20 }}>
           <Title level={5} style={{ color: "white", marginBottom: 10 }}>
             마케팅 활용 동의 및 광고 수신 동의

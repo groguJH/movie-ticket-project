@@ -9,6 +9,10 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
+  @media (max-width: 768px) {
+    padding: 1rem 0;
+  }
 `;
 
 export const SeatGrid = styled.div`
@@ -17,6 +21,11 @@ export const SeatGrid = styled.div`
   grid-template-rows: repeat(7, 2fr);
   gap: 10px;
   margin: 16px 0;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    gap: 6px;
+  }
 `;
 
 export const NoticeSection = styled.div`
@@ -24,6 +33,11 @@ export const NoticeSection = styled.div`
   margin-bottom: 32px;
   padding: 2rem;
   width: 100%;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+    margin-bottom: 20px;
+  }
 `;
 
 export const NoticeTitle = styled.h3`
@@ -33,6 +47,11 @@ export const NoticeTitle = styled.h3`
   margin-bottom: 20px;
   text-align: center;
   font-weight: 600;
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
 `;
 
 export const NoticeCard = styled.div`
@@ -41,6 +60,10 @@ export const NoticeCard = styled.div`
   padding: 20px;
   margin-bottom: 16px;
   border-left: 4px solid #1890ff;
+
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
 `;
 
 export const NoticeSubtitle = styled.h4`
@@ -96,6 +119,7 @@ export const MovieItem = styled.div`
 export const VideoWrapper = styled.div`
   margin-top: 1rem;
   iframe {
+    width: 100%;
     border-radius: 8px;
   }
 `;

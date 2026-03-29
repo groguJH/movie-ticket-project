@@ -65,7 +65,6 @@ export default function WriteListPresent({
         <Label>
           <span>해당 포트폴리오에 대한 솔직한 평가를 남겨주세요</span>
           <SatisfactionLabel>
-            {/* 만족도조사 라디오버튼 */}
             <CustomRadio
               value="매우만족"
               selected={satisfaction}
