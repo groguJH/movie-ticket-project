@@ -249,6 +249,7 @@ graph TD
     Home --> AdminFeedback["/feedbackAdmin: 관리자 피드백"]
 ```
 
+<br/>
 [개인 벨로그 링크](https://velog.io/@jh_000velog/%EC%98%81%ED%99%94-%EC%98%88%EB%A7%A4-%EC%82%AC%EC%9D%B4%ED%8A%B8-%EC%9C%A0%EC%A0%80%ED%94%8C%EB%A1%9C%EC%9A%B0)
 
 ### 인증 · 보안 설계
@@ -267,7 +268,6 @@ graph TD
 ### 실행 방법
 
 1. 환경 변수 파일 구분
-
    - `.env.local`: 로컬 개발용 실제 런타임 변수 파일
    - `.env.deploy.example`: 배포/런타임 변수 템플릿 예시 파일
    - `.env.sentry-build-plugin.example`: Sentry source map 업로드용 토큰 템플릿 예시 파일
