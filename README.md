@@ -197,6 +197,9 @@ Model
   - 목록/상세 조회
   - 상태 변경
   - 답글 생성/수정/삭제(소프트 삭제)
+ ![관리자 피드백 이미지](https://github.com/user-attachments/assets/1a1fc269-77d9-4975-9b0b-f7e4158ed8d5)
+
+    
 - 통합 검색 및 상영 시간/좌석 조회
 
 ### 주요 API 엔드포인트 요약
@@ -274,7 +277,7 @@ graph TD
   - `/feedbackAdmin/*` 관리자 권한 필요 (`reason=admin`)
 - `/bookPage`는 비회원 예매 지원을 위해 미들웨어 강제 보호 대상에서 제외
 - 비밀번호 저장 시 `bcryptjs` 해시 적용
-
+![소셜로그인 이미지](https://github.com/user-attachments/assets/ab27786e-fac8-4007-ae63-46c6212c1433)
 <br/>
 <br/>
 
