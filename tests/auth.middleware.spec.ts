@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import jwt, { SignOptions } from "jsonwebtoken";
+import { encode } from "next-auth/jwt";
 
 const BASE = process.env.PLAYWRIGHT_BASE_URL ?? "http://localhost:3000";
 
@@ -16,20 +16,17 @@ function getSessionCookieName() {
  * @param options
  * @returns
  */
-function makeNextAuthJwtToken(
-  payload: Record<string, any>,
-  options?: SignOptions,
-) {
+async function makeNextAuthJwtToken(payload: Record<string, any>) {
   const secret = process.env.NEXTAUTH_SECRET ?? "test-secret";
 
-  const tokenPayload = {
-    ...payload,
-    sub: payload.id ?? payload.sub ?? "test-sub",
-    iat: Math.floor(Date.now() / 1000),
-    exp: Math.floor(Date.now() / 1000) + 60 * 60,
-  };
-
-  return jwt.sign(tokenPayload, secret, options ?? {});
+  return encode({
+    secret,
+    maxAge: 60 * 60,
+    token: {
+      ...payload,
+      sub: payload.id ?? payload.sub ?? "test-sub",
+    },
+  });
 }
 
 test.describe("Auth & Admin middleware", () => {
@@ -55,7 +52,7 @@ test.describe("Auth & Admin middleware", () => {
     page,
     context,
   }) => {
-    const token = makeNextAuthJwtToken({
+    const token = await makeNextAuthJwtToken({
       id: "user-123",
       name: "일반회원",
       email: "user@example.com",
@@ -85,7 +82,7 @@ test.describe("Auth & Admin middleware", () => {
     page,
     context,
   }) => {
-    const token = makeNextAuthJwtToken({
+    const token = await makeNextAuthJwtToken({
       id: "admin-1",
       name: "관리자",
       email: "admin1@google.com",
