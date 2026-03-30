@@ -1,6 +1,7 @@
 # 🎬 영화/TV 예매 웹 서비스
 
-![홈페이지 녹화](https://velog.velcdn.com/images/jh_000velog/post/125422bb-2d21-4083-97cc-badc46cc6ca4/image.gif)
+![홈화면gif](https://github.com/user-attachments/assets/cce378e9-a7ec-42da-b1ef-563aa3965d5d)
+
 
 ## 목차
 
@@ -35,7 +36,7 @@
 - 사용자 피드백 작성/수정 및 관리자 응답 관리
 - 예매 정책: 현재 1회 요청당 1좌석(`seats.length === 1`)
 
-([포트폴리오 사이트 보러가기🔗 ](https://movie-ticket-project-theta.vercel.app/))<br/><br/>
+([개인 영화 예매 서비스 보러가기🔗 ](https://movie-ticket-project-theta.vercel.app/))<br/><br/>
 <br/>
 <br/>
 
@@ -176,31 +177,47 @@ Model
 
 - TMDB API 연동을 통한 영화/TV 데이터 조회 및 상세 페이지 구성
 - MongoDB를 활용한 기본적인 즐겨찾기 기능
+![기본기능](https://github.com/user-attachments/assets/86623583-9510-41dd-8865-32d60bf47e60)
+<br/>
+
 
 #### 추가 확장 기능
 
 - 회원 예매
   - 좌석 선택 후 예매 생성
   - 마이페이지에서 예매 내역 조회
+ ![회원예매](https://github.com/user-attachments/assets/8cdd9aeb-7698-4c45-a605-16bf4cbd7e73)
+<br/>
+
 - 비회원 예매
   - 비회원 정보를 생성하거나 기존 정보를 재사용한 뒤 `/bookPage?bookingId=...`로 이동
   - 영화 선택 이후 `/bookPage/[movieId]?bookingId=...` 형태로 예매 진행
   - 이름/생년월일/전화번호/비밀번호 조합으로 예매 내역 조회
+![비회원예매](https://github.com/user-attachments/assets/25be6df9-78e3-401b-bc4b-56c95ef61a4a)
+<br/> 
+
 - 즐겨찾기
-  - 영화/TV 타입별 목록 관리
+  - 영화/TV 타입별 목록 관리 
+
 - 마이페이지
   - 프로필 수정
   - 즐겨찾기 관리
   - 예매 내역 확인
   - 피드백 작성/조회/수정
+ ![회원프로필수정](https://github.com/user-attachments/assets/d3167c95-b6cd-49de-be90-064c2569d95c)
+<br/>
+
 - 관리자 피드백
   - 목록/상세 조회
   - 상태 변경
   - 답글 생성/수정/삭제(소프트 삭제)
  ![관리자 피드백 이미지](https://github.com/user-attachments/assets/1a1fc269-77d9-4975-9b0b-f7e4158ed8d5)
-
+<br/>
     
-- 통합 검색 및 상영 시간/좌석 조회
+- 영화 혹은 방송 통합 검색 
+![검색](https://github.com/user-attachments/assets/2c1aea2b-dcf5-44c5-83bf-aa473e7ebe9c)
+<br/>
+<br/>
 
 ### 주요 API 엔드포인트 요약
 
