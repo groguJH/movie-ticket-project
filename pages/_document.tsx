@@ -8,6 +8,7 @@ import Document, {
 import createEmotionServer from "@emotion/server/create-instance";
 import { CacheProvider } from "@emotion/react";
 import { createEmotionCache } from "../lib/utils/emotionCache";
+import Link from "next/link";
 
 export default class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
@@ -58,6 +59,7 @@ export default class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap"
             rel="stylesheet"
           />
+          <link rel="icon" type="image/png" href="/movie.png" />
         </Head>
         <body>
           <Main />
