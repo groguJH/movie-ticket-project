@@ -43,8 +43,8 @@
 ## 기술 스택
 
 **Frontend**<br/>
-![Next.js](https://img.shields.io/badge/Next.js_14-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
 ![React](https://img.shields.io/badge/React_18-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Next.js](https://img.shields.io/badge/Next.js_14-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript_5-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![TanStack Query](https://img.shields.io/badge/TanStack_Query_v5-FF4154?style=for-the-badge&logo=reactquery&logoColor=white)
 ![Emotion](https://img.shields.io/badge/Emotion-DB7093?style=for-the-badge&logo=styledcomponents&logoColor=white)
@@ -94,6 +94,7 @@ Model
 
 - 서버 상태 캐싱, 동기화, 재요청 제어를 일관되게 다루기 위해 사용했습니다.
 - 로딩/에러/갱신 상태 처리를 표준화하기 위해 사용했습니다.
+- 실제 서비스라면 어떻게 할까? 에 초점을 맞춘 프로젝트라 사용했습니다.
 
 **NextAuth를 사용한 이유**
 
@@ -282,6 +283,79 @@ graph TD
 <br/>
 <br/>
 
+
+## 라이브러리
+```text
+  "dependencies": {
+    "@ant-design/icons": "^6.0.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/server": "^11.11.0",
+    "@emotion/styled": "^11.14.0",
+    "@next-auth/mongodb-adapter": "^1.1.3",
+    "@next/bundle-analyzer": "^15.3.3",
+    "@sentry/nextjs": "10",
+    "@tanstack/react-query": "^5.71.5",
+    "@types/bcrypt": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.10",
+    "antd": "^5.26.0",
+    "axios": "^1.8.1",
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.2",
+    "dayjs": "^1.11.13",
+    "docdash": "^2.0.2",
+    "jsdoc": "^4.0.5",
+    "jsonwebtoken": "^9.0.3",
+    "mongodb": "^7.0.0",
+    "next": "14",
+    "next-auth": "^4.24.11",
+    "next-transpile-modules": "^10.0.1",
+    "rc-util": "^5.44.4",
+    "react": "18",
+    "react-dom": "18",
+    "react-icons": "^5.5.0",
+    "react-scroll": "^1.9.3",
+    "react-youtube": "^10.1.0",
+    "recoil": "^0.7.7",
+    "router": "^2.2.0",
+    "slick-carousel": "^1.8.1",
+    "use-debounce": "^10.0.6"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-class-properties": "^7.28.6",
+    "@babel/plugin-transform-private-methods": "^7.28.6",
+    "@babel/plugin-transform-private-property-in-object": "^7.28.6",
+    "@emotion/babel-plugin": "^11.13.5",
+    "@playwright/test": "^1.58.1",
+    "@types/bcryptjs": "^3.0.0",
+    "@types/cookie": "^1.0.0",
+    "@types/jest": "29.5.12",
+    "@types/lodash": "^4.17.24",
+    "@types/node": "^24.10.1",
+    "@types/node-fetch": "^2.6.12",
+    "@types/react": "^19.2.7",
+    "@types/react-refresh": "^0.14.6",
+    "@types/react-scroll": "^1.8.10",
+    "@types/supertest": "^6.0.3",
+    "@types/webpack": "^5.28.5",
+    "babel-plugin-import": "^1.13.8",
+    "cross-env": "^10.1.0",
+    "eslint": "9.20.1",
+    "eslint-config-next": "15.1.7",
+    "jest": "29.7.0",
+    "mongodb-memory-server": "^11.0.1",
+    "strip-ansi": "6",
+    "supertest": "^7.2.2",
+    "ts-jest": "29.1.1",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.8.3"
+  }
+```
+
+
+<br/>
+<br/>
+
 ## 인증 · 보안 설계
 
 - NextAuth 기반 JWT 세션 전략
@@ -357,6 +431,7 @@ graph TD
 ## 향후 개선 사항
 
 - 실제 PG사 결제 연동
+- 2인 이상 예매 기능
 - 예매 취소/환불 워크플로우 개선
 
 <br/>
