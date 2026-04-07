@@ -7,8 +7,14 @@ import TopRatedContainer from "../src/containers/top-rated/TopRatedContainer";
 import { useRouter } from "next/router";
 import { message } from "antd";
 import Seo from "../src/components/hoc/Seo";
+import { findBookingMoviesService } from "../src/services/bookingTicket/bookingfindMoviesService";
+import { Movie } from "../types/MovieCarouselData";
 
-export default function HomePage() {
+export default function HomePage({
+  initialMovies,
+}: {
+  initialMovies: Movie[];
+}) {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -26,7 +32,7 @@ export default function HomePage() {
     }
 
     router.replace("/", undefined, { shallow: true });
-  }, [router.isReady]);
+  }, [router, router.isReady]);
 
   function handleClick(): void {
     setIsModalOpen(true);
@@ -53,7 +59,7 @@ export default function HomePage() {
       />
       <main>
         <section>
-          <CarouselContainer />
+          <CarouselContainer initialData={initialMovies} />
         </section>
 
         <section>
@@ -77,4 +83,23 @@ export default function HomePage() {
       </main>
     </>
   );
+}
+
+export async function getServerSideProps() {
+  try {
+    const movies = await findBookingMoviesService();
+
+    return {
+      props: {
+        initialMovies: movies || [],
+      },
+    };
+  } catch (error) {
+    console.error("SSR 영화 데이터 가져오기 실패:", error);
+    return {
+      props: {
+        initialMovies: [],
+      },
+    };
+  }
 }
