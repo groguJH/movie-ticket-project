@@ -2,6 +2,7 @@
 import { Form, Input, Button, Modal, Typography } from "antd";
 import styled from "@emotion/styled";
 import { signIn } from "next-auth/react";
+import Image from "next/image";
 
 const { Text } = Typography;
 
@@ -142,12 +143,12 @@ export default function LoginModal({
         </Divider>
 
         <KakaoButton block onClick={() => signIn("kakao")}>
-          <img src="/kakao_button.png" alt="kakao" width={18} height={18} />
+          <Image src="/kakao_button.png" alt="kakao" width={18} height={18} />
           카카오 로그인
         </KakaoButton>
 
         <NaverButton block onClick={() => signIn("naver")}>
-          <img src="/naver_button.png" alt="naver" width={18} height={18} />
+          <Image src="/naver_button.png" alt="naver" width={18} height={18} />
           네이버 로그인
         </NaverButton>
 

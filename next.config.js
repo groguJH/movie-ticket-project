@@ -21,6 +21,20 @@ const nextConfig = {
         ? { exclude: ["error", "warn"] }
         : false,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "image.tmdb.org",
+        pathname: "/t/p/**",
+      },
+      {
+        protocol: "https",
+        hostname: "image.tmdb.org",
+        pathname: "/t/p/**",
+      },
+    ],
+  },
   webpack: (config) => {
     config.resolve.fallback = {
       fs: false,

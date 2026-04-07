@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 
 import { useRouter } from "next/router";
 import { MoviePresenterProps } from "../../../../types/fetchMovieBooking";
+import Image from "next/image";
 
 const IMAGE_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_BASE_URL!;
 
@@ -48,7 +49,7 @@ export function formatDate(date: string) {
   const day = new Date(date);
   return `${day.getFullYear()}-${String(day.getMonth() + 1).padStart(
     2,
-    "0"
+    "0",
   )}-${String(day.getDate()).padStart(2, "0")}`;
 }
 
@@ -98,7 +99,7 @@ export default function FetchingMoviesPresenter({
           hoverable
           style={{ width: "100%" }}
           cover={
-            <img
+            <Image
               style={{ height: 160, objectFit: "cover" }}
               src={`${IMAGE_BASE_URL}w400${movie.backdropPath}`}
               alt={movie.title}

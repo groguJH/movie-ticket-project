@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { MovieItemProps } from "../../../../types/MovieCarouselData";
 import {
   ContentItem,
@@ -17,14 +18,17 @@ export default function MovieItemPresenter({
 }: MovieItemProps) {
   return (
     <ContentItem>
-      <img
+      <Image
         src={
           movie?.backdropPath
             ? `${ImageBaseUrl}w780${movie.backdropPath}`
             : "/fallback.jpg"
         }
+        width={780}
+        height={movie.backdropPath ? 439 : 300}
         alt={movie.title}
         style={{ width: "100%", height: "100%", objectFit: "cover" }}
+        priority
       />
       <TitleOverlay>{movie.title}</TitleOverlay>
       <HoverItem className="HoverItem">

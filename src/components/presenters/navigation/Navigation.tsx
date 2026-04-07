@@ -1,5 +1,5 @@
 import React, { JSX } from "react";
-
+import Image from "next/image";
 import {
   MenuIcon,
   CloseIcon,
@@ -148,7 +148,14 @@ export default function NavigationPresenter({
           </LeftGroup>
           <CenterGroup>
             <NavItem onClick={onHomeClick} aria-label="홈으로 이동하기">
-              <img className="popcorn" src="../movie.png" alt="홈" />
+              <Image
+                className="popcorn"
+                src="/movie.png"
+                width={40}
+                height={40}
+                alt="홈"
+                priority
+              />
             </NavItem>
           </CenterGroup>
           <RightGroup>

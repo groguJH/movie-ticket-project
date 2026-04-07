@@ -33,34 +33,30 @@ export const NavGroup = styled.div`
 `;
 
 export const LeftGroup = styled(NavGroup)`
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
   gap: 1rem;
-  left: calc(16.666%);
 
   @media (max-width: 768px) {
-    left: calc(20%);
     gap: 0.35rem;
-  }
-
-  @media (max-width: 480px) {
-    left: calc(25%);
   }
 `;
 
 export const CenterGroup = styled(NavGroup)`
+  flex: 0 0 auto;
+  display: flex;
   justify-content: center;
 `;
 
 export const RightGroup = styled(NavGroup)`
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
   gap: 1rem;
-  left: calc(83.333%);
 
   @media (max-width: 768px) {
-    left: calc(80%);
     gap: 0.35rem;
-  }
-
-  @media (max-width: 480px) {
-    left: calc(75%);
   }
 `;
 

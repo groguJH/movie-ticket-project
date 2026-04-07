@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {} from "../../../pages/api/movies/fetchMovies";
 import {
   CardImage,
@@ -15,6 +15,7 @@ import {
   FullPageSkeleton,
   InlineSmallSpinner,
 } from "../../components/utils/loadingUI";
+import Image from "next/image";
 
 /**
  * 영화 목록 조회 컨테이너 컴포넌트
@@ -35,49 +36,60 @@ export default function MovieListContainer() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
 
+  const observerRef = useRef<HTMLDivElement | null>(null);
   const IMAGE_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_BASE_URL;
 
-  const fetchMovies = async (pageNumber: number) => {
-    if (loading) return;
-    setLoading(true);
+  const fetchMovies = useCallback(
+    async (pageNumber: number) => {
+      if (loading) return;
+      setLoading(true);
 
-    try {
-      const res = await fetch(`/api/movies/fetchMovies?page=${pageNumber}`);
-      const data: MovieResponse = await res.json();
+      try {
+        const res = await fetch(`/api/movies/fetchMovies?page=${pageNumber}`);
+        const data: MovieResponse = await res.json();
 
-      setMovies((prevMovies) => {
-        const existingIds = new Set(prevMovies.map((movie) => movie.id));
-        const newMovies =
-          data?.results?.filter((movie) => !existingIds.has(movie.id)) || [];
-        return [...prevMovies, ...newMovies];
-      });
+        setMovies((prevMovies) => {
+          const existingIds = new Set(prevMovies.map((movie) => movie.id));
+          const newMovies =
+            data?.results?.filter((movie) => !existingIds.has(movie.id)) || [];
+          return [...prevMovies, ...newMovies];
+        });
 
-      setMainMovieImage((prev) => prev || data?.results?.[0] || null);
-      setPage(pageNumber);
-    } catch (error) {
-      console.error("Error fetching movies:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+        setMainMovieImage((prev) => prev || data?.results?.[0] || null);
+        setPage(pageNumber);
+      } catch (error) {
+        console.error("Error fetching movies:", error);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [loading],
+  );
 
   useEffect(() => {
     fetchMovies(1);
-  }, []);
-
-  const handleScroll = () => {
-    if (
-      window.innerHeight + window.scrollY >= document.body.offsetHeight - 100 &&
-      !loading
-    ) {
-      fetchMovies(page + 1);
-    }
-  };
+  }, [fetchMovies]);
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [page, loading]);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !loading) {
+          fetchMovies(page + 1);
+        }
+      },
+      { threshold: 0.5 },
+    );
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observer.unobserve(observerRef.current);
+      }
+    };
+  }, [page, loading, fetchMovies]);
 
   if (loading && movies.length === 0) {
     return <FullPageSkeleton />;
@@ -92,9 +104,11 @@ export default function MovieListContainer() {
             href={`/moviePage/${MainMovieImage.id}`}
           >
             <HeaderBackground className="header-background">
-              <img
+              <Image
                 src={`${IMAGE_BASE_URL}w1280${MainMovieImage.backdrop_path}`}
                 alt={MainMovieImage.title}
+                width={1280}
+                height={720}
               />
             </HeaderBackground>
             <HeadParagraph className="header-paragraph">
@@ -124,7 +138,7 @@ export default function MovieListContainer() {
           ))}
       </ListWrapper>
 
-      <div id="loadMore">{loading && <InlineSmallSpinner />}</div>
+      <div ref={observerRef}>{loading && <InlineSmallSpinner />}</div>
     </div>
   );
 }

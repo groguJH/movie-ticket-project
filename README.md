@@ -2,7 +2,6 @@
 
 ![홈화면gif](https://github.com/user-attachments/assets/cce378e9-a7ec-42da-b1ef-563aa3965d5d)
 
-
 ## 목차
 
 - 프로젝트 개요
@@ -52,7 +51,6 @@
 ![Recoil](https://img.shields.io/badge/Recoil-3578E5?style=for-the-badge&logo=recoil&logoColor=white)
 <br/>
 
-
 **Backend / Infra**<br/>
 ![Next.js API Routes](https://img.shields.io/badge/Next.js_API_Routes-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
 ![NextAuth](https://img.shields.io/badge/NextAuth-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
@@ -60,14 +58,12 @@
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 <br/>
 
-
 **Testing / Tooling**<br/>
 ![Yarn](https://img.shields.io/badge/Yarn-2C8EBB?style=for-the-badge&logo=yarn&logoColor=white)
 ![Jest](https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white)
 ![Playwright](https://img.shields.io/badge/Playwright-2EAD33?style=for-the-badge&logo=playwright&logoColor=white)
 <br/>
 <br/>
-
 
 ## 설계 구조
 
@@ -88,7 +84,6 @@ Model
 - Presenter: UI 렌더링 담당
 - Service/Repository: 비즈니스 로직과 DB 접근 로직 분리
 - API Route: 요청 검증 및 HTTP 경계 처리
-
 
 **TanStack Query를 사용한 이유**
 
@@ -178,47 +173,45 @@ Model
 
 - TMDB API 연동을 통한 영화/TV 데이터 조회 및 상세 페이지 구성
 - MongoDB를 활용한 기본적인 즐겨찾기 기능
-![기본기능](https://github.com/user-attachments/assets/86623583-9510-41dd-8865-32d60bf47e60)
-<br/>
-
+  ![기본기능](https://github.com/user-attachments/assets/86623583-9510-41dd-8865-32d60bf47e60)
+  <br/>
 
 #### 추가 확장 기능
 
 - 회원 예매
   - 좌석 선택 후 예매 생성
   - 마이페이지에서 예매 내역 조회
- ![회원예매](https://github.com/user-attachments/assets/8cdd9aeb-7698-4c45-a605-16bf4cbd7e73)
-<br/>
+    ![회원예매](https://github.com/user-attachments/assets/8cdd9aeb-7698-4c45-a605-16bf4cbd7e73)
+    <br/>
 
 - 비회원 예매
   - 비회원 정보를 생성하거나 기존 정보를 재사용한 뒤 `/bookPage?bookingId=...`로 이동
   - 영화 선택 이후 `/bookPage/[movieId]?bookingId=...` 형태로 예매 진행
   - 이름/생년월일/전화번호/비밀번호 조합으로 예매 내역 조회
-![비회원예매](https://github.com/user-attachments/assets/25be6df9-78e3-401b-bc4b-56c95ef61a4a)
-<br/> 
+    ![비회원예매](https://github.com/user-attachments/assets/25be6df9-78e3-401b-bc4b-56c95ef61a4a)
+    <br/>
 
 - 즐겨찾기
-  - 영화/TV 타입별 목록 관리 
+  - 영화/TV 타입별 목록 관리
 
 - 마이페이지
   - 프로필 수정
   - 즐겨찾기 관리
   - 예매 내역 확인
   - 피드백 작성/조회/수정
- ![회원프로필수정](https://github.com/user-attachments/assets/d3167c95-b6cd-49de-be90-064c2569d95c)
-<br/>
+    ![회원프로필수정](https://github.com/user-attachments/assets/d3167c95-b6cd-49de-be90-064c2569d95c)
+    <br/>
 
 - 관리자 피드백
   - 목록/상세 조회
   - 상태 변경
   - 답글 생성/수정/삭제(소프트 삭제)
- ![관리자 피드백 이미지](https://github.com/user-attachments/assets/1a1fc269-77d9-4975-9b0b-f7e4158ed8d5)
-<br/>
-    
-- 영화 혹은 방송 통합 검색 
-![검색](https://github.com/user-attachments/assets/2c1aea2b-dcf5-44c5-83bf-aa473e7ebe9c)
-<br/>
-<br/>
+    ![관리자 피드백 이미지](https://github.com/user-attachments/assets/1a1fc269-77d9-4975-9b0b-f7e4158ed8d5)
+    <br/>
+- 영화 혹은 방송 통합 검색
+  ![검색](https://github.com/user-attachments/assets/2c1aea2b-dcf5-44c5-83bf-aa473e7ebe9c)
+  <br/>
+  <br/>
 
 ### 주요 API 엔드포인트 요약
 
@@ -283,8 +276,8 @@ graph TD
 <br/>
 <br/>
 
-
 ## 라이브러리
+
 ```text
   "dependencies": {
     "@ant-design/icons": "^6.0.0",
@@ -352,7 +345,6 @@ graph TD
   }
 ```
 
-
 <br/>
 <br/>
 
@@ -368,9 +360,9 @@ graph TD
   - `/feedbackAdmin/*` 관리자 권한 필요 (`reason=admin`)
 - `/bookPage`는 비회원 예매 지원을 위해 미들웨어 강제 보호 대상에서 제외
 - 비밀번호 저장 시 `bcryptjs` 해시 적용
-![소셜로그인 이미지](https://github.com/user-attachments/assets/ab27786e-fac8-4007-ae63-46c6212c1433)
-<br/>
-<br/>
+  ![소셜로그인 이미지](https://github.com/user-attachments/assets/ab27786e-fac8-4007-ae63-46c6212c1433)
+  <br/>
+  <br/>
 
 ## 실행 방법
 

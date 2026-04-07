@@ -10,6 +10,7 @@ import {
   MovieCard,
 } from "../../utils/MovieListLayout";
 import { InlineSmallSpinner } from "../../utils/loadingUI";
+import Image from "next/image";
 
 export default function TvListPresenter({
   TvImage,
@@ -26,7 +27,7 @@ export default function TvListPresenter({
           <>
             <Link key={TvImage.id} href={`/TVbroadcast/${TvImage.id}`}>
               <HeaderBackground className="header-background">
-                <img
+                <Image
                   src={`${imageBaseUrl}w1280${TvImage.backdrop_path}`}
                   alt={TvImage.name}
                 />
