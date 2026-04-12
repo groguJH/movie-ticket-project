@@ -1,5 +1,5 @@
 import { FloatButtonStyled } from "../src/components/utils/HomeCarouselLayout";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import QuestionCircleOutlined from "@ant-design/icons/lib/icons/QuestionCircleOutlined";
 import HelpInfoModal from "../src/components/utils/HelpInfoModal";
 import CarouselContainer from "../src/containers/HomeCarousel/CarouselContainer";
@@ -17,22 +17,33 @@ export default function HomePage({
 }) {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const handledReasonRef = useRef<string | null>(null);
 
   useEffect(() => {
     if (!router.isReady) return;
 
     const reason = router.query.reason;
 
+    if (!reason) {
+      handledReasonRef.current = null;
+      return;
+    }
+
+    if (handledReasonRef.current === reason) {
+      return;
+    }
+
     if (reason === "auth") {
       message.error("로그인이 필요한 서비스입니다");
-    }
-
-    if (reason === "admin") {
+    } else if (reason === "admin") {
       message.error("접근 권한이 없습니다");
+    } else {
+      return;
     }
 
-    router.replace("/", undefined, { shallow: true });
-  }, [router, router.isReady]);
+    handledReasonRef.current = reason;
+    router.replace("/", undefined, { shallow: true, scroll: false });
+  }, [router, router.isReady, router.query.reason]);
 
   function handleClick(): void {
     setIsModalOpen(true);
@@ -88,10 +99,11 @@ export default function HomePage({
 export async function getServerSideProps() {
   try {
     const movies = await findBookingMoviesService();
+    const initialMovies = JSON.parse(JSON.stringify(movies)) || [];
 
     return {
       props: {
-        initialMovies: movies || [],
+        initialMovies,
       },
     };
   } catch (error) {

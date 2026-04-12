@@ -1,4 +1,3 @@
-
 export interface Movie {
   _id: string;
   tmdbId: number;
@@ -16,6 +15,7 @@ export interface CarouselProps {
 
 export interface MovieItemProps {
   movie: Movie;
+  index: number;
   onClickReserve: (id: string) => void;
   onClickDetail: (id: string) => void;
 }

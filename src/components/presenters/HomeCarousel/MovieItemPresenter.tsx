@@ -13,6 +13,7 @@ const ImageBaseUrl = process.env.NEXT_PUBLIC_IMAGE_BASE_URL;
 
 export default function MovieItemPresenter({
   movie,
+  index,
   onClickReserve,
   onClickDetail,
 }: MovieItemProps) {
@@ -28,7 +29,7 @@ export default function MovieItemPresenter({
         height={movie.backdropPath ? 439 : 300}
         alt={movie.title}
         style={{ width: "100%", height: "100%", objectFit: "cover" }}
-        priority
+        priority={index === 0}
       />
       <TitleOverlay>{movie.title}</TitleOverlay>
       <HoverItem className="HoverItem">

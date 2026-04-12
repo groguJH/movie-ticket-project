@@ -12,7 +12,7 @@ import { FullPageSkeleton } from "../utils/loadingUI";
  * - 인증되지 않은 사용자는 signin 페이지
  */
 export default function withAuth<T>(WrappedComponent: any) {
-  return (props: T) => {
+  const WithAuthComponent = (props: T) => {
     const { data: session, status } = useSession();
     const router = useRouter();
 
@@ -27,4 +27,8 @@ export default function withAuth<T>(WrappedComponent: any) {
 
     return <WrappedComponent {...props} />;
   };
+
+  WithAuthComponent.displayName = `withAuth(${WrappedComponent.displayName || WrappedComponent.name || "Component"})`;
+
+  return WithAuthComponent;
 }

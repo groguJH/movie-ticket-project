@@ -1,50 +1,31 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import _ from "lodash";
 import SearchPresenter from "../../components/presenters/navigation/SearchPresenter";
-import { useRouter } from "next/router";
 
 /**
  * 검색창 컨테이너 컴포넌트
- * @props { onSearchClick: () => void } onSearchClick - 검색창 토글 핸들러
  * @description
  * 1. 사용자의 입력을 받아 디바운스 처리 후 검색 API 호출
  * 2. React Query를 사용하여 검색 결과를 비동기 조회
- * 3. 라우팅 이벤트를 감지하여 페이지 이동 시 검색어 및 결과 초기화
+ * 3. 언마운트 시 디바운스를 정리하여 불필요한 상태 업데이트를 방지
  */
-export default function SearchContainer({
-  onSearchClick,
-}: {
-  onSearchClick: () => void;
-}) {
+export default function SearchContainer() {
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
-  const router = useRouter();
-
-  const handleDebounce = useCallback(
-    _.debounce((val: string) => {
-      setDebouncedQuery(val);
-    }, 300),
-    [],
-  );
 
   useEffect(() => {
-    const handleRouteChange = () => {
-      setQuery("");
-      setDebouncedQuery("");
-      onSearchClick();
-    };
-    router.events.on("routeChangeStart", handleRouteChange);
+    const timeoutId = window.setTimeout(() => {
+      setDebouncedQuery(query.trim());
+    }, 300);
+
     return () => {
-      router.events.off("routeChangeStart", handleRouteChange);
+      window.clearTimeout(timeoutId);
     };
-  }, [router.events, onSearchClick]);
+  }, [query]);
 
   const handleResultClick = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputData = e.target.value;
-    setQuery(inputData);
-    handleDebounce(inputData);
+    setQuery(e.target.value);
   };
 
   const { data, isLoading } = useQuery({

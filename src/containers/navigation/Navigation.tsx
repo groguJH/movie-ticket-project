@@ -4,7 +4,6 @@ import { signOut, useSession } from "next-auth/react";
 import NavigationPresenter from "../../components/presenters/navigation/Navigation";
 import LoginModalContainer from "../login/LoginModalContainer";
 import LoginRequiredModal from "../../components/presenters/login/LoginRequiredModal";
-import SearchContainer from "./SearchContainer";
 
 /**
  * 네비게이션 컨테이너 컴포넌트
@@ -88,7 +87,6 @@ const NavigationContainer: React.FC<{ children: React.ReactNode }> = ({
 
   const onSearchClick = () => {
     setIsSearchOpen((prev) => !prev);
-    ("검색버튼 클릭했다!");
   };
 
   return (
@@ -107,6 +105,7 @@ const NavigationContainer: React.FC<{ children: React.ReactNode }> = ({
         onEditProfile={onEditProfile}
         onBookingHistoryClick={() => router.push("/mypage/tickets")}
         userName={session?.user?.name ?? null}
+        userRole={session?.user?.role ?? null}
         userProfileImage={session?.user?.image ?? null}
         status={status}
         userId={session?.user?.id ?? null}
@@ -119,8 +118,6 @@ const NavigationContainer: React.FC<{ children: React.ReactNode }> = ({
         }}
       >
         {children}
-
-        {isSearchOpen && <SearchContainer onSearchClick={onSearchClick} />}
       </NavigationPresenter>
 
       {isLoginModalOpen && (

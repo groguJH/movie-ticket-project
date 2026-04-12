@@ -61,13 +61,13 @@ export default function NavigationPresenter({
   onGuestClick,
   status,
   userName,
+  userRole,
   children,
   userId,
   isSearchVisible,
   userProfileImage,
 }: NavigationPresenterProps): JSX.Element {
-  const myName = "관리자";
-  const isAdmin = userName === myName;
+  const isAdmin = userRole === "admin";
 
   const menuProps = {
     items: isAdmin
@@ -154,7 +154,7 @@ export default function NavigationPresenter({
                 width={40}
                 height={40}
                 alt="홈"
-                priority
+                loading="lazy"
               />
             </NavItem>
           </CenterGroup>
@@ -208,7 +208,7 @@ export default function NavigationPresenter({
 
       {isSearchVisible && (
         <SearchWrapper>
-          <SearchContainer onSearchClick={onSearchClick} />
+          <SearchContainer />
         </SearchWrapper>
       )}
 

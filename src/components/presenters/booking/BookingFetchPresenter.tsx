@@ -93,16 +93,19 @@ export default function FetchingMoviesPresenter({
   const router = useRouter();
   return (
     <ListWrapper>
-      {movies.map((movie) => (
+      {movies.map((movie, index) => (
         <Card
           key={movie._id}
           hoverable
           style={{ width: "100%" }}
           cover={
             <Image
-              style={{ height: 160, objectFit: "cover" }}
+              style={{ width: "auto", height: "auto", objectFit: "cover" }}
               src={`${IMAGE_BASE_URL}w400${movie.backdropPath}`}
+              width={400}
+              height={160}
               alt={movie.title}
+              priority={index === 0}
             />
           }
           actions={[

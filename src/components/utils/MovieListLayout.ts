@@ -146,7 +146,8 @@ export const CardImage = styled.div<{ image: string }>`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  width: 100%;
+  width: 720px;
+  height: 439px;
   aspect-ratio: 2 / 3;
   border-radius: 12px;
   position: relative;

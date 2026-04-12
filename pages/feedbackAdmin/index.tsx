@@ -3,14 +3,14 @@ import { useRouter } from "next/router";
 import FeedbackAdContainer from "../../src/containers/feedbackAdmin/FeedbackAdContainer";
 import { useEffect } from "react";
 
-export default function index() {
+export default function Index() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
   useEffect(() => {
     if (status !== "loading") {
       if (!session || session?.user?.role !== "admin") {
-        router.push("/");
+        router.replace("/");
       }
     }
   }, [session, status, router]);

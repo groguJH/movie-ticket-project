@@ -24,7 +24,7 @@ export default function MovieListPage({
         image={
           firstMovie?.backdrop_path
             ? `${IMAGE_BASE_URL}w700${firstMovie.backdrop_path}`
-            : "/movie.png"
+            : undefined
         }
         url={seoUrl}
       />

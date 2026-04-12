@@ -1,12 +1,12 @@
 import { useRouter } from "next/router";
 import { Movie } from "../../../types/MovieCarouselData";
 import { useQuery } from "@tanstack/react-query";
-import dynamic from "next/dynamic";
 import {
   EmptyMovieList,
   FullPageSkeleton,
 } from "../../components/utils/loadingUI";
 import { fetchBookingMovies } from "../../../queries/movieQueries";
+import CarouselPresenter from "../../components/presenters/HomeCarousel/CarouselPresenter";
 
 /**
  * 홈페이지 캐러셀 컨테이너 컴포넌트
@@ -24,11 +24,6 @@ export default function CarouselContainer({
   initialData,
 }: CarouselContainerProps) {
   const router = useRouter();
-
-  const CarouselPresenter = dynamic(
-    () => import("../../components/presenters/HomeCarousel/CarouselPresenter"),
-    { ssr: true },
-  );
 
   const {
     data: movies,

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { MyPagePresenterProps } from "../../../../types/myPage";
 import {
   Card,
@@ -15,8 +16,8 @@ export default function MyPageLayout({ name, children }: MyPagePresenterProps) {
       <GreetingSection>
         <Greeting>안녕하세요 {name} 님</Greeting>
         <LinkRow>
-          <a href="/mypage/edit">개인정보 수정</a>
-          <a href="/mypage/feedback/write">소중한 의견 보내기</a>
+          <Link href="/mypage/edit">개인정보 수정</Link>
+          <Link href="/mypage/feedback/write">소중한 의견 보내기</Link>
         </LinkRow>
       </GreetingSection>
 

@@ -30,6 +30,8 @@ export default function TvListPresenter({
                 <Image
                   src={`${imageBaseUrl}w1280${TvImage.backdrop_path}`}
                   alt={TvImage.name}
+                  width={1280}
+                  height={720}
                 />
               </HeaderBackground>
             </Link>

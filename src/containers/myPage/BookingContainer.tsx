@@ -81,7 +81,6 @@ export default function BookingTicketContainer() {
             movieTitle={b.movieTitle}
             selectedDate={bookingDate}
             seats={b.seats}
-            children={undefined}
           />
         );
       })}

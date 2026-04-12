@@ -16,6 +16,7 @@ export interface NavigationPresenterProps {
   onFavoritesClick: () => void;
   status: "loading" | "authenticated" | "unauthenticated";
   userName: string | null;
+  userRole: "user" | "admin" | null;
   userProfileImage: string | null;
   userId: string | null;
   children: React.ReactNode;

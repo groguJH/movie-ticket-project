@@ -1,5 +1,5 @@
 import { Carousel } from "antd";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CarouselWrapper,
   ContentDiv,
@@ -19,7 +19,6 @@ export default function CarouselPresenter({
   onClickReserve: (id: string) => void;
   onClickDetail: (tmdbId: number) => void;
 }) {
-  const carouselRef = useRef<any>(null);
   const router = useRouter();
   const getItemsPerSlide = () => {
     if (typeof window === "undefined") {
@@ -37,29 +36,12 @@ export default function CarouselPresenter({
 
   const settings = {
     arrows: true,
-    infinite: true,
-    autoplay: true,
+    infinite: groupedMovies.length > 1,
+    autoplay: groupedMovies.length > 1,
     autoplaySpeed: 3000,
     speed: 600,
     slidesToShow: 1,
     slidesToScroll: 1,
-    afterChange: (current: number) => {
-      hideClonedSlides();
-    },
-    beforeChange: () => {
-      hideClonedSlides();
-    },
-  };
-
-  const hideClonedSlides = () => {
-    setTimeout(() => {
-      const clonedSlides = document.querySelectorAll(
-        ".movie-carousel .slick-cloned",
-      );
-      clonedSlides.forEach((slide) => {
-        (slide as HTMLElement).style.display = "none !important";
-      });
-    }, 10);
   };
 
   useEffect(() => {
@@ -75,23 +57,6 @@ export default function CarouselPresenter({
     };
   }, []);
 
-  useEffect(() => {
-    hideClonedSlides();
-
-    const interval = setInterval(() => {
-      hideClonedSlides();
-    }, 100);
-
-    const timeout = setTimeout(() => {
-      clearInterval(interval);
-    }, 5000);
-
-    return () => {
-      clearInterval(interval);
-      clearTimeout(timeout);
-    };
-  }, [movies, itemsPerSlide]);
-
   const handleMoreContents = () => {
     router.push("/bookPage");
   };
@@ -106,13 +71,14 @@ export default function CarouselPresenter({
           </MoreContentsLink>
         </ContentTitle>
 
-        <Carousel ref={carouselRef} className="movie-carousel" {...settings}>
+        <Carousel className="movie-carousel" {...settings}>
           {groupedMovies.map((movieGroup: MovieProps[], groupIndex: number) => (
             <div key={`movie-group-${groupIndex}`}>
               <ContentDiv itemCount={itemsPerSlide}>
                 {movieGroup.map((movie: MovieProps) => (
                   <MovieItemPresenter
                     key={movie._id}
+                    index={groupIndex === 0 ? movieGroup.indexOf(movie) : 1}
                     movie={movie}
                     onClickReserve={onClickReserve}
                     onClickDetail={() => onClickDetail(movie.tmdbId)}
