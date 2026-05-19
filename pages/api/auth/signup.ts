@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { MongoClient } from "mongodb";
 import bcrypt from "bcryptjs";
+import clientPromise from "../../../lib/mongodb";
 
 /**
  * 회원가입 API 핸들러
@@ -17,31 +17,6 @@ import bcrypt from "bcryptjs";
  * @throws 400 - 필수 필드 누락
  * @throws 500 - 서버 에러
  */
-const uri = process.env.MONGODB_URI;
-
-if (!uri) {
-  throw new Error("MONGODB_URI 환경변수를 설정하세요!");
-}
-const options = {};
-
-let client: MongoClient;
-let clientPromise: Promise<MongoClient>;
-
-declare global {
-  var mongoClientPromise: Promise<MongoClient>;
-}
-
-if (process.env.NODE_ENV === "development") {
-  if (!global.mongoClientPromise) {
-    client = new MongoClient(uri, options);
-    global.mongoClientPromise = client.connect();
-  }
-  clientPromise = global.mongoClientPromise;
-} else {
-  client = new MongoClient(uri, options);
-  clientPromise = client.connect();
-}
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,

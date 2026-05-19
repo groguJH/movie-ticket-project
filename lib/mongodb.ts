@@ -13,17 +13,35 @@ if (!uri) {
 }
 
 let client: MongoClient;
-let clientPromise: Promise<MongoClient>;
+let clientPromise: Promise<MongoClient> | undefined;
 
-if (process.env.NODE_ENV === "development") {
-  if (!(global as any)._mongoClientPromise) {
-    client = new MongoClient(uri, options);
-    (global as any)._mongoClientPromise = client.connect();
+function getClientPromise() {
+  if (process.env.NODE_ENV === "development") {
+    if (!(global as any)._mongoClientPromise) {
+      client = new MongoClient(uri, options);
+      (global as any)._mongoClientPromise = client.connect();
+    }
+    return (global as any)._mongoClientPromise as Promise<MongoClient>;
   }
-  clientPromise = (global as any)._mongoClientPromise;
-} else {
-  client = new MongoClient(uri, options);
-  clientPromise = client.connect();
+
+  if (!clientPromise) {
+    client = new MongoClient(uri, options);
+    clientPromise = client.connect();
+  }
+  return clientPromise;
 }
 
-export default clientPromise;
+const lazyClientPromise: Promise<MongoClient> = {
+  then(onfulfilled, onrejected) {
+    return getClientPromise().then(onfulfilled, onrejected);
+  },
+  catch(onrejected) {
+    return getClientPromise().catch(onrejected);
+  },
+  finally(onfinally) {
+    return getClientPromise().finally(onfinally);
+  },
+  [Symbol.toStringTag]: "Promise",
+};
+
+export default lazyClientPromise;

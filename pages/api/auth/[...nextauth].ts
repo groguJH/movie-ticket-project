@@ -2,7 +2,7 @@ import NextAuth, { NextAuthOptions, Session } from "next-auth";
 import KakaoProvider from "next-auth/providers/kakao";
 import NaverProvider from "next-auth/providers/naver";
 import CredentialsProvider from "next-auth/providers/credentials";
-import clientPromise from "../../../lib/mongodb";
+import { ObjectId } from "mongodb";
 import bcrypt from "bcryptjs";
 import hashSocialID from "../../../lib/utils/hashSocialID";
 
@@ -37,6 +37,13 @@ declare module "next-auth/jwt" {
     provider?: string | null;
     role?: "user" | "admin";
   }
+}
+
+async function getUsersCollection() {
+  const { default: clientPromise } = await import("../../../lib/mongodb");
+  const client = await clientPromise;
+  const db = client.db("mymovieticket");
+  return db.collection("users");
 }
 
 export const authOptions: NextAuthOptions = {
@@ -93,9 +100,8 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const client = await clientPromise;
-        const db = client.db("mymovieticket");
-        const user = await db.collection("users").findOne<{
+        const users = await getUsersCollection();
+        const user = await users.findOne<{
           profileImage: string | null | undefined;
           _id: any;
           email: string;
@@ -145,9 +151,7 @@ export const authOptions: NextAuthOptions = {
       }
 
       if (account?.provider === "kakao" || account?.provider === "naver") {
-        const client = await clientPromise;
-        const db = client.db("mymovieticket");
-        const users = db.collection("users");
+        const users = await getUsersCollection();
 
         const provider = account.provider;
         const providerId = token.sub as string;
@@ -169,11 +173,7 @@ export const authOptions: NextAuthOptions = {
           : "user";
 
         if (!token.role && token.id) {
-          const client = await clientPromise;
-          const db = client.db("mymovieticket");
-          const u = await db
-            .collection("users")
-            .findOne({ _id: new (require("mongodb").ObjectId)(token.id) });
+          const u = await users.findOne({ _id: new ObjectId(token.id) });
           if (u) {
             token.role = u.role ?? "user";
           }
